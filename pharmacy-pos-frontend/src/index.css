@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@theme {
+  --font-cairo: "Cairo", sans-serif;
+  --font-sans: "Inter", "Cairo", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* Custom Medical Theme Colors */
+  --color-brand-50: #ecfdf5;
+  --color-brand-100: #d1fae5;
+  --color-brand-200: #a7f3d0;
+  --color-brand-300: #6ee7b7;
+  --color-brand-400: #34d399;
+  --color-brand-500: #10b981;
+  --color-brand-600: #059669;
+  --color-brand-700: #047857;
+  --color-brand-800: #065f46;
+  --color-brand-900: #064e3b;
+  --color-brand-950: #022c22;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-slate-200);
+  }
+  body {
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+/* Custom Scrollbar for POS / Data Tables */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
