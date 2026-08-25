@@ -16,13 +16,13 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="w-full space-y-1.5 text-right">
         {label && (
-          <label htmlFor={inputId} className="block text-xs font-semibold text-slate-700 dark:text-slate-200">
+          <label htmlFor={inputId} className="block text-xs font-bold text-slate-700 dark:text-slate-200">
             {label}
           </label>
         )}
-        <div className="relative rounded-xl shadow-sm">
+        <div className="relative rounded-2xl">
           {leftIcon && (
-            <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400">
+            <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
               {leftIcon}
             </div>
           )}
@@ -31,19 +31,20 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             type={type}
             ref={ref}
             className={cn(
-              'block w-full rounded-xl border border-slate-300 bg-white py-2.5 px-3.5 text-sm text-slate-900 placeholder:text-slate-400 transition-all',
-              'focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none',
-              'disabled:bg-slate-50 disabled:text-slate-500 disabled:cursor-not-allowed',
-              'dark:bg-slate-900 dark:border-slate-750 dark:text-slate-100',
-              leftIcon && 'pr-10',
-              rightIcon && 'pl-10',
-              error && 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20',
+              'block w-full rounded-2xl border py-2.5 px-4 text-sm transition-all',
+              'bg-white border-slate-200 text-slate-900 placeholder:text-slate-400',
+              'dark:bg-[#0B0F17] dark:border-[#223049] dark:text-slate-100 dark:placeholder:text-slate-500',
+              'focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none dark:focus:border-emerald-400 dark:focus:ring-emerald-400/20',
+              'disabled:opacity-50 disabled:cursor-not-allowed',
+              leftIcon && 'pr-11',
+              rightIcon && 'pl-11',
+              error && 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20 dark:border-rose-500',
               className
             )}
             {...props}
           />
           {rightIcon && (
-            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 dark:text-slate-500">
               {rightIcon}
             </div>
           )}

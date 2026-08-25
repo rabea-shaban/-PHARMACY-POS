@@ -38,7 +38,7 @@ export const Header: React.FC = () => {
       case 'PHARMACY_MANAGER':
         return <Badge variant="warning">مدير الصيدلية</Badge>;
       case 'PHARMACIST':
-        return <Badge variant="mint">صيدلي</Badge>;
+        return <Badge variant="success">صيدلي</Badge>;
       case 'ACCOUNTANT':
         return <Badge variant="info">محاسب</Badge>;
       default:
@@ -47,12 +47,12 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="h-16 bg-[#F7FCFC] dark:bg-[#0E2C2E] border-b border-[#D5E6E5] dark:border-[#183C3E] px-6 flex items-center justify-between sticky top-0 z-30 shadow-xs">
+    <header className="h-16 bg-white dark:bg-[#0E1522] border-b border-slate-200 dark:border-[#1E293B] px-6 flex items-center justify-between sticky top-0 z-30 shadow-xs">
       {/* Left side: Hamburger Toggle */}
       <div className="flex items-center gap-4">
         <button
           onClick={() => dispatch(toggleSidebar())}
-          className="p-2 rounded-2xl text-[#557274] hover:bg-[#DDEEEE] hover:text-[#003C3D] transition-colors"
+          className="p-2 rounded-2xl text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-[#1A2639] dark:hover:text-white transition-colors"
           aria-label="Toggle Sidebar"
         >
           <Menu className="w-5 h-5" />
@@ -64,7 +64,7 @@ export const Header: React.FC = () => {
         {/* Theme Toggle */}
         <button
           onClick={() => dispatch(setTheme(theme === 'light' ? 'dark' : 'light'))}
-          className="p-2 rounded-2xl text-[#557274] hover:bg-[#DDEEEE] hover:text-[#003C3D] transition-colors"
+          className="p-2.5 rounded-2xl text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-[#1A2639] dark:hover:text-amber-400 transition-colors"
           aria-label="Toggle Theme"
         >
           {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
@@ -73,26 +73,26 @@ export const Header: React.FC = () => {
         {/* Notifications Icon */}
         <Link
           to="/notifications"
-          className="relative p-2 rounded-2xl text-[#557274] hover:bg-[#DDEEEE] hover:text-[#003C3D] transition-colors"
+          className="relative p-2.5 rounded-2xl text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-[#1A2639] dark:hover:text-white transition-colors"
         >
           <Bell className="w-5 h-5" />
           {unreadCount > 0 && (
-            <span className="absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#F2A9AB] text-[#713F42] text-[9px] font-bold">
+            <span className="absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-rose-600 text-white text-[9px] font-bold">
               {unreadCount}
             </span>
           )}
         </Link>
 
         {/* Divider */}
-        <div className="h-6 w-px bg-[#D5E6E5] dark:bg-[#183C3E] mx-1" />
+        <div className="h-6 w-px bg-slate-200 dark:bg-[#1E293B] mx-1" />
 
         {/* User Info & Avatar */}
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-2xl bg-[#DDEEEE] text-[#003C3D] flex items-center justify-center font-bold text-sm">
+          <div className="w-9 h-9 rounded-2xl bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 flex items-center justify-center font-bold text-sm">
             <UserIcon className="w-5 h-5" />
           </div>
           <div className="hidden md:block text-right">
-            <p className="text-xs font-bold text-[#0B3031] dark:text-[#F2FBFA] leading-none">
+            <p className="text-xs font-bold text-slate-900 dark:text-slate-100 leading-none">
               {user?.name || 'مستخدم النظام'}
             </p>
             <div className="mt-1">{getRoleBadge()}</div>
@@ -103,7 +103,7 @@ export const Header: React.FC = () => {
         <button
           onClick={handleLogout}
           title="تسجيل الخروج"
-          className="p-2 rounded-2xl text-[#713F42] bg-[#FDEEEF] hover:bg-[#F2A9AB] transition-colors"
+          className="p-2.5 rounded-2xl text-rose-600 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:text-rose-400 dark:hover:bg-rose-950/70 transition-colors"
         >
           <LogOut className="w-5 h-5" />
         </button>

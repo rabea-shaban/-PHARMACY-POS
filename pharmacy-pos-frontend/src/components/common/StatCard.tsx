@@ -16,34 +16,39 @@ export interface StatCardProps {
 
 const cardStyles = {
   totalSales: {
-    card: 'bg-[#E7F7B9] border-[#d8efa0] text-[#365A35]',
-    title: 'text-[#486b47]',
-    value: 'text-[#284827]',
-    iconBg: 'bg-[#daf59f] text-[#365A35]',
+    card: 'bg-emerald-50/80 border-emerald-200 text-emerald-900 dark:bg-[#0E2C24] dark:border-emerald-800/50 dark:text-emerald-100',
+    title: 'text-emerald-700 dark:text-emerald-300',
+    value: 'text-emerald-950 dark:text-emerald-50',
+    iconBg: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/60 dark:text-emerald-300',
+    trendPos: 'text-emerald-700 dark:text-emerald-300',
   },
   inStore: {
-    card: 'bg-[#F4B0B2] border-[#eca2a4] text-[#713F42]',
-    title: 'text-[#844c50]',
-    value: 'text-[#592d30]',
-    iconBg: 'bg-[#f09ea1] text-[#713F42]',
+    card: 'bg-rose-50/80 border-rose-200 text-rose-900 dark:bg-[#2C1418] dark:border-rose-800/50 dark:text-rose-100',
+    title: 'text-rose-700 dark:text-rose-300',
+    value: 'text-rose-950 dark:text-rose-50',
+    iconBg: 'bg-rose-100 text-rose-700 dark:bg-rose-900/60 dark:text-rose-300',
+    trendPos: 'text-rose-700 dark:text-rose-300',
   },
   online: {
-    card: 'bg-[#91D7CC] border-[#7ecfc2] text-[#245957]',
-    title: 'text-[#2a6866]',
-    value: 'text-[#184442]',
-    iconBg: 'bg-[#7dcbbd] text-[#245957]',
+    card: 'bg-cyan-50/80 border-cyan-200 text-cyan-900 dark:bg-[#0C2533] dark:border-cyan-800/50 dark:text-cyan-100',
+    title: 'text-cyan-700 dark:text-cyan-300',
+    value: 'text-cyan-950 dark:text-cyan-50',
+    iconBg: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/60 dark:text-cyan-300',
+    trendPos: 'text-cyan-700 dark:text-cyan-300',
   },
   orders: {
-    card: 'bg-[#F7FCFC] border-[#D5E6E5] text-[#0B3031]',
-    title: 'text-[#557274]',
-    value: 'text-[#0B3031]',
-    iconBg: 'bg-[#DDEEEE] text-[#003C3D]',
+    card: 'bg-white border-slate-200 text-slate-900 dark:bg-[#131B2A] dark:border-[#223049] dark:text-slate-100',
+    title: 'text-slate-500 dark:text-slate-400',
+    value: 'text-slate-900 dark:text-white',
+    iconBg: 'bg-slate-100 text-slate-700 dark:bg-[#1E293B] dark:text-slate-300',
+    trendPos: 'text-emerald-600 dark:text-emerald-400',
   },
   default: {
-    card: 'bg-[#F7FCFC] border-[#D5E6E5] text-[#0B3031]',
-    title: 'text-[#557274]',
-    value: 'text-[#0B3031]',
-    iconBg: 'bg-[#DDEEEE] text-[#003C3D]',
+    card: 'bg-white border-slate-200 text-slate-900 dark:bg-[#131B2A] dark:border-[#223049] dark:text-slate-100',
+    title: 'text-slate-500 dark:text-slate-400',
+    value: 'text-slate-900 dark:text-white',
+    iconBg: 'bg-slate-100 text-slate-700 dark:bg-[#1E293B] dark:text-slate-300',
+    trendPos: 'text-emerald-600 dark:text-emerald-400',
   },
 };
 
@@ -58,7 +63,7 @@ export const StatCard: React.FC<StatCardProps> = ({
   const styles = cardStyles[cardType];
 
   return (
-    <Card className={cn('hover:shadow-md transition-all rounded-3xl shadow-xs', styles.card)}>
+    <Card className={cn('hover:shadow-md transition-all rounded-3xl', styles.card)}>
       <CardContent className="p-6">
         <div className="flex items-center justify-between">
           <div className="space-y-1">
@@ -71,7 +76,7 @@ export const StatCard: React.FC<StatCardProps> = ({
             )}
             {trend && (
               <div className="flex items-center gap-1 mt-1.5 text-xs font-bold">
-                <span className={trend.isPositive ? 'text-emerald-800' : 'text-rose-800'}>
+                <span className={trend.isPositive ? styles.trendPos : 'text-rose-500'}>
                   {trend.isPositive ? '↑ +' : '↓ -'}
                   {Math.abs(trend.value)}%
                 </span>
@@ -79,7 +84,7 @@ export const StatCard: React.FC<StatCardProps> = ({
               </div>
             )}
           </div>
-          <div className={cn('p-3 rounded-2xl shrink-0 shadow-xs', styles.iconBg)}>
+          <div className={cn('p-3.5 rounded-2xl shrink-0 shadow-xs', styles.iconBg)}>
             {icon}
           </div>
         </div>

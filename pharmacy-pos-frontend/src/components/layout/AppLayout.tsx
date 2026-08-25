@@ -9,7 +9,7 @@ export const AppLayout: React.FC = () => {
   const { sidebarOpen } = useAppSelector((state) => state.ui);
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 font-cairo text-slate-900 dark:text-slate-100 flex">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0B0F17] font-cairo text-slate-900 dark:text-slate-100 flex transition-colors duration-200">
       {/* Sidebar Navigation */}
       <Sidebar />
 

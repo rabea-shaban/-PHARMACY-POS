@@ -31,7 +31,7 @@ export const POSPage: React.FC = () => {
                     leftIcon={<Search className="w-4 h-4" />}
                   />
                 </div>
-                <div className="w-48">
+                <div className="w-56">
                   <Input
                     placeholder="امسح الباركود..."
                     leftIcon={<Barcode className="w-4 h-4" />}
@@ -46,7 +46,7 @@ export const POSPage: React.FC = () => {
               <CardTitle>الأصناف المتاحة للبيع السريع</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="p-12 text-center text-slate-400 text-sm">
+              <div className="p-16 text-center text-slate-400 dark:text-slate-500 text-sm">
                 سيتم ربط البحث اللحظي بالأدوية وتشغيلات FEFO في مرحلة F05.
               </div>
             </CardContent>
@@ -55,25 +55,28 @@ export const POSPage: React.FC = () => {
 
         {/* Right Column: POS Cart & Checkout Summary */}
         <div className="space-y-4">
-          <Card className="border-emerald-600/30">
+          <Card className="border-emerald-600/30 dark:border-emerald-500/30">
             <CardHeader className="flex flex-row items-center justify-between pb-3">
               <div className="flex items-center gap-2">
-                <ShoppingCart className="w-5 h-5 text-emerald-600" />
+                <div className="p-2 rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400">
+                  <ShoppingCart className="w-4 h-4" />
+                </div>
                 <CardTitle className="text-base">سلة الفاتورة</CardTitle>
               </div>
               {items.length > 0 && (
                 <button
                   onClick={() => dispatch(clearCart())}
-                  className="text-xs text-rose-500 hover:text-rose-700 flex items-center gap-1"
+                  className="text-xs text-rose-500 hover:text-rose-700 flex items-center gap-1 font-bold transition-colors"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   إفراغ السلة
                 </button>
               )}
             </CardHeader>
+
             <CardContent className="space-y-4">
               {items.length === 0 ? (
-                <div className="p-8 text-center text-slate-400 text-xs">
+                <div className="p-10 text-center text-slate-400 dark:text-slate-500 text-xs">
                   السلة فارغة حالياً. قم بإضافة أصناف لبدء البيع.
                 </div>
               ) : (
@@ -81,37 +84,42 @@ export const POSPage: React.FC = () => {
                   {items.map((item) => (
                     <div
                       key={item.productId}
-                      className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-between text-xs"
+                      className="p-3 rounded-2xl bg-slate-50 dark:bg-[#0B0F17] border border-slate-100 dark:border-[#1E293B] flex items-center justify-between text-xs"
                     >
                       <div>
                         <p className="font-bold text-slate-800 dark:text-slate-100">{item.product.name}</p>
                         <p className="text-slate-400">{formatCurrency(item.unitPrice)} × {item.quantity}</p>
                       </div>
-                      <span className="font-bold text-emerald-600">{formatCurrency(item.total)}</span>
+                      <span className="font-black text-emerald-600 dark:text-emerald-400">{formatCurrency(item.total)}</span>
                     </div>
                   ))}
                 </div>
               )}
 
               {/* Totals */}
-              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-1.5 text-xs">
-                <div className="flex justify-between text-slate-500">
+              <div className="pt-4 border-t border-slate-100 dark:border-[#1E293B] space-y-2 text-xs">
+                <div className="flex justify-between text-slate-500 dark:text-slate-400 font-medium">
                   <span>المجموع الفرعي:</span>
-                  <span className="font-semibold text-slate-750">{formatCurrency(subtotal)}</span>
+                  <span className="font-bold text-slate-800 dark:text-slate-200">{formatCurrency(subtotal)}</span>
                 </div>
                 {discountTotal > 0 && (
-                  <div className="flex justify-between text-emerald-600">
+                  <div className="flex justify-between text-emerald-600 dark:text-emerald-400 font-bold">
                     <span>إجمالي الخصم:</span>
-                    <span className="font-semibold">-{formatCurrency(discountTotal)}</span>
+                    <span>-{formatCurrency(discountTotal)}</span>
                   </div>
                 )}
-                <div className="flex justify-between text-base font-black text-slate-900 dark:text-slate-100 pt-2 border-t border-slate-100 dark:border-slate-800">
+                <div className="flex justify-between text-base font-black text-slate-900 dark:text-white pt-3 border-t border-slate-100 dark:border-[#1E293B]">
                   <span>الإجمالي النهائي:</span>
-                  <span className="text-emerald-600">{formatCurrency(total)}</span>
+                  <span className="text-emerald-600 dark:text-emerald-400 text-xl">{formatCurrency(total)}</span>
                 </div>
               </div>
 
-              <Button variant="primary" size="lg" className="w-full" disabled={items.length === 0}>
+              <Button
+                variant="primary"
+                size="lg"
+                className="w-full text-base py-3 font-black shadow-lg"
+                disabled={items.length === 0}
+              >
                 إتمام عملية البيع (Checkout)
               </Button>
             </CardContent>

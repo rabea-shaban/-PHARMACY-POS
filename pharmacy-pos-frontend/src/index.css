@@ -5,131 +5,80 @@
   --font-sans: "Inter", "Cairo", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
-  /* Theme Colors mapped to CSS Variables */
-  --color-background: var(--background);
-  --color-background-soft: var(--background-soft);
-  --color-background-card: var(--background-card);
+  /* Theme Tokens mapped to CSS variables */
+  --color-app-bg: var(--app-bg);
+  --color-app-surface: var(--app-surface);
+  --color-app-surface-hover: var(--app-surface-hover);
+  --color-app-border: var(--app-border);
+  --color-app-border-hover: var(--app-border-hover);
 
-  --color-primary: var(--primary);
-  --color-primary-hover: var(--primary-hover);
-  --color-primary-light: var(--primary-light);
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-primary-hover: var(--brand-primary-hover);
+  --color-brand-accent: var(--brand-accent);
 
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --color-text-muted: var(--text-muted);
-
-  --color-chart-mint: var(--chart-mint);
-  --color-chart-coral: var(--chart-coral);
-  --color-chart-lime: var(--chart-lime);
-  --color-chart-cyan: var(--chart-cyan);
-  --color-chart-purple: var(--chart-purple);
-
-  --color-success: var(--success);
-  --color-success-bg: var(--success-bg);
-  --color-warning: var(--warning);
-  --color-warning-bg: var(--warning-bg);
-  --color-danger: var(--danger);
-  --color-danger-bg: var(--danger-bg);
-  --color-info: var(--info);
-  --color-info-bg: var(--info-bg);
-
-  --color-border: var(--border);
-  --color-border-light: var(--border-light);
-  --color-border-hover: var(--border-hover);
-
-  --color-card: var(--card);
-  --color-card-hover: var(--card-hover);
+  --color-app-text: var(--app-text);
+  --color-app-text-muted: var(--app-text-muted);
+  --color-app-text-faint: var(--app-text-faint);
 }
 
 :root {
-  /* Background */
-  --background: #EAF7F7;
-  --background-soft: #F2FBFA;
-  --background-card: #F7FCFC;
+  /* Light Theme (Clean Fresh Medical) */
+  --app-bg: #F4FBF9;
+  --app-surface: #FFFFFF;
+  --app-surface-hover: #F8FAFC;
+  --app-border: #E2E8F0;
+  --app-border-hover: #CBD5E1;
 
-  /* Primary - Dark Teal */
-  --primary: #003C3D;
-  --primary-hover: #005456;
-  --primary-light: #DDEEEE;
+  --brand-primary: #003C3D;
+  --brand-primary-hover: #005456;
+  --brand-accent: #10B981;
 
-  /* Text */
-  --text-primary: #0B3031;
-  --text-secondary: #557274;
-  --text-muted: #829697;
-  --text-white: #FFFFFF;
-
-  /* Charts */
-  --chart-mint: #83D4C8;
-  --chart-coral: #F2A9AB;
-  --chart-lime: #CBEF91;
-  --chart-cyan: #9FDCE8;
-  --chart-purple: #AEB9E8;
+  --app-text: #0F172A;
+  --app-text-muted: #64748B;
+  --app-text-faint: #94A3B8;
 
   /* Status */
-  --success: #73C77A;
-  --success-bg: #E8F7E8;
-
-  --warning: #D7C65A;
-  --warning-bg: #FFF8D8;
-
-  --danger: #E8898D;
-  --danger-bg: #FDEBEC;
-
-  --info: #79C7D7;
-  --info-bg: #E4F6F8;
-
-  /* Inventory */
-  --inventory-in-stock: #83D4C8;
-  --inventory-low-stock: #CBEF91;
-  --inventory-out-stock: #F2A9AB;
-  --inventory-expiring: #AEB9E8;
-
-  /* Borders */
-  --border: #D5E6E5;
-  --border-light: #E3EFEE;
-  --border-hover: #AFCFCD;
-
-  /* Cards */
-  --card: #F7FCFC;
-  --card-hover: #FFFFFF;
-
-  /* Shadow */
-  --shadow-card: 0 4px 20px rgba(0, 60, 61, 0.05);
+  --status-success: #10B981;
+  --status-warning: #F59E0B;
+  --status-danger: #EF4444;
+  --status-info: #06B6D4;
 }
 
 .dark {
-  --background: #06191A;
-  --background-soft: #0A2426;
-  --background-card: #0E2C2E;
+  /* Dark Theme (Modern Sleek High-Contrast Dark Slate) */
+  --app-bg: #0B0F17;
+  --app-surface: #131B2A;
+  --app-surface-hover: #1C273B;
+  --app-border: #223049;
+  --app-border-hover: #334666;
 
-  --primary: #83D4C8;
-  --primary-hover: #9FDCE8;
-  --primary-light: #003C3D;
+  --brand-primary: #10B981;
+  --brand-primary-hover: #059669;
+  --brand-accent: #34D399;
 
-  --text-primary: #F2FBFA;
-  --text-secondary: #A0B9BA;
-  --text-muted: #6B8788;
+  --app-text: #F8FAFC;
+  --app-text-muted: #94A3B8;
+  --app-text-faint: #64748B;
 
-  --border: #183C3E;
-  --border-light: #123133;
-  --border-hover: #265558;
-
-  --card: #0E2C2E;
-  --card-hover: #133638;
+  /* Status */
+  --status-success: #34D399;
+  --status-warning: #FBBF24;
+  --status-danger: #F87171;
+  --status-info: #22D3EE;
 }
 
 @layer base {
   * {
-    border-color: var(--border);
+    border-color: var(--app-border);
   }
   body {
-    background-color: var(--background);
-    color: var(--text-primary);
+    background-color: var(--app-bg);
+    color: var(--app-text);
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 }
 
-/* Custom Scrollbar for POS / Data Tables */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -138,9 +87,12 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #AFCFCD;
+  background: #64748B;
   border-radius: 9999px;
 }
+.dark ::-webkit-scrollbar-thumb {
+  background: #334666;
+}
 ::-webkit-scrollbar-thumb:hover {
-  background: #83D4C8;
+  background: #94A3B8;
 }
