@@ -13,12 +13,12 @@
     },
     {
       "key": "createdUserId",
-      "value": "",
+      "value": "7d604182-a707-421b-8448-e8c4768ca82a",
       "type": "string"
     },
     {
       "key": "createdCustomerId",
-      "value": "",
+      "value": "afd7140a-2010-41a3-bd18-dca31255b632",
       "type": "string"
     },
     {
@@ -28,17 +28,17 @@
     },
     {
       "key": "createdProductId",
-      "value": "",
+      "value": "ee928d79-5e24-4b23-8040-7bb5d1a7b34f",
       "type": "string"
     },
     {
       "key": "createdBatchId",
-      "value": "",
+      "value": "b605b4b7-e483-4af2-8bdd-f1a35facdb54",
       "type": "string"
     },
     {
       "key": "createdSupplierId",
-      "value": "",
+      "value": "3aebd0c0-98b3-4e3d-bcb5-74fbf63490ae",
       "type": "string"
     },
     {
