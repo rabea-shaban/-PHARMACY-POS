@@ -26,15 +26,32 @@ export class AuthService {
 
     // Generic error message to prevent account enumeration
     if (!user) {
+      await this.audit.logAction({
+        action: 'LOGIN',
+        entity: 'auth',
+        metadata: { status: 'FAILED', phone: identifier, reason: 'User not found' },
+      });
       throw new UnauthorizedError('Invalid credentials');
     }
 
     if (!user.isActive) {
+      await this.audit.logAction({
+        userId: user.id,
+        action: 'LOGIN',
+        entity: 'auth',
+        metadata: { status: 'FAILED', phone: identifier, reason: 'Account deactivated' },
+      });
       throw new UnauthorizedError('Invalid credentials');
     }
 
     const isPasswordValid = await comparePassword(input.password, user.passwordHash);
     if (!isPasswordValid) {
+      await this.audit.logAction({
+        userId: user.id,
+        action: 'LOGIN',
+        entity: 'auth',
+        metadata: { status: 'FAILED', phone: identifier, reason: 'Invalid password' },
+      });
       throw new UnauthorizedError('Invalid credentials');
     }
 
@@ -54,13 +71,13 @@ export class AuthService {
       role: user.role,
     });
 
-    // Record login audit log
+    // Record successful login audit log
     await this.audit.logAction({
       userId: user.id,
       action: 'LOGIN',
-      entity: 'users',
+      entity: 'auth',
       entityId: user.id,
-      metadata: { role: user.role, identifier },
+      metadata: { status: 'SUCCESS', role: user.role, identifier },
     });
 
     return {

@@ -22,6 +22,9 @@ import { reportsRouter } from '../modules/reports/index.js';
 import { payrollRouter } from '../modules/payroll/index.js';
 import { notificationsRouter } from '../modules/notifications/index.js';
 import { whatsAppRouter } from '../modules/whatsapp/index.js';
+import { auditRouter } from '../modules/audit/index.js';
+import { settingsRouter } from '../modules/settings/index.js';
+import { securityRouter } from '../modules/security/index.js';
 
 export const apiRouter = Router();
 
@@ -93,3 +96,12 @@ apiRouter.use('/notifications', notificationsRouter);
 
 // WhatsApp Customer Communication Module
 apiRouter.use('/whatsapp', whatsAppRouter);
+
+// Audit Logs & Activity Tracking Module
+apiRouter.use('/audit-logs', auditRouter);
+
+// System & Business Configuration Settings Module
+apiRouter.use('/settings', settingsRouter);
+
+// Security & Authentication Activity Logs Module
+apiRouter.use('/security', securityRouter);

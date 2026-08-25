@@ -2352,6 +2352,179 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "31. Audit Logs",
+      "item": [
+        {
+          "name": "Get Audit Activity Summary",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/audit-logs/summary",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "audit-logs", "summary"]
+            },
+            "description": "High-level summary of system activity and action distributions."
+          },
+          "response": []
+        },
+        {
+          "name": "List Audit Logs with Filters",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/audit-logs?page=1&limit=20&action=UPDATE",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "audit-logs"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" },
+                { "key": "action", "value": "UPDATE" }
+              ]
+            },
+            "description": "Query audit logs with entity, user, and action filters."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Audit Log Details by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/audit-logs/<AUDIT_ID>",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "audit-logs", "<AUDIT_ID>"]
+            },
+            "description": "View complete audit log record with old and new data diffs."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "32. System Settings",
+      "item": [
+        {
+          "name": "Get Public Settings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/settings/public",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "settings", "public"]
+            },
+            "description": "Public branding and receipt configurations (no auth required)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get All System Settings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/settings",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "settings"]
+            },
+            "description": "List all system settings and configuration map."
+          },
+          "response": []
+        },
+        {
+          "name": "Batch Update System Settings",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"settings\": [\n    { \"key\": \"pharmacy_name\", \"value\": \"Al-Shifa Elite Pharmacy\", \"isPublic\": true },\n    { \"key\": \"low_stock_threshold\", \"value\": \"15\" }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/settings",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "settings"]
+            },
+            "description": "Batch update system configuration settings."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Setting by Key",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/settings/pharmacy_name",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "settings", "pharmacy_name"]
+            },
+            "description": "Get configuration value for a single key."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Single Setting",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"value\": \"60\",\n  \"description\": \"Updated expiry alert horizon in days\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/settings/expiry_alert_days",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "settings", "expiry_alert_days"]
+            },
+            "description": "Update value of a single setting."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "33. Security",
+      "item": [
+        {
+          "name": "Get Security & Authentication Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/security/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "security", "stats"]
+            },
+            "description": "Authentication metrics, successful vs failed logins, and failure rate percentage."
+          },
+          "response": []
+        },
+        {
+          "name": "List Security & Login Logs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/security/logs?page=1&limit=20&status=FAILED",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "security", "logs"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" },
+                { "key": "status", "value": "FAILED" }
+              ]
+            },
+            "description": "Query authentication activity logs (successes, failures, IPs, reasons)."
+          },
+          "response": []
+        }
+      ]
     }
   ]
 }
