@@ -117,6 +117,11 @@ export const APP_ROUTES: Record<string, AppRouteDefinition> = {
     isProtected: true,
     allowedRoles: MODULE_PERMISSIONS.sales,
   },
+  SALES_DETAILS: {
+    path: '/sales/:id',
+    isProtected: true,
+    allowedRoles: MODULE_PERMISSIONS.sales,
+  },
   RETURNS: {
     path: '/returns',
     isProtected: true,

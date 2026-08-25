@@ -1,133 +1,145 @@
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { PageHeader } from '../components/common/PageHeader.js';
-import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card.js';
-import { Button } from '../components/ui/Button.js';
-import { Input } from '../components/ui/Input.js';
-import { Search, Barcode, ShoppingCart, Trash2 } from 'lucide-react';
-import { useAppDispatch, useAppSelector } from '../store/hooks.js';
+import React, { useState, useRef, useEffect } from 'react';
+import { useAppSelector, useAppDispatch } from '../store/hooks.js';
 import { clearCart } from '../store/slices/cartSlice.js';
-import { formatCurrency } from '../lib/utils.js';
+import { POSHeader } from '../features/sales/components/POSHeader.js';
+import { BarcodeScannerInput } from '../features/sales/components/BarcodeScannerInput.js';
+import { ProductSearch } from '../features/sales/components/ProductSearch.js';
+import { CartPanel } from '../features/sales/components/CartPanel.js';
+import { CustomerSelector } from '../features/sales/components/CustomerSelector.js';
+import { DiscountSelector } from '../features/sales/components/DiscountSelector.js';
+import { InsuranceSelector } from '../features/sales/components/InsuranceSelector.js';
+import { LoyaltySummary } from '../features/sales/components/LoyaltySummary.js';
+import { SaleSummary } from '../features/sales/components/SaleSummary.js';
+import { CheckoutModal } from '../features/sales/components/CheckoutModal.js';
+import { InvoiceSuccessModal } from '../features/sales/components/InvoiceSuccessModal.js';
+import { POSKeyboardShortcuts } from '../features/sales/components/POSKeyboardShortcuts.js';
+import { Sale } from '../features/sales/types/sale.types.js';
 
 export const POSPage: React.FC = () => {
-  const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { items, subtotal, total, discountTotal } = useAppSelector((state) => state.cart);
+  const cartItems = useAppSelector((state) => state.cart.items);
+
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+  const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
+  const [completedSale, setCompletedSale] = useState<Sale | null>(null);
+
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const barcodeInputRef = useRef<HTMLInputElement>(null);
+
+  // Global Keyboard Shortcuts (F1, F2, F8, Esc)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'F1') {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+      } else if (e.key === 'F2') {
+        e.preventDefault();
+        barcodeInputRef.current?.focus();
+      } else if (e.key === 'F8') {
+        e.preventDefault();
+        if (cartItems.length > 0) {
+          setIsCheckoutOpen(true);
+        }
+      } else if (e.key === 'Escape') {
+        if (isCheckoutOpen) setIsCheckoutOpen(false);
+        if (isSuccessOpen) {
+          setIsSuccessOpen(false);
+          dispatch(clearCart());
+        }
+        if (isShortcutsOpen) setIsShortcutsOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [cartItems.length, isCheckoutOpen, isSuccessOpen, isShortcutsOpen, dispatch]);
+
+  const handleCheckoutSuccess = (sale: Sale) => {
+    setCompletedSale(sale);
+    setIsCheckoutOpen(false);
+    setIsSuccessOpen(true);
+  };
+
+  const handleNewSale = () => {
+    setIsSuccessOpen(false);
+    setCompletedSale(null);
+    dispatch(clearCart());
+    barcodeInputRef.current?.focus();
+  };
 
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title={t('pos.title')}
-        description={t('pos.subtitle')}
-      />
+    <div className="flex flex-col h-[calc(100vh-5rem)] space-y-3 animate-in fade-in duration-300">
+      {/* POS Top Navigation / Status Header */}
+      <POSHeader onOpenShortcuts={() => setIsShortcutsOpen(true)} />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column: Product Search & Quick Catalog */}
-        <div className="lg:col-span-2 space-y-4">
-          <Card>
-            <CardContent className="p-4 space-y-3">
-              <div className="flex gap-3">
-                <div className="flex-1">
-                  <Input
-                    placeholder={t('pos.searchPlaceholder')}
-                    leftIcon={<Search className="w-4 h-4" />}
-                  />
-                </div>
-                <div className="w-56">
-                  <Input
-                    placeholder={t('pos.barcodePlaceholder')}
-                    leftIcon={<Barcode className="w-4 h-4" />}
-                  />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+      {/* Main Cashier Workspace Split Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 flex-1 min-h-0">
+        {/* Left Column: Product Search, Barcode Reader & Cart Items List */}
+        <div className="lg:col-span-8 flex flex-col space-y-3 h-full min-h-0">
+          {/* Top Controls: Fast Barcode Scanner and Search Autocomplete */}
+          <div className="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
+            <div className="sm:col-span-6">
+              <BarcodeScannerInput inputRef={barcodeInputRef} />
+            </div>
+            <div className="sm:col-span-6">
+              <ProductSearch inputRef={searchInputRef} />
+            </div>
+          </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>{t('pos.quickCatalog')}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="p-16 text-center text-slate-400 dark:text-slate-500 text-sm">
-                {t('pos.fefoNotice')}
-              </div>
-            </CardContent>
-          </Card>
+          {/* Real-time Cart Items Panel */}
+          <div className="flex-1 min-h-0">
+            <CartPanel />
+          </div>
         </div>
 
-        {/* Right Column: POS Cart & Checkout Summary */}
-        <div className="space-y-4">
-          <Card className="border-sky-200 dark:border-sky-500/30">
-            <CardHeader className="flex flex-row items-center justify-between pb-3">
-              <div className="flex items-center gap-2">
-                <div className="p-2 rounded-xl bg-sky-50 text-sky-600 dark:bg-sky-950/60 dark:text-sky-400">
-                  <ShoppingCart className="w-4 h-4" />
-                </div>
-                <CardTitle className="text-base">{t('pos.cartTitle')}</CardTitle>
-              </div>
-              {items.length > 0 && (
-                <button
-                  onClick={() => dispatch(clearCart())}
-                  className="text-xs text-rose-500 hover:text-rose-700 flex items-center gap-1 font-bold transition-colors cursor-pointer"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                  {t('pos.clearCart')}
-                </button>
-              )}
-            </CardHeader>
+        {/* Right Column: Customer Profile, Discounts, Insurance, Loyalty, and Grand Total Breakdown */}
+        <div className="lg:col-span-4 flex flex-col justify-between space-y-2.5 h-full overflow-y-auto">
+          <div className="space-y-2.5">
+            {/* Customer Lookup & Quick Registration */}
+            <CustomerSelector />
 
-            <CardContent className="space-y-4">
-              {items.length === 0 ? (
-                <div className="p-10 text-center text-slate-400 dark:text-slate-500 text-xs">
-                  {t('pos.emptyCart')}
-                </div>
-              ) : (
-                <div className="space-y-2 max-h-60 overflow-y-auto">
-                  {items.map((item) => (
-                    <div
-                      key={item.productId}
-                      className="p-3 rounded-2xl bg-slate-50 dark:bg-[#0B0F17] border border-slate-100 dark:border-[#1E293B] flex items-center justify-between text-xs"
-                    >
-                      <div>
-                        <p className="font-bold text-slate-800 dark:text-slate-100">{item.product.name}</p>
-                        <p className="text-slate-400">{formatCurrency(item.unitPrice)} × {item.quantity}</p>
-                      </div>
-                      <span className="font-black text-sky-600 dark:text-sky-400">{formatCurrency(item.total)}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
+            {/* Loyalty points deduction widget */}
+            <LoyaltySummary />
 
-              {/* Totals */}
-              <div className="pt-4 border-t border-slate-100 dark:border-[#1E293B] space-y-2 text-xs">
-                <div className="flex justify-between text-slate-500 dark:text-slate-400 font-medium">
-                  <span>{t('pos.subtotal')}</span>
-                  <span className="font-bold text-slate-800 dark:text-slate-200">{formatCurrency(subtotal)}</span>
-                </div>
-                {discountTotal > 0 && (
-                  <div className="flex justify-between text-emerald-600 dark:text-emerald-400 font-bold">
-                    <span>{t('pos.discount')}</span>
-                    <span>-{formatCurrency(discountTotal)}</span>
-                  </div>
-                )}
-                <div className="flex justify-between text-base font-black text-slate-900 dark:text-white pt-3 border-t border-slate-100 dark:border-[#1E293B]">
-                  <span>{t('pos.grandTotal')}</span>
-                  <span className="text-sky-600 dark:text-sky-400 text-xl">{formatCurrency(total)}</span>
-                </div>
-              </div>
+            {/* Insurance policy co-pay selector */}
+            <InsuranceSelector />
 
-              <Button
-                variant="primary"
-                size="lg"
-                className="w-full text-base py-3 font-black shadow-lg shadow-sky-600/20"
-                disabled={items.length === 0}
-              >
-                {t('pos.checkoutButton')}
-              </Button>
-            </CardContent>
-          </Card>
+            {/* Discount / coupon code selector */}
+            <DiscountSelector />
+          </div>
+
+          {/* Grand Totals and Final Checkout Trigger */}
+          <SaleSummary onOpenCheckout={() => setIsCheckoutOpen(true)} />
         </div>
       </div>
+
+      {/* Checkout Modal with Split Payments */}
+      {isCheckoutOpen && (
+        <CheckoutModal
+          isOpen={isCheckoutOpen}
+          onClose={() => setIsCheckoutOpen(false)}
+          onSuccess={handleCheckoutSuccess}
+        />
+      )}
+
+      {/* Invoice Success & Thermal Receipt Print Modal */}
+      {isSuccessOpen && completedSale && (
+        <InvoiceSuccessModal
+          isOpen={isSuccessOpen}
+          onClose={() => setIsSuccessOpen(false)}
+          sale={completedSale}
+          onNewSale={handleNewSale}
+        />
+      )}
+
+      {/* Keyboard Shortcuts Dialog */}
+      {isShortcutsOpen && (
+        <POSKeyboardShortcuts
+          isOpen={isShortcutsOpen}
+          onClose={() => setIsShortcutsOpen(false)}
+        />
+      )}
     </div>
   );
 };

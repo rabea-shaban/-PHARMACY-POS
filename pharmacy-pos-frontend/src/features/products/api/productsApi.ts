@@ -24,6 +24,12 @@ export const productsApi = {
     return response.data.data;
   },
 
+  // 3b. Fast barcode lookup
+  getProductByBarcode: async (barcode: string): Promise<Product> => {
+    const response = await api.get<ApiResponse<Product>>(`/products/barcode/${barcode}`);
+    return response.data.data;
+  },
+
   // 4. Get product stock summary
   getProductStock: async (id: string): Promise<ProductStockSummary> => {
     const response = await api.get<ApiResponse<ProductStockSummary>>(`/products/${id}/stock`);

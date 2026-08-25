@@ -40,6 +40,10 @@ import { PurchasesPage } from '../features/purchases/pages/PurchasesPage.js';
 import { CreatePurchasePage } from '../features/purchases/pages/CreatePurchasePage.js';
 import { PurchaseDetailsPage } from '../features/purchases/pages/PurchaseDetailsPage.js';
 
+// F06: Sales & POS Pages
+import { SalesPage } from '../features/sales/pages/SalesPage.js';
+import { SaleDetailsPage } from '../features/sales/pages/SaleDetailsPage.js';
+
 export const AppRoutes: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -296,11 +300,20 @@ export const AppRoutes: React.FC = () => {
             </RoleGuard>
           }
         />
+        {/* Sales Module (F06) */}
         <Route
           path="/sales"
           element={
             <RoleGuard allowedRoles={MODULE_PERMISSIONS.sales}>
-              <div className="p-8 text-center text-slate-400">سجل فواتير المبيعات (المرحلة F10)</div>
+              <SalesPage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/sales/:id"
+          element={
+            <RoleGuard allowedRoles={MODULE_PERMISSIONS.sales}>
+              <SaleDetailsPage />
             </RoleGuard>
           }
         />

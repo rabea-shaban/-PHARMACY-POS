@@ -1,54 +1,94 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CartItem, Product, Customer } from '../../types/index.js';
+import { Product } from '../../features/products/types/product.types.js';
+import { Customer } from '../../features/customers/types/customer.types.js';
+import {
+  CartItemModel,
+  AppliedDiscount,
+  AppliedInsurance,
+  AppliedLoyalty,
+} from '../../features/sales/types/checkout.types.js';
 
 interface CartSliceState {
-  items: CartItem[];
+  items: CartItemModel[];
   customer: Customer | null;
-  discountPercentage: number;
-  pointsToRedeem: number;
-  redeemedDiscountAmount: number;
+  discount: AppliedDiscount | null;
+  insurance: AppliedInsurance | null;
+  loyalty: AppliedLoyalty | null;
+  notes: string;
   subtotal: number;
-  discountTotal: number;
-  taxTotal: number;
+  discountAmount: number;
+  insuranceAmount: number;
+  taxAmount: number;
   total: number;
 }
 
 const initialState: CartSliceState = {
   items: [],
   customer: null,
-  discountPercentage: 0,
-  pointsToRedeem: 0,
-  redeemedDiscountAmount: 0,
+  discount: null,
+  insurance: null,
+  loyalty: null,
+  notes: '',
   subtotal: 0,
-  discountTotal: 0,
-  taxTotal: 0,
+  discountAmount: 0,
+  insuranceAmount: 0,
+  taxAmount: 0,
   total: 0,
 };
 
 function calculateTotals(state: CartSliceState) {
   let subtotal = 0;
+  let taxAmount = 0;
+
   for (const item of state.items) {
+    const itemSubtotal = item.quantity * item.unitPrice;
+    item.subtotal = Number(itemSubtotal.toFixed(2));
+    item.total = Number(Math.max(0, item.subtotal - (item.discount || 0)).toFixed(2));
     subtotal += item.total;
+
+    if (item.product.taxRate && item.product.taxRate > 0) {
+      taxAmount += (item.total * item.product.taxRate) / 100;
+    }
   }
+
   state.subtotal = Number(subtotal.toFixed(2));
+  state.taxAmount = Number(taxAmount.toFixed(2));
 
-  // Percentage discount
-  let percentageDiscount = 0;
-  if (state.discountPercentage > 0) {
-    percentageDiscount = (state.subtotal * state.discountPercentage) / 100;
+  // 1. Calculate General Discount (Percentage or Fixed)
+  let discountAmount = 0;
+  if (state.discount) {
+    if (state.discount.type === 'PERCENTAGE') {
+      discountAmount = (state.subtotal * state.discount.value) / 100;
+    } else {
+      discountAmount = state.discount.value;
+    }
   }
 
-  // Customer tier discount if applicable
-  let tierDiscount = 0;
-  if (state.customer?.tier?.discountPercentage) {
-    tierDiscount = (state.subtotal * state.customer.tier.discountPercentage) / 100;
+  // 2. Customer Tier Discount (if applicable and no conflicting custom discount)
+  if (!state.discount && state.customer?.loyalty?.tier?.discountPercentage) {
+    const tierPct = state.customer.loyalty.tier.discountPercentage;
+    discountAmount = (state.subtotal * tierPct) / 100;
   }
 
-  const combinedDiscount = percentageDiscount + tierDiscount + state.redeemedDiscountAmount;
-  state.discountTotal = Number(Math.min(state.subtotal, combinedDiscount).toFixed(2));
+  // 3. Loyalty points redemption
+  if (state.loyalty?.discountAmount) {
+    discountAmount += state.loyalty.discountAmount;
+  }
 
-  const afterDiscount = Math.max(0, state.subtotal - state.discountTotal);
-  state.total = Number(afterDiscount.toFixed(2));
+  state.discountAmount = Number(Math.min(state.subtotal, discountAmount).toFixed(2));
+
+  const afterDiscount = Math.max(0, state.subtotal - state.discountAmount);
+
+  // 4. Insurance Coverage (if active policy selected)
+  let insuranceAmount = 0;
+  if (state.insurance && state.insurance.coveragePercentage > 0) {
+    insuranceAmount = (afterDiscount * state.insurance.coveragePercentage) / 100;
+  }
+  state.insuranceAmount = Number(insuranceAmount.toFixed(2));
+
+  // 5. Final Grand Total Due from Customer
+  const grandTotal = Math.max(0, afterDiscount - state.insuranceAmount + state.taxAmount);
+  state.total = Number(grandTotal.toFixed(2));
 }
 
 export const cartSlice = createSlice({
@@ -61,15 +101,14 @@ export const cartSlice = createSlice({
 
       if (existing) {
         existing.quantity += quantity;
-        existing.subtotal = Number((existing.quantity * existing.unitPrice).toFixed(2));
-        existing.total = existing.subtotal - existing.discount;
       } else {
-        const subtotal = Number((quantity * product.sellingPrice).toFixed(2));
+        const unitPrice = product.sellingPrice || 0;
+        const subtotal = Number((quantity * unitPrice).toFixed(2));
         state.items.push({
           product,
           productId: product.id,
           quantity,
-          unitPrice: product.sellingPrice,
+          unitPrice,
           subtotal,
           discount: 0,
           total: subtotal,
@@ -77,10 +116,12 @@ export const cartSlice = createSlice({
       }
       calculateTotals(state);
     },
+
     removeItem: (state, action: PayloadAction<string>) => {
       state.items = state.items.filter((i) => i.productId !== action.payload);
       calculateTotals(state);
     },
+
     updateQuantity: (state, action: PayloadAction<{ productId: string; quantity: number }>) => {
       const item = state.items.find((i) => i.productId === action.payload.productId);
       if (item) {
@@ -88,37 +129,58 @@ export const cartSlice = createSlice({
           state.items = state.items.filter((i) => i.productId !== action.payload.productId);
         } else {
           item.quantity = action.payload.quantity;
-          item.subtotal = Number((item.quantity * item.unitPrice).toFixed(2));
-          item.total = item.subtotal - item.discount;
         }
       }
       calculateTotals(state);
     },
+
+    updateItemDiscount: (state, action: PayloadAction<{ productId: string; discount: number }>) => {
+      const item = state.items.find((i) => i.productId === action.payload.productId);
+      if (item) {
+        item.discount = Math.max(0, action.payload.discount);
+      }
+      calculateTotals(state);
+    },
+
     setCustomer: (state, action: PayloadAction<Customer | null>) => {
       state.customer = action.payload;
+      if (!action.payload) {
+        state.insurance = null;
+        state.loyalty = null;
+      }
       calculateTotals(state);
     },
-    setDiscountPercentage: (state, action: PayloadAction<number>) => {
-      state.discountPercentage = action.payload;
+
+    setDiscount: (state, action: PayloadAction<AppliedDiscount | null>) => {
+      state.discount = action.payload;
       calculateTotals(state);
     },
-    setLoyaltyRedemption: (
-      state,
-      action: PayloadAction<{ points: number; discountAmount: number }>
-    ) => {
-      state.pointsToRedeem = action.payload.points;
-      state.redeemedDiscountAmount = action.payload.discountAmount;
+
+    setInsurance: (state, action: PayloadAction<AppliedInsurance | null>) => {
+      state.insurance = action.payload;
       calculateTotals(state);
     },
+
+    setLoyaltyRedemption: (state, action: PayloadAction<AppliedLoyalty | null>) => {
+      state.loyalty = action.payload;
+      calculateTotals(state);
+    },
+
+    setNotes: (state, action: PayloadAction<string>) => {
+      state.notes = action.payload;
+    },
+
     clearCart: (state) => {
       state.items = [];
       state.customer = null;
-      state.discountPercentage = 0;
-      state.pointsToRedeem = 0;
-      state.redeemedDiscountAmount = 0;
+      state.discount = null;
+      state.insurance = null;
+      state.loyalty = null;
+      state.notes = '';
       state.subtotal = 0;
-      state.discountTotal = 0;
-      state.taxTotal = 0;
+      state.discountAmount = 0;
+      state.insuranceAmount = 0;
+      state.taxAmount = 0;
       state.total = 0;
     },
   },
@@ -128,9 +190,12 @@ export const {
   addItem,
   removeItem,
   updateQuantity,
+  updateItemDiscount,
   setCustomer,
-  setDiscountPercentage,
+  setDiscount,
+  setInsurance,
   setLoyaltyRedemption,
+  setNotes,
   clearCart,
 } = cartSlice.actions;
 
