@@ -5,25 +5,126 @@
   --font-sans: "Inter", "Cairo", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
-  /* Custom Medical Theme Colors */
-  --color-brand-50: #ecfdf5;
-  --color-brand-100: #d1fae5;
-  --color-brand-200: #a7f3d0;
-  --color-brand-300: #6ee7b7;
-  --color-brand-400: #34d399;
-  --color-brand-500: #10b981;
-  --color-brand-600: #059669;
-  --color-brand-700: #047857;
-  --color-brand-800: #065f46;
-  --color-brand-900: #064e3b;
-  --color-brand-950: #022c22;
+  /* Theme Colors mapped to CSS Variables */
+  --color-background: var(--background);
+  --color-background-soft: var(--background-soft);
+  --color-background-card: var(--background-card);
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-light: var(--primary-light);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+
+  --color-chart-mint: var(--chart-mint);
+  --color-chart-coral: var(--chart-coral);
+  --color-chart-lime: var(--chart-lime);
+  --color-chart-cyan: var(--chart-cyan);
+  --color-chart-purple: var(--chart-purple);
+
+  --color-success: var(--success);
+  --color-success-bg: var(--success-bg);
+  --color-warning: var(--warning);
+  --color-warning-bg: var(--warning-bg);
+  --color-danger: var(--danger);
+  --color-danger-bg: var(--danger-bg);
+  --color-info: var(--info);
+  --color-info-bg: var(--info-bg);
+
+  --color-border: var(--border);
+  --color-border-light: var(--border-light);
+  --color-border-hover: var(--border-hover);
+
+  --color-card: var(--card);
+  --color-card-hover: var(--card-hover);
+}
+
+:root {
+  /* Background */
+  --background: #EAF7F7;
+  --background-soft: #F2FBFA;
+  --background-card: #F7FCFC;
+
+  /* Primary - Dark Teal */
+  --primary: #003C3D;
+  --primary-hover: #005456;
+  --primary-light: #DDEEEE;
+
+  /* Text */
+  --text-primary: #0B3031;
+  --text-secondary: #557274;
+  --text-muted: #829697;
+  --text-white: #FFFFFF;
+
+  /* Charts */
+  --chart-mint: #83D4C8;
+  --chart-coral: #F2A9AB;
+  --chart-lime: #CBEF91;
+  --chart-cyan: #9FDCE8;
+  --chart-purple: #AEB9E8;
+
+  /* Status */
+  --success: #73C77A;
+  --success-bg: #E8F7E8;
+
+  --warning: #D7C65A;
+  --warning-bg: #FFF8D8;
+
+  --danger: #E8898D;
+  --danger-bg: #FDEBEC;
+
+  --info: #79C7D7;
+  --info-bg: #E4F6F8;
+
+  /* Inventory */
+  --inventory-in-stock: #83D4C8;
+  --inventory-low-stock: #CBEF91;
+  --inventory-out-stock: #F2A9AB;
+  --inventory-expiring: #AEB9E8;
+
+  /* Borders */
+  --border: #D5E6E5;
+  --border-light: #E3EFEE;
+  --border-hover: #AFCFCD;
+
+  /* Cards */
+  --card: #F7FCFC;
+  --card-hover: #FFFFFF;
+
+  /* Shadow */
+  --shadow-card: 0 4px 20px rgba(0, 60, 61, 0.05);
+}
+
+.dark {
+  --background: #06191A;
+  --background-soft: #0A2426;
+  --background-card: #0E2C2E;
+
+  --primary: #83D4C8;
+  --primary-hover: #9FDCE8;
+  --primary-light: #003C3D;
+
+  --text-primary: #F2FBFA;
+  --text-secondary: #A0B9BA;
+  --text-muted: #6B8788;
+
+  --border: #183C3E;
+  --border-light: #123133;
+  --border-hover: #265558;
+
+  --card: #0E2C2E;
+  --card-hover: #133638;
 }
 
 @layer base {
   * {
-    border-color: var(--color-slate-200);
+    border-color: var(--border);
   }
   body {
+    background-color: var(--background);
+    color: var(--text-primary);
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 }
@@ -37,9 +138,9 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #AFCFCD;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #83D4C8;
 }

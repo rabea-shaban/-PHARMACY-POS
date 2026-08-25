@@ -133,20 +133,22 @@ export const Sidebar: React.FC = () => {
   return (
     <aside
       className={cn(
-        'fixed top-0 right-0 z-40 h-screen bg-slate-900 text-white border-l border-slate-800 transition-all duration-300 flex flex-col',
+        'fixed top-0 right-0 z-40 h-screen bg-[#F7FCFC] dark:bg-[#0E2C2E] border-l border-[#D5E6E5] dark:border-[#183C3E] transition-all duration-300 flex flex-col',
         sidebarOpen ? 'w-64' : 'w-20'
       )}
     >
-      {/* Brand Logo */}
-      <div className="h-16 flex items-center justify-between px-5 border-b border-slate-800 shrink-0">
+      {/* Brand Logo Header */}
+      <div className="h-16 flex items-center justify-between px-5 border-b border-[#D5E6E5] dark:border-[#183C3E] shrink-0 bg-[#F2FBFA] dark:bg-[#0A2426]">
         <div className="flex items-center gap-3 overflow-hidden">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center font-black text-xl shadow-lg shadow-emerald-500/20 shrink-0">
+          <div className="w-10 h-10 rounded-2xl bg-[#003C3D] text-white flex items-center justify-center font-black text-xl shadow-md shadow-[#003C3D]/20 shrink-0">
             🏥
           </div>
           {sidebarOpen && (
             <div className="truncate">
-              <h2 className="text-sm font-bold tracking-tight text-white">صيدلية الأمل</h2>
-              <p className="text-[10px] text-emerald-400 font-semibold tracking-wider uppercase">
+              <h2 className="text-sm font-bold tracking-tight text-[#0B3031] dark:text-[#F2FBFA]">
+                صيدلية الأمل
+              </h2>
+              <p className="text-[10px] text-[#557274] dark:text-[#83D4C8] font-semibold tracking-wider uppercase">
                 POS & Management
               </p>
             </div>
@@ -155,17 +157,17 @@ export const Sidebar: React.FC = () => {
       </div>
 
       {/* Nav List */}
-      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
+      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1.5">
         {filteredItems.map((item) => (
           <NavLink
             key={item.href}
             to={item.href}
             className={({ isActive }) =>
               cn(
-                'flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all group',
+                'flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-sm font-medium transition-all group',
                 isActive
-                  ? 'bg-emerald-600 text-white font-bold shadow-md shadow-emerald-600/30'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/80'
+                  ? 'bg-[#003C3D] text-white font-bold shadow-md shadow-[#003C3D]/20'
+                  : 'text-[#557274] hover:text-[#0B3031] hover:bg-[#DDEEEE]/60 dark:hover:bg-[#123133]'
               )
             }
           >
@@ -175,12 +177,12 @@ export const Sidebar: React.FC = () => {
         ))}
       </nav>
 
-      {/* Footer / POS Quick Launch */}
+      {/* Footer Version */}
       {sidebarOpen && (
-        <div className="p-4 border-t border-slate-800/80 bg-slate-950/40">
-          <div className="flex items-center justify-between text-xs text-slate-400">
-            <span>الإصدار</span>
-            <span className="font-mono font-semibold text-emerald-400">v1.0.0 Pro</span>
+        <div className="p-4 border-t border-[#D5E6E5] dark:border-[#183C3E] bg-[#F2FBFA] dark:bg-[#0A2426]">
+          <div className="flex items-center justify-between text-xs text-[#557274]">
+            <span>نظام الصيدلية الذكي</span>
+            <span className="font-mono font-bold text-[#003C3D] dark:text-[#83D4C8]">v1.0 Pro</span>
           </div>
         </div>
       )}

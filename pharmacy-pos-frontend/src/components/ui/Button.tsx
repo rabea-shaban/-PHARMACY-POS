@@ -4,27 +4,29 @@ import { cn } from '../../lib/utils.js';
 import { Spinner } from './Spinner.js';
 
 export const buttonVariants = cva(
-  'inline-flex items-center justify-center font-medium transition-all duration-150 rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none active:scale-[0.98]',
+  'inline-flex items-center justify-center font-semibold transition-all duration-150 rounded-2xl focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none active:scale-[0.98]',
   {
     variants: {
       variant: {
         primary:
-          'bg-emerald-600 text-white hover:bg-emerald-700 focus:ring-emerald-500 shadow-sm hover:shadow shadow-emerald-600/20',
+          'bg-[#003C3D] text-white hover:bg-[#005456] focus:ring-[#003C3D] shadow-sm hover:shadow',
         secondary:
-          'bg-slate-800 text-white hover:bg-slate-900 focus:ring-slate-700 shadow-sm shadow-slate-800/10',
+          'bg-[#DDEEEE] text-[#003C3D] hover:bg-[#c9e4e4] focus:ring-[#003C3D]',
         outline:
-          'border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 focus:ring-emerald-500 shadow-sm',
+          'border border-[#D5E6E5] text-[#0B3031] bg-[#F7FCFC] hover:bg-white focus:ring-[#003C3D]',
         ghost:
-          'text-slate-600 hover:bg-slate-100 hover:text-slate-900 focus:ring-slate-400',
+          'text-[#557274] hover:bg-[#DDEEEE]/50 hover:text-[#003C3D]',
         danger:
-          'bg-rose-600 text-white hover:bg-rose-700 focus:ring-rose-500 shadow-sm shadow-rose-600/20',
-        success:
-          'bg-teal-600 text-white hover:bg-teal-700 focus:ring-teal-500 shadow-sm shadow-teal-600/20',
+          'bg-[#F2A9AB] text-[#713F42] hover:bg-[#ea9496] focus:ring-[#F2A9AB]',
+        mint:
+          'bg-[#83D4C8] text-[#003C3D] hover:bg-[#72c5b9] focus:ring-[#83D4C8]',
+        lime:
+          'bg-[#CBEF91] text-[#365A35] hover:bg-[#bee67e] focus:ring-[#CBEF91]',
       },
       size: {
         sm: 'h-8 px-3 text-xs gap-1.5',
         md: 'h-10 px-4 text-sm gap-2',
-        lg: 'h-12 px-6 text-base gap-2.5 font-semibold',
+        lg: 'h-12 px-6 text-base gap-2.5',
         icon: 'h-10 w-10 p-0',
       },
     },

@@ -11,15 +11,40 @@ export interface StatCardProps {
     value: number;
     isPositive: boolean;
   };
-  color?: 'emerald' | 'cyan' | 'amber' | 'rose' | 'slate';
+  cardType?: 'totalSales' | 'inStore' | 'online' | 'orders' | 'default';
 }
 
-const colorStyles = {
-  emerald: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-300',
-  cyan: 'bg-cyan-50 text-cyan-600 dark:bg-cyan-950/40 dark:text-cyan-300',
-  amber: 'bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-300',
-  rose: 'bg-rose-50 text-rose-600 dark:bg-rose-950/40 dark:text-rose-300',
-  slate: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300',
+const cardStyles = {
+  totalSales: {
+    card: 'bg-[#E7F7B9] border-[#d8efa0] text-[#365A35]',
+    title: 'text-[#486b47]',
+    value: 'text-[#284827]',
+    iconBg: 'bg-[#daf59f] text-[#365A35]',
+  },
+  inStore: {
+    card: 'bg-[#F4B0B2] border-[#eca2a4] text-[#713F42]',
+    title: 'text-[#844c50]',
+    value: 'text-[#592d30]',
+    iconBg: 'bg-[#f09ea1] text-[#713F42]',
+  },
+  online: {
+    card: 'bg-[#91D7CC] border-[#7ecfc2] text-[#245957]',
+    title: 'text-[#2a6866]',
+    value: 'text-[#184442]',
+    iconBg: 'bg-[#7dcbbd] text-[#245957]',
+  },
+  orders: {
+    card: 'bg-[#F7FCFC] border-[#D5E6E5] text-[#0B3031]',
+    title: 'text-[#557274]',
+    value: 'text-[#0B3031]',
+    iconBg: 'bg-[#DDEEEE] text-[#003C3D]',
+  },
+  default: {
+    card: 'bg-[#F7FCFC] border-[#D5E6E5] text-[#0B3031]',
+    title: 'text-[#557274]',
+    value: 'text-[#0B3031]',
+    iconBg: 'bg-[#DDEEEE] text-[#003C3D]',
+  },
 };
 
 export const StatCard: React.FC<StatCardProps> = ({
@@ -28,31 +53,33 @@ export const StatCard: React.FC<StatCardProps> = ({
   subtitle,
   icon,
   trend,
-  color = 'emerald',
+  cardType = 'default',
 }) => {
+  const styles = cardStyles[cardType];
+
   return (
-    <Card className="hover:shadow-md transition-shadow">
+    <Card className={cn('hover:shadow-md transition-all rounded-3xl shadow-xs', styles.card)}>
       <CardContent className="p-6">
         <div className="flex items-center justify-between">
           <div className="space-y-1">
-            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">{title}</p>
-            <h4 className="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-tight">
+            <p className={cn('text-xs font-bold', styles.title)}>{title}</p>
+            <h4 className={cn('text-2xl font-black tracking-tight', styles.value)}>
               {value}
             </h4>
             {subtitle && (
-              <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">{subtitle}</p>
+              <p className="text-xs opacity-75 mt-1">{subtitle}</p>
             )}
             {trend && (
               <div className="flex items-center gap-1 mt-1.5 text-xs font-bold">
-                <span className={trend.isPositive ? 'text-emerald-600' : 'text-rose-600'}>
+                <span className={trend.isPositive ? 'text-emerald-800' : 'text-rose-800'}>
                   {trend.isPositive ? '↑ +' : '↓ -'}
                   {Math.abs(trend.value)}%
                 </span>
-                <span className="text-slate-400 font-normal">مقارنة بالأمس</span>
+                <span className="opacity-60 font-normal">مقارنة بالأمس</span>
               </div>
             )}
           </div>
-          <div className={cn('p-3 rounded-2xl shrink-0', colorStyles[color])}>
+          <div className={cn('p-3 rounded-2xl shrink-0 shadow-xs', styles.iconBg)}>
             {icon}
           </div>
         </div>
