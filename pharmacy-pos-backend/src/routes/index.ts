@@ -17,6 +17,8 @@ import { insuranceRouter } from '../modules/insurance/index.js';
 import { saleReturnsRouter } from '../modules/sale-returns/index.js';
 import { expensesRouter } from '../modules/expenses/index.js';
 import { commissionsRouter } from '../modules/commissions/index.js';
+import { dashboardRouter } from '../modules/dashboard/index.js';
+import { reportsRouter } from '../modules/reports/index.js';
 
 export const apiRouter = Router();
 
@@ -73,3 +75,9 @@ apiRouter.use('/expenses', expensesRouter);
 
 // Staff Commissions Module
 apiRouter.use('/commissions', commissionsRouter);
+
+// Dashboard Overview Module
+apiRouter.use('/dashboard', dashboardRouter);
+
+// Reports & Business Intelligence Module
+apiRouter.use('/reports', reportsRouter);

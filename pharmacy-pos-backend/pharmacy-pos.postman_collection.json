@@ -1864,6 +1864,207 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "19. Dashboard",
+      "item": [
+        {
+          "name": "Dashboard Overview (KPIs, Cash Flow & Alerts)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/dashboard/overview",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "dashboard", "overview"]
+            },
+            "description": "Top-level KPI overview (Gross/Net Sales, Inventory Units/Value, Active Customers, Operational Alerts)."
+          },
+          "response": []
+        },
+        {
+          "name": "Dashboard Overview with Date Range",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/dashboard/overview?from=2026-08-01&to=2026-08-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "dashboard", "overview"],
+              "query": [
+                { "key": "from", "value": "2026-08-01" },
+                { "key": "to", "value": "2026-08-31" }
+              ]
+            },
+            "description": "Dashboard overview aggregated for a custom date range."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "20. Reports - Sales",
+      "item": [
+        {
+          "name": "Sales Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reports/sales?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reports", "sales"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            },
+            "description": "Filterable sales report, payment methods, daily trends, top products/categories, and paginated invoices."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "21. Reports - Products",
+      "item": [
+        {
+          "name": "Product Performance Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reports/products?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reports", "products"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            },
+            "description": "Product performance metrics, top sellers, slow-moving items (<= 2 sales), and zero-sales products."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "22. Reports - Inventory",
+      "item": [
+        {
+          "name": "Inventory Health & Valuation Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reports/inventory",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reports", "inventory"]
+            },
+            "description": "Stock valuation (Cost & Retail), healthy vs expiring/expired stock units, low-stock items, and stock movements."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "23. Reports - Purchases",
+      "item": [
+        {
+          "name": "Purchases & Supplier Spending Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reports/purchases",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reports", "purchases"]
+            },
+            "description": "Procurement invoice totals, supplier spending breakdown, and procurement trends."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "24. Reports - Expenses",
+      "item": [
+        {
+          "name": "Operating Expenses Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reports/expenses",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reports", "expenses"]
+            },
+            "description": "Operating expenses aggregated by category, payment method, and daily trend."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "25. Reports - Customers",
+      "item": [
+        {
+          "name": "Customer Purchasing & Loyalty Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reports/customers?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reports", "customers"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            },
+            "description": "Customer spend rankings, purchasing frequencies, and loyalty tier distribution."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "26. Reports - Staff",
+      "item": [
+        {
+          "name": "Staff Performance & Commissions Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reports/staff",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reports", "staff"]
+            },
+            "description": "Staff sales volume, commission earned, commission reversed, and net commission payout."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "27. Reports - Financial",
+      "item": [
+        {
+          "name": "Financial Summary Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reports/financial-summary",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reports", "financial-summary"]
+            },
+            "description": "High-level executive financial reconciliation (Net Sales - Purchases - Expenses - Commissions)."
+          },
+          "response": []
+        }
+      ]
     }
   ]
 }

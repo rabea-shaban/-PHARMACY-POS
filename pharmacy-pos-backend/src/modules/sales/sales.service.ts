@@ -4,6 +4,7 @@ import { batchesService, BatchesService } from '../batches/batches.service.js';
 import { customersService, CustomersService } from '../customers/customers.service.js';
 import { discountsService, DiscountsService } from '../discounts/discounts.service.js';
 import { insuranceService, InsuranceService } from '../insurance/insurance.service.js';
+import { commissionsService, CommissionsService } from '../commissions/commissions.service.js';
 import { getPaginationMeta } from '../../utils/pagination.util.js';
 import { CheckoutRequestDTO, SaleQueryDTO, CancelSaleDTO } from './sales.validator.js';
 import {
@@ -12,7 +13,6 @@ import {
   PaginatedSalesResponse,
 } from './sales.types.js';
 import { NotFoundError, BadRequestError } from '../../utils/errors.js';
-import { prisma } from '../../lib/prisma.js';
 
 function formatSale(raw: any): SaleResponse {
   return {
@@ -80,7 +80,8 @@ export class SalesService {
     private readonly batches: BatchesService = batchesService,
     private readonly customers: CustomersService = customersService,
     private readonly discounts: DiscountsService = discountsService,
-    private readonly insurance: InsuranceService = insuranceService
+    private readonly insurance: InsuranceService = insuranceService,
+    private readonly commissions: CommissionsService = commissionsService
   ) {}
 
   async getSales(filters: SaleQueryFilters): Promise<PaginatedSalesResponse> {
@@ -244,10 +245,7 @@ export class SalesService {
 
     // 6. Calculate Staff Commission
     let commissionPlan: AtomicCheckoutPlan['commission'] = null;
-    const activeRule = await prisma.commissionRule.findFirst({
-      where: { isActive: true },
-      orderBy: { effectiveDate: 'desc' },
-    });
+    const activeRule = await this.commissions.getActiveRule();
 
     if (activeRule) {
       const rate = Number(activeRule.percentage);
