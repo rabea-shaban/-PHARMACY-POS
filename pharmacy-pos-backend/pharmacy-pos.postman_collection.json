@@ -369,6 +369,25 @@
       "item": [
         {
           "name": "Search & List Customers (Paginated)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.items && jsonData.data.items.length > 0) {",
+                  "        var firstCustomer = jsonData.data.items[0];",
+                  "        pm.collectionVariables.set('createdCustomerId', firstCustomer.id);",
+                  "        pm.environment.set('createdCustomerId', firstCustomer.id);",
+                  "        console.log('✅ Auto-saved createdCustomerId: ' + firstCustomer.id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
@@ -406,6 +425,7 @@
                   "    var jsonData = pm.response.json();",
                   "    if (jsonData.data && jsonData.data.id) {",
                   "        pm.collectionVariables.set('createdCustomerId', jsonData.data.id);",
+                  "        pm.environment.set('createdCustomerId', jsonData.data.id);",
                   "        console.log('✅ Created Customer ID saved to variable: ' + jsonData.data.id);",
                   "    }",
                   "}"
