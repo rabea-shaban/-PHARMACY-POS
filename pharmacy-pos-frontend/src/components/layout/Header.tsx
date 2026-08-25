@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks.js';
-import { toggleSidebar, setTheme } from '../../store/slices/uiSlice.js';
+import { toggleSidebar, toggleTheme } from '../../store/slices/uiSlice.js';
 import { clearUser } from '../../store/slices/authSlice.js';
 import { api } from '../../lib/api.js';
 import {
@@ -47,7 +47,7 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="h-16 bg-white dark:bg-[#0E1522] border-b border-slate-200/80 dark:border-[#1E293B] px-6 flex items-center justify-between sticky top-0 z-30 shadow-xs">
+    <header className="h-16 bg-white dark:bg-[#0E1522] border-b border-slate-200/80 dark:border-[#1E293B] px-6 flex items-center justify-between sticky top-0 z-30 shadow-xs transition-colors">
       {/* Left side: Hamburger Toggle */}
       <div className="flex items-center gap-4">
         <button
@@ -61,11 +61,13 @@ export const Header: React.FC = () => {
 
       {/* Right side: Notifications, Theme, User Avatar, Logout */}
       <div className="flex items-center gap-3">
-        {/* Theme Toggle */}
+        {/* Theme Toggle Button */}
         <button
-          onClick={() => dispatch(setTheme(theme === 'light' ? 'dark' : 'light'))}
-          className="p-2.5 rounded-2xl text-slate-600 hover:bg-sky-50 hover:text-sky-700 dark:text-slate-300 dark:hover:bg-[#1A2639] dark:hover:text-amber-400 transition-colors"
+          type="button"
+          onClick={() => dispatch(toggleTheme())}
+          className="p-2.5 rounded-2xl text-slate-600 hover:bg-sky-50 hover:text-sky-700 dark:text-slate-300 dark:hover:bg-[#1A2639] dark:hover:text-amber-400 transition-colors cursor-pointer"
           aria-label="Toggle Theme"
+          title={theme === 'light' ? 'التبديل إلى الوضع الليلي (Dark Mode)' : 'التبديل إلى الوضع الفاتح (Light Mode)'}
         >
           {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
         </button>

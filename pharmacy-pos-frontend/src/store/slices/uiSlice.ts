@@ -7,9 +7,21 @@ interface UISliceState {
   direction: 'rtl' | 'ltr';
 }
 
+const savedTheme = (typeof window !== 'undefined' ? localStorage.getItem('pharmacy_theme') : null) as 'light' | 'dark' | null;
+const initialTheme = savedTheme || 'light';
+
+// Ensure DOM class matches initial state
+if (typeof document !== 'undefined') {
+  if (initialTheme === 'dark') {
+    document.documentElement.classList.add('dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+  }
+}
+
 const initialState: UISliceState = {
   sidebarOpen: true,
-  theme: 'light',
+  theme: initialTheme,
   language: 'ar',
   direction: 'rtl',
 };
@@ -26,7 +38,26 @@ export const uiSlice = createSlice({
     },
     setTheme: (state, action: PayloadAction<'light' | 'dark'>) => {
       state.theme = action.payload;
+      try {
+        localStorage.setItem('pharmacy_theme', action.payload);
+      } catch {
+        // Ignore
+      }
       if (action.payload === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    },
+    toggleTheme: (state) => {
+      const nextTheme = state.theme === 'light' ? 'dark' : 'light';
+      state.theme = nextTheme;
+      try {
+        localStorage.setItem('pharmacy_theme', nextTheme);
+      } catch {
+        // Ignore
+      }
+      if (nextTheme === 'dark') {
         document.documentElement.classList.add('dark');
       } else {
         document.documentElement.classList.remove('dark');
@@ -41,5 +72,5 @@ export const uiSlice = createSlice({
   },
 });
 
-export const { toggleSidebar, setSidebarOpen, setTheme, setLanguage } = uiSlice.actions;
+export const { toggleSidebar, setSidebarOpen, setTheme, toggleTheme, setLanguage } = uiSlice.actions;
 export default uiSlice.reducer;
