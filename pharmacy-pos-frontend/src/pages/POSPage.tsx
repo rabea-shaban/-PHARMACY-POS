@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { PageHeader } from '../components/common/PageHeader.js';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card.js';
 import { Button } from '../components/ui/Button.js';
@@ -9,14 +10,15 @@ import { clearCart } from '../store/slices/cartSlice.js';
 import { formatCurrency } from '../lib/utils.js';
 
 export const POSPage: React.FC = () => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { items, subtotal, total, discountTotal } = useAppSelector((state) => state.cart);
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title="شاشة نقطة البيع (POS Cashier)"
-        description="البحث بالاسم والباركود، سلة المشتريات، وتطبيق الخصومات"
+        title={t('pos.title')}
+        description={t('pos.subtitle')}
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -27,13 +29,13 @@ export const POSPage: React.FC = () => {
               <div className="flex gap-3">
                 <div className="flex-1">
                   <Input
-                    placeholder="ابحث باسم الدواء أو المادة الفعالة..."
+                    placeholder={t('pos.searchPlaceholder')}
                     leftIcon={<Search className="w-4 h-4" />}
                   />
                 </div>
                 <div className="w-56">
                   <Input
-                    placeholder="امسح الباركود..."
+                    placeholder={t('pos.barcodePlaceholder')}
                     leftIcon={<Barcode className="w-4 h-4" />}
                   />
                 </div>
@@ -43,11 +45,11 @@ export const POSPage: React.FC = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle>الأصناف المتاحة للبيع السريع</CardTitle>
+              <CardTitle>{t('pos.quickCatalog')}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="p-16 text-center text-slate-400 dark:text-slate-500 text-sm">
-                سيتم ربط البحث اللحظي بالأدوية وتشغيلات FEFO في مرحلة F05.
+                {t('pos.fefoNotice')}
               </div>
             </CardContent>
           </Card>
@@ -61,15 +63,15 @@ export const POSPage: React.FC = () => {
                 <div className="p-2 rounded-xl bg-sky-50 text-sky-600 dark:bg-sky-950/60 dark:text-sky-400">
                   <ShoppingCart className="w-4 h-4" />
                 </div>
-                <CardTitle className="text-base">سلة الفاتورة</CardTitle>
+                <CardTitle className="text-base">{t('pos.cartTitle')}</CardTitle>
               </div>
               {items.length > 0 && (
                 <button
                   onClick={() => dispatch(clearCart())}
-                  className="text-xs text-rose-500 hover:text-rose-700 flex items-center gap-1 font-bold transition-colors"
+                  className="text-xs text-rose-500 hover:text-rose-700 flex items-center gap-1 font-bold transition-colors cursor-pointer"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
-                  إفراغ السلة
+                  {t('pos.clearCart')}
                 </button>
               )}
             </CardHeader>
@@ -77,7 +79,7 @@ export const POSPage: React.FC = () => {
             <CardContent className="space-y-4">
               {items.length === 0 ? (
                 <div className="p-10 text-center text-slate-400 dark:text-slate-500 text-xs">
-                  السلة فارغة حالياً. قم بإضافة أصناف لبدء البيع.
+                  {t('pos.emptyCart')}
                 </div>
               ) : (
                 <div className="space-y-2 max-h-60 overflow-y-auto">
@@ -99,17 +101,17 @@ export const POSPage: React.FC = () => {
               {/* Totals */}
               <div className="pt-4 border-t border-slate-100 dark:border-[#1E293B] space-y-2 text-xs">
                 <div className="flex justify-between text-slate-500 dark:text-slate-400 font-medium">
-                  <span>المجموع الفرعي:</span>
+                  <span>{t('pos.subtotal')}</span>
                   <span className="font-bold text-slate-800 dark:text-slate-200">{formatCurrency(subtotal)}</span>
                 </div>
                 {discountTotal > 0 && (
                   <div className="flex justify-between text-emerald-600 dark:text-emerald-400 font-bold">
-                    <span>إجمالي الخصم:</span>
+                    <span>{t('pos.discount')}</span>
                     <span>-{formatCurrency(discountTotal)}</span>
                   </div>
                 )}
                 <div className="flex justify-between text-base font-black text-slate-900 dark:text-white pt-3 border-t border-slate-100 dark:border-[#1E293B]">
-                  <span>الإجمالي النهائي:</span>
+                  <span>{t('pos.grandTotal')}</span>
                   <span className="text-sky-600 dark:text-sky-400 text-xl">{formatCurrency(total)}</span>
                 </div>
               </div>
@@ -120,7 +122,7 @@ export const POSPage: React.FC = () => {
                 className="w-full text-base py-3 font-black shadow-lg shadow-sky-600/20"
                 disabled={items.length === 0}
               >
-                إتمام عملية البيع (Checkout)
+                {t('pos.checkoutButton')}
               </Button>
             </CardContent>
           </Card>

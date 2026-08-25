@@ -6,10 +6,10 @@ import { useAppSelector } from '../../store/hooks.js';
 import { cn } from '../../lib/utils.js';
 
 export const AppLayout: React.FC = () => {
-  const { sidebarOpen } = useAppSelector((state) => state.ui);
+  const { sidebarOpen, direction } = useAppSelector((state) => state.ui);
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0B0F17] font-cairo text-slate-900 dark:text-slate-100 flex transition-colors duration-200">
+    <div className="min-h-screen bg-[#F0F6FA] dark:bg-[#0B0F17] font-sans text-slate-900 dark:text-slate-100 flex transition-colors duration-200">
       {/* Sidebar Navigation */}
       <Sidebar />
 
@@ -17,7 +17,9 @@ export const AppLayout: React.FC = () => {
       <div
         className={cn(
           'flex-1 flex flex-col min-w-0 transition-all duration-300',
-          sidebarOpen ? 'mr-64' : 'mr-20'
+          direction === 'rtl'
+            ? sidebarOpen ? 'mr-64' : 'mr-20'
+            : sidebarOpen ? 'ml-64' : 'ml-20'
         )}
       >
         <Header />

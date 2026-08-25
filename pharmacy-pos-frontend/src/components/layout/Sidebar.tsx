@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../store/hooks.js';
 import {
   LayoutDashboard,
@@ -22,100 +23,100 @@ import {
 import { cn } from '../../lib/utils.js';
 import { Role } from '../../types/auth.types.js';
 
-interface NavItem {
-  title: string;
+interface NavItemDef {
+  key: string;
   href: string;
   icon: React.ReactNode;
   roles?: Role[];
 }
 
-const navItems: NavItem[] = [
+const navItemDefs: NavItemDef[] = [
   {
-    title: 'نقطة البيع (POS)',
+    key: 'pos',
     href: '/pos',
     icon: <ShoppingCart className="w-5 h-5" />,
     roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'],
   },
   {
-    title: 'لوحة التحكم (Dashboard)',
+    key: 'dashboard',
     href: '/dashboard',
     icon: <LayoutDashboard className="w-5 h-5" />,
     roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT'],
   },
   {
-    title: 'الأدوية والأصناف',
+    key: 'products',
     href: '/products',
     icon: <Pill className="w-5 h-5" />,
     roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'],
   },
   {
-    title: 'المخزون والتشغيلات (FEFO)',
+    key: 'inventory',
     href: '/inventory',
     icon: <Boxes className="w-5 h-5" />,
     roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'],
   },
   {
-    title: 'الموردين والمشتريات',
+    key: 'purchases',
     href: '/purchases',
     icon: <Truck className="w-5 h-5" />,
     roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT'],
   },
   {
-    title: 'العملاء والولاء',
+    key: 'customers',
     href: '/customers',
     icon: <Users className="w-5 h-5" />,
     roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'],
   },
   {
-    title: 'فواتير المبيعات',
+    key: 'sales',
     href: '/sales',
     icon: <Receipt className="w-5 h-5" />,
     roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'],
   },
   {
-    title: 'المرتجعات والاسترداد',
+    key: 'returns',
     href: '/returns',
     icon: <RotateCcw className="w-5 h-5" />,
     roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'],
   },
   {
-    title: 'المصروفات والعمولات',
+    key: 'expenses',
     href: '/expenses',
     icon: <Wallet className="w-5 h-5" />,
     roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT'],
   },
   {
-    title: 'مسيرات الرواتب (Payroll)',
+    key: 'payroll',
     href: '/payroll',
     icon: <Coins className="w-5 h-5" />,
     roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT'],
   },
   {
-    title: 'التقارير والتحليلات',
+    key: 'reports',
     href: '/reports',
     icon: <FileSpreadsheet className="w-5 h-5" />,
     roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT'],
   },
   {
-    title: 'التنبيهات و WhatsApp',
+    key: 'notifications',
     href: '/notifications',
     icon: <BellRing className="w-5 h-5" />,
     roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'],
   },
   {
-    title: 'سجلات التدقيق والأمان',
+    key: 'audit',
     href: '/audit',
     icon: <ShieldCheck className="w-5 h-5" />,
     roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER'],
   },
   {
-    title: 'إعدادات النظام',
+    key: 'settings',
     href: '/settings',
     icon: <Settings className="w-5 h-5" />,
     roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT'],
   },
   {
-    title: 'إدارة الموظفين والصلاحيات',
+    key: 'users',
     href: '/users',
     icon: <UsersRound className="w-5 h-5" />,
     roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER'],
@@ -123,10 +124,11 @@ const navItems: NavItem[] = [
 ];
 
 export const Sidebar: React.FC = () => {
-  const { sidebarOpen } = useAppSelector((state) => state.ui);
+  const { t } = useTranslation();
+  const { sidebarOpen, direction } = useAppSelector((state) => state.ui);
   const { role } = useAppSelector((state) => state.auth);
 
-  const filteredItems = navItems.filter((item) => {
+  const filteredItems = navItemDefs.filter((item) => {
     if (!item.roles) return true;
     return role && item.roles.includes(role);
   });
@@ -134,8 +136,9 @@ export const Sidebar: React.FC = () => {
   return (
     <aside
       className={cn(
-        'fixed top-0 right-0 z-40 h-screen transition-all duration-300 flex flex-col',
-        'bg-white border-l border-slate-200/80 shadow-xs',
+        'fixed top-0 z-40 h-screen transition-all duration-300 flex flex-col',
+        direction === 'rtl' ? 'right-0 border-l' : 'left-0 border-r',
+        'bg-white border-slate-200/80 shadow-xs',
         'dark:bg-[#0E1522] dark:border-[#1E293B]',
         sidebarOpen ? 'w-64' : 'w-20'
       )}
@@ -149,10 +152,10 @@ export const Sidebar: React.FC = () => {
           {sidebarOpen && (
             <div className="truncate">
               <h2 className="text-sm font-bold tracking-tight text-slate-900 dark:text-white">
-                صيدلية الأمل
+                {t('common.pharmacyName')}
               </h2>
               <p className="text-[10px] text-sky-600 dark:text-sky-400 font-bold tracking-wider uppercase">
-                POS & Management
+                {t('common.posAndManagement')}
               </p>
             </div>
           )}
@@ -175,7 +178,7 @@ export const Sidebar: React.FC = () => {
             }
           >
             <span className="shrink-0 transition-transform group-hover:scale-110">{item.icon}</span>
-            {sidebarOpen && <span className="truncate">{item.title}</span>}
+            {sidebarOpen && <span className="truncate">{t(`nav.${item.key}`)}</span>}
           </NavLink>
         ))}
       </nav>
@@ -184,8 +187,8 @@ export const Sidebar: React.FC = () => {
       {sidebarOpen && (
         <div className="p-4 border-t border-slate-200/80 dark:border-[#1E293B] bg-[#F4F9FC] dark:bg-[#0B0F17]/50">
           <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-            <span>نظام الصيدلية</span>
-            <span className="font-mono font-bold text-sky-600 dark:text-sky-400">v1.0 Pro</span>
+            <span>{t('common.pharmacyName')}</span>
+            <span className="font-mono font-bold text-sky-600 dark:text-sky-400">{t('common.version')}</span>
           </div>
         </div>
       )}

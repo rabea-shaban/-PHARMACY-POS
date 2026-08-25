@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from '../store/hooks.js';
 import { setUser } from '../store/slices/authSlice.js';
 import { api } from '../lib/api.js';
@@ -9,6 +10,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../co
 import { Phone, Lock, Sparkles, HeartPulse } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
+  const { t } = useTranslation();
   const [identifier, setIdentifier] = useState('01012345678');
   const [password, setPassword] = useState('AdminPass123!');
   const [isLoading, setIsLoading] = useState(false);
@@ -37,7 +39,7 @@ export const LoginPage: React.FC = () => {
         }
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || 'فشل تسجيل الدخول. يرجى التأكد من صحة البيانات.');
+      setError(err.response?.data?.message || t('auth.invalidCredentials'));
     } finally {
       setIsLoading(false);
     }
@@ -49,7 +51,7 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F0F6FA] dark:bg-[#0B0F17] flex items-center justify-center p-4 relative overflow-hidden font-cairo">
+    <div className="min-h-screen bg-[#F0F6FA] dark:bg-[#0B0F17] flex items-center justify-center p-4 relative overflow-hidden font-sans">
       {/* Background Decorative Blur Circles */}
       <div className="absolute -top-40 -right-40 w-96 h-96 bg-sky-200/50 dark:bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-cyan-200/50 dark:bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -60,23 +62,23 @@ export const LoginPage: React.FC = () => {
           <div className="inline-flex w-16 h-16 rounded-3xl bg-gradient-to-tr from-sky-600 via-cyan-500 to-teal-400 text-white items-center justify-center shadow-xl shadow-sky-500/25">
             <HeartPulse className="w-9 h-9 text-white animate-pulse" strokeWidth={2.5} />
           </div>
-          <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">صيدلية الأمل الحديثة</h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400">Pharmacy POS & Management System</p>
+          <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">{t('common.pharmacyName')}</h1>
+          <p className="text-xs text-slate-500 dark:text-slate-400">{t('common.posAndManagement')}</p>
         </div>
 
         {/* Login Card */}
         <Card className="border-slate-200/80 dark:border-[#223049] bg-white dark:bg-[#131B2A] shadow-xl rounded-3xl">
           <CardHeader>
-            <CardTitle className="text-slate-900 dark:text-white text-lg">تسجيل الدخول للنظام</CardTitle>
+            <CardTitle className="text-slate-900 dark:text-white text-lg">{t('auth.loginTitle')}</CardTitle>
             <CardDescription className="text-slate-500 dark:text-slate-400">
-              أدخل رقم الهاتف أو البريد الإلكتروني وكلمة المرور للمتابعة
+              {t('auth.loginSubtitle')}
             </CardDescription>
           </CardHeader>
 
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-4">
               <Input
-                label="رقم الهاتف أو البريد الإلكتروني"
+                label={t('auth.identifierLabel')}
                 type="text"
                 placeholder="01012345678"
                 value={identifier}
@@ -86,7 +88,7 @@ export const LoginPage: React.FC = () => {
               />
 
               <Input
-                label="كلمة المرور"
+                label={t('auth.passwordLabel')}
                 type="password"
                 placeholder="••••••••"
                 value={password}
@@ -102,7 +104,7 @@ export const LoginPage: React.FC = () => {
               )}
 
               <Button type="submit" variant="primary" size="lg" className="w-full shadow-md" isLoading={isLoading}>
-                دخول إلى النظام
+                {t('auth.loginButton')}
               </Button>
             </form>
 
@@ -110,29 +112,29 @@ export const LoginPage: React.FC = () => {
             <div className="mt-6 pt-5 border-t border-slate-100 dark:border-[#1E293B]">
               <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 mb-3">
                 <Sparkles className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
-                <span>حسابات تجريبية سريعة (Seed Demo):</span>
+                <span>{t('auth.quickDemo')}</span>
               </div>
               <div className="grid grid-cols-3 gap-2 text-[11px]">
                 <button
                   type="button"
                   onClick={() => handleQuickFill('01012345678', 'AdminPass123!')}
-                  className="p-2 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-800 dark:bg-[#1E293B] dark:text-slate-200 text-center font-bold transition-colors"
+                  className="p-2 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-800 dark:bg-[#1E293B] dark:text-slate-200 text-center font-bold transition-colors cursor-pointer"
                 >
-                  Super Admin
+                  Admin
                 </button>
                 <button
                   type="button"
                   onClick={() => handleQuickFill('01123456789', 'PharmPass123!')}
-                  className="p-2 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-800 dark:bg-[#1E293B] dark:text-slate-200 text-center font-bold transition-colors"
+                  className="p-2 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-800 dark:bg-[#1E293B] dark:text-slate-200 text-center font-bold transition-colors cursor-pointer"
                 >
-                  صيدلي (POS)
+                  {t('roles.PHARMACIST')}
                 </button>
                 <button
                   type="button"
                   onClick={() => handleQuickFill('01223456789', 'AccPass123!')}
-                  className="p-2 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-800 dark:bg-[#1E293B] dark:text-slate-200 text-center font-bold transition-colors"
+                  className="p-2 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-800 dark:bg-[#1E293B] dark:text-slate-200 text-center font-bold transition-colors cursor-pointer"
                 >
-                  محاسب
+                  {t('roles.ACCOUNTANT')}
                 </button>
               </div>
             </div>

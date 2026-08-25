@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import i18n, { applyLanguageSettings } from '../../lib/i18n.js';
 
 interface UISliceState {
   sidebarOpen: boolean;
@@ -9,6 +10,9 @@ interface UISliceState {
 
 const savedTheme = (typeof window !== 'undefined' ? localStorage.getItem('pharmacy_theme') : null) as 'light' | 'dark' | null;
 const initialTheme = savedTheme || 'light';
+
+const savedLang = (typeof window !== 'undefined' ? localStorage.getItem('pharmacy_language') : null) as 'ar' | 'en' | null;
+const initialLang = savedLang || 'ar';
 
 // Ensure DOM class matches initial state
 if (typeof document !== 'undefined') {
@@ -22,8 +26,8 @@ if (typeof document !== 'undefined') {
 const initialState: UISliceState = {
   sidebarOpen: true,
   theme: initialTheme,
-  language: 'ar',
-  direction: 'rtl',
+  language: initialLang,
+  direction: initialLang === 'ar' ? 'rtl' : 'ltr',
 };
 
 export const uiSlice = createSlice({
@@ -66,11 +70,28 @@ export const uiSlice = createSlice({
     setLanguage: (state, action: PayloadAction<'ar' | 'en'>) => {
       state.language = action.payload;
       state.direction = action.payload === 'ar' ? 'rtl' : 'ltr';
-      document.documentElement.setAttribute('dir', state.direction);
-      document.documentElement.setAttribute('lang', action.payload);
+      try {
+        localStorage.setItem('pharmacy_language', action.payload);
+      } catch {
+        // Ignore
+      }
+      i18n.changeLanguage(action.payload);
+      applyLanguageSettings(action.payload);
+    },
+    toggleLanguage: (state) => {
+      const nextLang = state.language === 'ar' ? 'en' : 'ar';
+      state.language = nextLang;
+      state.direction = nextLang === 'ar' ? 'rtl' : 'ltr';
+      try {
+        localStorage.setItem('pharmacy_language', nextLang);
+      } catch {
+        // Ignore
+      }
+      i18n.changeLanguage(nextLang);
+      applyLanguageSettings(nextLang);
     },
   },
 });
 
-export const { toggleSidebar, setSidebarOpen, setTheme, toggleTheme, setLanguage } = uiSlice.actions;
+export const { toggleSidebar, setSidebarOpen, setTheme, toggleTheme, setLanguage, toggleLanguage } = uiSlice.actions;
 export default uiSlice.reducer;
