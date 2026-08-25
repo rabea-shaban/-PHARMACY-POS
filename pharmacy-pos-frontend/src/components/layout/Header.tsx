@@ -1,58 +1,59 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../store/hooks.js';
 import { toggleSidebar, toggleTheme, toggleLanguage } from '../../store/slices/uiSlice.js';
-import { useAuth } from '../../features/auth/hooks/useAuth.js';
+import { setUnreadCount } from '../../store/slices/notificationSlice.js';
+import { api } from '../../lib/api.js';
 import {
   Menu,
   Sun,
   Moon,
-  LogOut,
   Bell,
   Languages,
-  User as UserIcon,
 } from 'lucide-react';
-import { Badge } from '../ui/Badge.js';
 import { Link } from 'react-router-dom';
+import { GlobalSearch } from '../common/GlobalSearch.js';
+import { UserMenu } from './UserMenu.js';
 
 export const Header: React.FC = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { user, role } = useAppSelector((state) => state.auth);
   const { theme, language } = useAppSelector((state) => state.ui);
   const { unreadCount } = useAppSelector((state) => state.notifications);
-  const { logout } = useAuth();
 
-  const getRoleBadge = () => {
-    switch (role) {
-      case 'PLATFORM_MANAGER':
-        return <Badge variant="danger">{t('roles.PLATFORM_MANAGER')}</Badge>;
-      case 'PHARMACY_MANAGER':
-        return <Badge variant="warning">{t('roles.PHARMACY_MANAGER')}</Badge>;
-      case 'PHARMACIST':
-        return <Badge variant="info">{t('roles.PHARMACIST')}</Badge>;
-      case 'ACCOUNTANT':
-        return <Badge variant="success">{t('roles.ACCOUNTANT')}</Badge>;
-      default:
-        return null;
-    }
-  };
+  // Fetch live unread notification count
+  useEffect(() => {
+    const fetchUnreadCount = async () => {
+      try {
+        const response = await api.get('/notifications/unread-count');
+        if (typeof response.data.data?.unreadCount === 'number') {
+          dispatch(setUnreadCount(response.data.data.unreadCount));
+        }
+      } catch {
+        // Ignore if notification server endpoint not triggered yet
+      }
+    };
+    fetchUnreadCount();
+  }, [dispatch]);
 
   return (
-    <header className="h-16 bg-white dark:bg-[#0E1522] border-b border-slate-200/80 dark:border-[#1E293B] px-6 flex items-center justify-between sticky top-0 z-30 shadow-xs transition-colors">
-      {/* Left side: Hamburger Toggle */}
-      <div className="flex items-center gap-4">
+    <header className="h-16 bg-white dark:bg-[#0E1522] border-b border-slate-200/80 dark:border-[#1E293B] px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 shadow-xs transition-colors">
+      {/* Left side: Hamburger Toggle & Global Search */}
+      <div className="flex items-center gap-3 md:gap-4 flex-1">
         <button
+          type="button"
           onClick={() => dispatch(toggleSidebar())}
           className="p-2.5 rounded-2xl text-slate-600 hover:bg-sky-50 hover:text-sky-700 dark:text-slate-300 dark:hover:bg-[#1A2639] dark:hover:text-white transition-colors cursor-pointer"
           aria-label="Toggle Sidebar"
         >
           <Menu className="w-5 h-5" />
         </button>
+
+        <GlobalSearch />
       </div>
 
-      {/* Right side: Language, Theme, Notifications, User Avatar, Logout */}
-      <div className="flex items-center gap-2.5">
+      {/* Right side: Language, Theme, Notifications, User Menu */}
+      <div className="flex items-center gap-2 sm:gap-2.5">
         {/* Language Switcher Button */}
         <button
           type="button"
@@ -79,6 +80,7 @@ export const Header: React.FC = () => {
         <Link
           to="/notifications"
           className="relative p-2.5 rounded-2xl text-slate-600 hover:bg-sky-50 hover:text-sky-700 dark:text-slate-300 dark:hover:bg-[#1A2639] dark:hover:text-white transition-colors"
+          title={t('nav.notifications')}
         >
           <Bell className="w-5 h-5" />
           {unreadCount > 0 && (
@@ -89,29 +91,10 @@ export const Header: React.FC = () => {
         </Link>
 
         {/* Divider */}
-        <div className="h-6 w-px bg-slate-200 dark:bg-[#1E293B] mx-1" />
+        <div className="h-6 w-px bg-slate-200 dark:bg-[#1E293B] mx-1 hidden sm:block" />
 
-        {/* User Info & Avatar */}
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-2xl bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-300 flex items-center justify-center font-bold text-sm">
-            <UserIcon className="w-5 h-5" />
-          </div>
-          <div className="hidden md:block text-start">
-            <p className="text-xs font-bold text-slate-900 dark:text-slate-100 leading-none">
-              {user?.name || (language === 'ar' ? 'مستخدم النظام' : 'Staff Member')}
-            </p>
-            <div className="mt-1">{getRoleBadge()}</div>
-          </div>
-        </div>
-
-        {/* Logout Button */}
-        <button
-          onClick={logout}
-          title={t('common.logout')}
-          className="p-2.5 rounded-2xl text-rose-600 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:text-rose-400 dark:hover:bg-rose-950/70 transition-colors cursor-pointer"
-        >
-          <LogOut className="w-5 h-5" />
-        </button>
+        {/* User Dropdown Menu */}
+        <UserMenu />
       </div>
     </header>
   );

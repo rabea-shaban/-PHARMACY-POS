@@ -1,84 +1,38 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { PageHeader } from '../components/common/PageHeader.js';
-import { StatCard } from '../components/common/StatCard.js';
-import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card.js';
-import { Button } from '../components/ui/Button.js';
-import { DollarSign, ShoppingBag, Store, Globe, ShoppingCart } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { DashboardHeader } from '../features/dashboard/components/DashboardHeader.js';
+import { KPIGrid } from '../features/dashboard/components/KPIGrid.js';
+import { SalesChart } from '../features/dashboard/components/SalesChart.js';
+import { QuickActions } from '../features/dashboard/components/QuickActions.js';
+import { RecentSales } from '../features/dashboard/components/RecentSales.js';
+import { LowStockWidget } from '../features/dashboard/components/LowStockWidget.js';
+import { ExpiryAlertsWidget } from '../features/dashboard/components/ExpiryAlertsWidget.js';
 
 export const DashboardPage: React.FC = () => {
-  const { t } = useTranslation();
-
   return (
-    <div className="space-y-6">
-      <PageHeader
-        title={t('dashboard.title')}
-        description={t('dashboard.subtitle')}
-        actions={
-          <Link to="/pos">
-            <Button variant="primary" leftIcon={<ShoppingCart className="w-4 h-4" />}>
-              {t('dashboard.openPos')}
-            </Button>
-          </Link>
-        }
-      />
+    <div className="space-y-6 animate-in fade-in duration-300">
+      {/* 1. Header & Live Refresh */}
+      <DashboardHeader />
 
-      {/* KPI Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <StatCard
-          title={t('dashboard.totalSales')}
-          value={`24,850 ${t('common.currency')}`}
-          icon={<DollarSign className="w-5 h-5" />}
-          trend={{ value: 12.5, isPositive: true }}
-          cardType="totalSales"
-        />
-        <StatCard
-          title={t('dashboard.inStoreSales')}
-          value={`18,320 ${t('common.currency')}`}
-          icon={<Store className="w-5 h-5" />}
-          trend={{ value: 6.4, isPositive: true }}
-          cardType="inStore"
-        />
-        <StatCard
-          title={t('dashboard.onlineSales')}
-          value={`6,530 ${t('common.currency')}`}
-          icon={<Globe className="w-5 h-5" />}
-          trend={{ value: 18.2, isPositive: true }}
-          cardType="online"
-        />
-        <StatCard
-          title={t('dashboard.totalOrders')}
-          value="142"
-          subtitle={`${t('dashboard.averageBasket')}: 175 ${t('common.currency')}`}
-          icon={<ShoppingBag className="w-5 h-5" />}
-          cardType="orders"
-        />
+      {/* 2. Top KPI Cards */}
+      <KPIGrid />
+
+      {/* 3. Role-Aware Quick Actions */}
+      <QuickActions />
+
+      {/* 4. Sales Analytics & Recent Sales */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <SalesChart />
+        </div>
+        <div>
+          <RecentSales />
+        </div>
       </div>
 
-      {/* Overview Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="rounded-3xl">
-          <CardHeader>
-            <CardTitle>{t('dashboard.weeklySalesChart')}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="p-10 text-center text-slate-400 text-sm">
-              {t('dashboard.chartPlaceholder')}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="rounded-3xl">
-          <CardHeader>
-            <CardTitle>{t('dashboard.topSellingProducts')}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="p-10 text-center text-slate-400 text-sm">
-              {t('dashboard.topProductsPlaceholder')}
-            </div>
-          </CardContent>
-        </Card>
+      {/* 5. Inventory Health & Expiry Alerts (FEFO) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <LowStockWidget />
+        <ExpiryAlertsWidget />
       </div>
     </div>
   );
