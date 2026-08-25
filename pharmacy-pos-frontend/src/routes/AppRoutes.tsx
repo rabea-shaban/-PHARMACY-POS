@@ -49,6 +49,12 @@ import { ReturnsPage } from '../features/returns/pages/ReturnsPage.js';
 import { CreateReturnPage } from '../features/returns/pages/CreateReturnPage.js';
 import { ReturnDetailsPage } from '../features/returns/pages/ReturnDetailsPage.js';
 
+// F08: Customers & Loyalty Pages
+import { CustomersPage } from '../features/customers/pages/CustomersPage.js';
+import { CreateCustomerPage } from '../features/customers/pages/CreateCustomerPage.js';
+import { EditCustomerPage } from '../features/customers/pages/EditCustomerPage.js';
+import { CustomerDetailsPage } from '../features/customers/pages/CustomerDetailsPage.js';
+
 export const AppRoutes: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -296,12 +302,36 @@ export const AppRoutes: React.FC = () => {
         {/* Forbidden Page (403) */}
         <Route path="/forbidden" element={<ForbiddenPage />} />
 
-        {/* Subsequent phase placeholders */}
+        {/* Customers & Loyalty Module (F08) */}
         <Route
           path="/customers"
           element={
             <RoleGuard allowedRoles={MODULE_PERMISSIONS.customers}>
-              <div className="p-8 text-center text-slate-400">العملاء ونقاط الولاء (المرحلة F08)</div>
+              <CustomersPage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/customers/new"
+          element={
+            <RoleGuard allowedRoles={['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST']}>
+              <CreateCustomerPage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/customers/:id/edit"
+          element={
+            <RoleGuard allowedRoles={['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST']}>
+              <EditCustomerPage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/customers/:id"
+          element={
+            <RoleGuard allowedRoles={MODULE_PERMISSIONS.customers}>
+              <CustomerDetailsPage />
             </RoleGuard>
           }
         />

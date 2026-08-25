@@ -65,9 +65,11 @@ function calculateTotals(state: CartSliceState) {
   }
 
   // 2. Customer Tier Discount (if applicable and no conflicting custom discount)
-  if (!state.discount && state.customer?.loyalty?.tier?.discountPercentage) {
-    const tierPct = state.customer.loyalty.tier.discountPercentage;
-    discountAmount = (state.subtotal * tierPct) / 100;
+  const tierDiscountPct =
+    state.customer?.tier?.discountPercentage ??
+    state.customer?.loyalty?.tier?.discountPercentage;
+  if (!state.discount && tierDiscountPct && tierDiscountPct > 0) {
+    discountAmount = (state.subtotal * tierDiscountPct) / 100;
   }
 
   // 3. Loyalty points redemption

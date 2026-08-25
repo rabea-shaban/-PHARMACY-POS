@@ -391,5 +391,31 @@
     "originalSale": "الفاتورة الأصلية",
     "returnItems": "الأصناف المسترجعة إلى المخزن",
     "printCreditNote": "طباعة إشعار الإرجاع (Credit Note)"
+  },
+  "customers": {
+    "pageTitle": "إدارة العملاء وبرامج الولاء",
+    "pageSubtitle": "دليل عملاء الصيدلية، برامج النقاط والمكافآت، وفئات الخصم التراكمية",
+    "createCustomer": "تسجيل عميل جديد",
+    "editCustomer": "تعديل بيانات العميل",
+    "searchPlaceholder": "ابحث بالاسم، رقم الهاتف، أو البريد...",
+    "allTiers": "جميع فئات الولاء",
+    "allStatuses": "جميع الحالات",
+    "colCustomer": "العميل",
+    "colPhone": "رقم الهاتف",
+    "colTier": "فئة الولاء",
+    "colPoints": "رصيد النقاط",
+    "colRegisteredAt": "تاريخ التسجيل",
+    "noCustomersFound": "لا يوجد عملاء مسجلين",
+    "noCustomersFoundDesc": "لم يتم العثور على أي عملاء يطابقون خيارات البحث والفلترة.",
+    "profileInfo": "معلومات الملف الشخصي",
+    "loyaltyCard": "حساب نقاط الولاء والمكافآت",
+    "availablePoints": "الرصيد المتاح للاستبدال",
+    "currentTier": "الفئة الحالية",
+    "adjustPoints": "تعديل الرصيد",
+    "tierProgress": "التقدم نحو الفئة القادمة",
+    "purchaseHistory": "سجل فواتير المشتريات السابقة للعميل",
+    "loyaltyTransactions": "سجل حركات نقاط الولاء والمكافآت",
+    "newSale": "فتح فاتورة بيع جديدة",
+    "editProfile": "تعديل البيانات"
   }
 }

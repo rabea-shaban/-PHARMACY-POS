@@ -391,5 +391,31 @@
     "originalSale": "Original Sales Invoice",
     "returnItems": "Returned Items Restocked",
     "printCreditNote": "Print Credit Note (Thermal Receipt)"
+  },
+  "customers": {
+    "pageTitle": "Customers & Loyalty Management",
+    "pageSubtitle": "Customer directory, reward points programs, and cumulative discount tiers",
+    "createCustomer": "Register New Customer",
+    "editCustomer": "Edit Customer Profile",
+    "searchPlaceholder": "Search by name, phone number, or email...",
+    "allTiers": "All Loyalty Tiers",
+    "allStatuses": "All Statuses",
+    "colCustomer": "Customer",
+    "colPhone": "Phone",
+    "colTier": "Loyalty Tier",
+    "colPoints": "Reward Points",
+    "colRegisteredAt": "Registration Date",
+    "noCustomersFound": "No Customers Found",
+    "noCustomersFoundDesc": "No customers matching the current search criteria were found.",
+    "profileInfo": "Profile Information",
+    "loyaltyCard": "Loyalty & Rewards Account",
+    "availablePoints": "Available Balance",
+    "currentTier": "Current Tier",
+    "adjustPoints": "Adjust Points",
+    "tierProgress": "Progress Toward Next Tier",
+    "purchaseHistory": "Customer Purchase Invoices History",
+    "loyaltyTransactions": "Points & Rewards Transaction History",
+    "newSale": "New POS Sale",
+    "editProfile": "Edit Profile"
   }
 }

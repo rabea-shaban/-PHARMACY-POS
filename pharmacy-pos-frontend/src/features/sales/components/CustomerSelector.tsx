@@ -109,19 +109,19 @@ export const CustomerSelector: React.FC = () => {
                 <p className="text-xs font-bold text-slate-900 dark:text-white truncate">
                   {customer.name}
                 </p>
-                {customer.loyalty?.tier && (
+                {customer.tier && (
                   <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 flex items-center gap-1">
                     <Award className="w-3 h-3" />
-                    <span>{customer.loyalty.tier.name}</span>
+                    <span>{customer.tier.name}</span>
                   </span>
                 )}
               </div>
 
               <div className="flex items-center gap-3 text-[10px] text-slate-400 mt-0.5">
                 <span className="font-mono">{customer.phone}</span>
-                {customer.loyalty && (
+                {(customer.loyaltyAccount || customer.loyalty) && (
                   <span className="text-emerald-600 dark:text-emerald-400 font-bold">
-                    {customer.loyalty.points} {t('pos.pointsUnit') || 'نقطة'}
+                    {customer.loyaltyAccount?.totalPoints ?? customer.loyalty?.points ?? 0} {t('pos.pointsUnit') || 'نقطة'}
                   </span>
                 )}
               </div>
@@ -177,9 +177,9 @@ export const CustomerSelector: React.FC = () => {
                       <p className="text-[11px] text-slate-400 font-mono">{cust.phone}</p>
                     </div>
                     <div className="text-end text-[11px]">
-                      {cust.loyalty && (
+                      {(cust.loyaltyAccount || cust.loyalty) && (
                         <span className="font-bold text-sky-600 dark:text-sky-400">
-                          {cust.loyalty.points} {t('pos.pointsUnit') || 'نقطة'}
+                          {cust.loyaltyAccount?.totalPoints ?? cust.loyalty?.points ?? 0} {t('pos.pointsUnit') || 'نقطة'}
                         </span>
                       )}
                     </div>

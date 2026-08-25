@@ -12,7 +12,7 @@ export const LoyaltySummary: React.FC = () => {
   const loyaltyRedemption = useAppSelector((state) => state.cart.loyalty);
   const subtotal = useAppSelector((state) => state.cart.subtotal);
 
-  const availablePoints = customer?.loyalty?.points || 0;
+  const availablePoints = customer?.loyaltyAccount?.totalPoints ?? customer?.loyalty?.points ?? 0;
   // Standard conversion: 10 points = 1 EGP discount
   const maxRedeemableDiscount = Math.min(subtotal, availablePoints / 10);
 

@@ -112,6 +112,21 @@ export const APP_ROUTES: Record<string, AppRouteDefinition> = {
     isProtected: true,
     allowedRoles: MODULE_PERMISSIONS.customers,
   },
+  CUSTOMERS_NEW: {
+    path: '/customers/new',
+    isProtected: true,
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'],
+  },
+  CUSTOMERS_EDIT: {
+    path: '/customers/:id/edit',
+    isProtected: true,
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'],
+  },
+  CUSTOMERS_DETAILS: {
+    path: '/customers/:id',
+    isProtected: true,
+    allowedRoles: MODULE_PERMISSIONS.customers,
+  },
   SALES: {
     path: '/sales',
     isProtected: true,
