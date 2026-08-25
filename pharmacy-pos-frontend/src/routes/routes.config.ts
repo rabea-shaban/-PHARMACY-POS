@@ -127,6 +127,16 @@ export const APP_ROUTES: Record<string, AppRouteDefinition> = {
     isProtected: true,
     allowedRoles: MODULE_PERMISSIONS.returns,
   },
+  RETURNS_NEW: {
+    path: '/returns/new',
+    isProtected: true,
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'],
+  },
+  RETURNS_DETAILS: {
+    path: '/returns/:id',
+    isProtected: true,
+    allowedRoles: MODULE_PERMISSIONS.returns,
+  },
   EXPENSES: {
     path: '/expenses',
     isProtected: true,

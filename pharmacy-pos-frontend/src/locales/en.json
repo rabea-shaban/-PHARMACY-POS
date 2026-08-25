@@ -366,5 +366,30 @@
     "grandTotal": "Grand Total Due:",
     "checkoutButton": "Complete Sale & Confirm Invoice",
     "fefoNotice": "Real-time medicine search and FEFO batches will be connected in the next phase."
+  },
+  "returns": {
+    "pageTitle": "Sales Returns & Refunds Ledger",
+    "pageSubtitle": "Manage credit notes, inventory returns (FEFO), and financial reversals",
+    "createReturn": "New Return / Refund",
+    "searchPlaceholder": "Search by return voucher #...",
+    "colReturnNumber": "Return Voucher #",
+    "colInvoiceNumber": "Original Invoice #",
+    "colProcessedBy": "Authorized Staff",
+    "colItemsCount": "Returned Items",
+    "colTotalRefund": "Total Refund",
+    "noReturnsFound": "No Returns Recorded",
+    "noReturnsFoundDesc": "No sales returns have been recorded yet.",
+    "createTitle": "Process Sale Return & Refund",
+    "createSubtitle": "Lookup original invoice, select items & quantities to return, and restock batches",
+    "step1Title": "Step 1: Lookup Original Sales Invoice",
+    "step2Title": "Step 2: Select Items & Return Quantities",
+    "fieldReason": "Return Reason (Mandatory for audit)",
+    "selectReasonPlaceholder": "Select return reason...",
+    "financialSummary": "Refund Financial Summary",
+    "confirmReturn": "Confirm Return & Issue Refund",
+    "returnNumberTitle": "Return Voucher #",
+    "originalSale": "Original Sales Invoice",
+    "returnItems": "Returned Items Restocked",
+    "printCreditNote": "Print Credit Note (Thermal Receipt)"
   }
 }

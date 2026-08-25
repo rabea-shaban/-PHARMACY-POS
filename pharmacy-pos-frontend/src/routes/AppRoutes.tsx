@@ -44,6 +44,11 @@ import { PurchaseDetailsPage } from '../features/purchases/pages/PurchaseDetails
 import { SalesPage } from '../features/sales/pages/SalesPage.js';
 import { SaleDetailsPage } from '../features/sales/pages/SaleDetailsPage.js';
 
+// F07: Returns & Refunds Pages
+import { ReturnsPage } from '../features/returns/pages/ReturnsPage.js';
+import { CreateReturnPage } from '../features/returns/pages/CreateReturnPage.js';
+import { ReturnDetailsPage } from '../features/returns/pages/ReturnDetailsPage.js';
+
 export const AppRoutes: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -317,11 +322,28 @@ export const AppRoutes: React.FC = () => {
             </RoleGuard>
           }
         />
+        {/* Returns & Refunds Module (F07) */}
         <Route
           path="/returns"
           element={
             <RoleGuard allowedRoles={MODULE_PERMISSIONS.returns}>
-              <div className="p-8 text-center text-slate-400">مرتجعات المبيعات (المرحلة F10)</div>
+              <ReturnsPage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/returns/new"
+          element={
+            <RoleGuard allowedRoles={['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST']}>
+              <CreateReturnPage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/returns/:id"
+          element={
+            <RoleGuard allowedRoles={MODULE_PERMISSIONS.returns}>
+              <ReturnDetailsPage />
             </RoleGuard>
           }
         />
