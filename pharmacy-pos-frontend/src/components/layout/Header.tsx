@@ -2,8 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../store/hooks.js';
 import { toggleSidebar, toggleTheme, toggleLanguage } from '../../store/slices/uiSlice.js';
-import { clearUser } from '../../store/slices/authSlice.js';
-import { api } from '../../lib/api.js';
+import { useAuth } from '../../features/auth/hooks/useAuth.js';
 import {
   Menu,
   Sun,
@@ -22,17 +21,7 @@ export const Header: React.FC = () => {
   const { user, role } = useAppSelector((state) => state.auth);
   const { theme, language } = useAppSelector((state) => state.ui);
   const { unreadCount } = useAppSelector((state) => state.notifications);
-
-  const handleLogout = async () => {
-    try {
-      await api.post('/auth/logout');
-    } catch {
-      // Ignore
-    } finally {
-      dispatch(clearUser());
-      window.location.href = '/login';
-    }
-  };
+  const { logout } = useAuth();
 
   const getRoleBadge = () => {
     switch (role) {
@@ -55,7 +44,7 @@ export const Header: React.FC = () => {
       <div className="flex items-center gap-4">
         <button
           onClick={() => dispatch(toggleSidebar())}
-          className="p-2.5 rounded-2xl text-slate-600 hover:bg-sky-50 hover:text-sky-700 dark:text-slate-300 dark:hover:bg-[#1A2639] dark:hover:text-white transition-colors"
+          className="p-2.5 rounded-2xl text-slate-600 hover:bg-sky-50 hover:text-sky-700 dark:text-slate-300 dark:hover:bg-[#1A2639] dark:hover:text-white transition-colors cursor-pointer"
           aria-label="Toggle Sidebar"
         >
           <Menu className="w-5 h-5" />
@@ -109,7 +98,7 @@ export const Header: React.FC = () => {
           </div>
           <div className="hidden md:block text-start">
             <p className="text-xs font-bold text-slate-900 dark:text-slate-100 leading-none">
-              {user?.name || 'مستخدم النظام'}
+              {user?.name || (language === 'ar' ? 'مستخدم النظام' : 'Staff Member')}
             </p>
             <div className="mt-1">{getRoleBadge()}</div>
           </div>
@@ -117,7 +106,7 @@ export const Header: React.FC = () => {
 
         {/* Logout Button */}
         <button
-          onClick={handleLogout}
+          onClick={logout}
           title={t('common.logout')}
           className="p-2.5 rounded-2xl text-rose-600 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:text-rose-400 dark:hover:bg-rose-950/70 transition-colors cursor-pointer"
         >

@@ -1,5 +1,12 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 
+type SessionExpiredHandler = () => void;
+let onSessionExpiredCallback: SessionExpiredHandler | null = null;
+
+export function registerSessionExpiredHandler(handler: SessionExpiredHandler) {
+  onSessionExpiredCallback = handler;
+}
+
 // Base Axios instance matching Backend API
 export const api = axios.create({
   baseURL: '/api/v1',
@@ -21,20 +28,22 @@ api.interceptors.request.use(
   }
 );
 
-// Response Interceptor for global error catching (e.g. 401 unauthenticated)
+// Response Interceptor for global error catching
 api.interceptors.response.use(
   (response) => {
     return response;
   },
   (error: AxiosError) => {
-    if (error.response?.status === 401) {
-      // Unauthenticated session - optionally trigger global auth check
-      const currentPath = window.location.pathname;
-      if (currentPath !== '/login') {
-        // Soft redirect to login if session expired
-        console.warn('Session expired or unauthorized. Redirecting to login.');
+    const status = error.response?.status;
+    const requestUrl = error.config?.url || '';
+
+    // If 401 occurs on regular API requests (excluding /auth/login and initial /auth/me)
+    if (status === 401 && !requestUrl.includes('/auth/login') && !requestUrl.includes('/auth/me')) {
+      if (onSessionExpiredCallback) {
+        onSessionExpiredCallback();
       }
     }
+
     return Promise.reject(error);
   }
 );

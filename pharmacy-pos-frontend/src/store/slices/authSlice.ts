@@ -6,6 +6,7 @@ interface AuthSliceState {
   role: Role | null;
   isAuthenticated: boolean;
   isCheckingAuth: boolean;
+  sessionExpired: boolean;
 }
 
 const initialState: AuthSliceState = {
@@ -13,6 +14,7 @@ const initialState: AuthSliceState = {
   role: null,
   isAuthenticated: false,
   isCheckingAuth: true,
+  sessionExpired: false,
 };
 
 export const authSlice = createSlice({
@@ -24,6 +26,7 @@ export const authSlice = createSlice({
       state.role = action.payload.role;
       state.isAuthenticated = true;
       state.isCheckingAuth = false;
+      state.sessionExpired = false;
     },
     clearUser: (state) => {
       state.user = null;
@@ -34,8 +37,16 @@ export const authSlice = createSlice({
     setCheckingAuth: (state, action: PayloadAction<boolean>) => {
       state.isCheckingAuth = action.payload;
     },
+    setSessionExpired: (state, action: PayloadAction<boolean>) => {
+      state.sessionExpired = action.payload;
+      if (action.payload) {
+        state.user = null;
+        state.role = null;
+        state.isAuthenticated = false;
+      }
+    },
   },
 });
 
-export const { setUser, clearUser, setCheckingAuth } = authSlice.actions;
+export const { setUser, clearUser, setCheckingAuth, setSessionExpired } = authSlice.actions;
 export default authSlice.reducer;

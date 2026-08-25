@@ -11,7 +11,7 @@
     "edit": "Edit",
     "actions": "Actions",
     "status": "Status",
-    "loading": "Loading...",
+    "loading": "Verifying session and security permissions...",
     "noData": "No records found",
     "currency": "EGP",
     "egp": "EGP",
@@ -49,7 +49,8 @@
     "loginButton": "Sign In to System",
     "loggingIn": "Signing in...",
     "quickDemo": "Quick Demo Accounts:",
-    "invalidCredentials": "Sign in failed. Please verify your phone number and password."
+    "invalidCredentials": "Sign in failed. Please verify your credentials and password.",
+    "sessionExpiredNotice": "Your authenticated session has expired. Please sign in again to continue."
   },
   "dashboard": {
     "title": "Operations Dashboard",
