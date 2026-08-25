@@ -13,6 +13,7 @@ import {
   PaginatedSalesResponse,
 } from './sales.types.js';
 import { NotFoundError, BadRequestError } from '../../utils/errors.js';
+import { eventBus } from '../../lib/events.js';
 
 function formatSale(raw: any): SaleResponse {
   return {
@@ -284,7 +285,22 @@ export class SalesService {
 
     // 8. Execute Atomic Transaction in Database
     const createdSale = await this.repo.createSaleAtomic(checkoutPlan);
-    return formatSale(createdSale);
+    const saleResponse = formatSale(createdSale);
+
+    // 9. Publish Asynchronous Business Event (decoupled from transaction)
+    eventBus.emitSaleCompleted({
+      saleId: saleResponse.id,
+      invoiceNumber: saleResponse.invoiceNumber,
+      customerId: saleResponse.customerId,
+      customerName: saleResponse.customerName || null,
+      customerPhone: saleResponse.customerPhone || null,
+      total: saleResponse.total,
+      paidAmount: saleResponse.paidAmount,
+      cashierName: saleResponse.cashierName,
+      itemsCount: saleResponse.items.length,
+    });
+
+    return saleResponse;
   }
 
   async cancelSale(id: string, actorId: string, input: CancelSaleDTO): Promise<SaleResponse> {

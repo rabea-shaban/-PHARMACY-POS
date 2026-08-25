@@ -2235,6 +2235,123 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "29. Notifications",
+      "item": [
+        {
+          "name": "Get User Notifications",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/notifications?page=1&limit=20&isRead=false",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "notifications"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" },
+                { "key": "isRead", "value": "false" }
+              ]
+            },
+            "description": "Query paginated list of internal notifications for current user."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Unread Notification Count",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/notifications/unread-count",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "notifications", "unread-count"]
+            },
+            "description": "Retrieve count of unread notifications for current user."
+          },
+          "response": []
+        },
+        {
+          "name": "Mark Single Notification as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/notifications/<NOTIFICATION_ID>/read",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "notifications", "<NOTIFICATION_ID>", "read"]
+            },
+            "description": "Mark a single notification as read."
+          },
+          "response": []
+        },
+        {
+          "name": "Mark All Notifications as Read",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/notifications/read-all",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "notifications", "read-all"]
+            },
+            "description": "Mark all notifications as read for current user."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "30. WhatsApp",
+      "item": [
+        {
+          "name": "List WhatsApp Messages",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/whatsapp/messages?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "whatsapp", "messages"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            },
+            "description": "List WhatsApp messages with optional filters (phone, sale, customer, status)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get WhatsApp Message Details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/whatsapp/messages/<MESSAGE_ID>",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "whatsapp", "messages", "<MESSAGE_ID>"]
+            },
+            "description": "Get detailed WhatsApp message record with provider ID and error log."
+          },
+          "response": []
+        },
+        {
+          "name": "Retry Failed WhatsApp Message",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/whatsapp/messages/<MESSAGE_ID>/retry",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "whatsapp", "messages", "<MESSAGE_ID>", "retry"]
+            },
+            "description": "Manually re-queue a permanently FAILED WhatsApp message for retry."
+          },
+          "response": []
+        }
+      ]
     }
   ]
 }

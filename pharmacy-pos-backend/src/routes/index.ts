@@ -20,6 +20,8 @@ import { commissionsRouter } from '../modules/commissions/index.js';
 import { dashboardRouter } from '../modules/dashboard/index.js';
 import { reportsRouter } from '../modules/reports/index.js';
 import { payrollRouter } from '../modules/payroll/index.js';
+import { notificationsRouter } from '../modules/notifications/index.js';
+import { whatsAppRouter } from '../modules/whatsapp/index.js';
 
 export const apiRouter = Router();
 
@@ -85,3 +87,9 @@ apiRouter.use('/reports', reportsRouter);
 
 // Workforce Payroll Management Module
 apiRouter.use('/payroll', payrollRouter);
+
+// System Notifications Module
+apiRouter.use('/notifications', notificationsRouter);
+
+// WhatsApp Customer Communication Module
+apiRouter.use('/whatsapp', whatsAppRouter);
