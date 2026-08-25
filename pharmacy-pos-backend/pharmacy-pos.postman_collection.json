@@ -2428,6 +2428,24 @@
         },
         {
           "name": "List Audit Logs with Filters",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.items && jsonData.data.items.length > 0) {",
+                  "        pm.collectionVariables.set('auditLogId', jsonData.data.items[0].id);",
+                  "        pm.environment.set('auditLogId', jsonData.data.items[0].id);",
+                  "        console.log('✅ Auto-saved auditLogId: ' + jsonData.data.items[0].id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
@@ -2451,9 +2469,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/v1/audit-logs/<AUDIT_ID>",
+              "raw": "{{baseUrl}}/api/v1/audit-logs/{{auditLogId}}",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "audit-logs", "<AUDIT_ID>"]
+              "path": ["api", "v1", "audit-logs", "{{auditLogId}}"]
             },
             "description": "View complete audit log record with old and new data diffs."
           },
