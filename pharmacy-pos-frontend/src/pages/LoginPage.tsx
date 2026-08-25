@@ -6,7 +6,7 @@ import { api } from '../lib/api.js';
 import { Button } from '../components/ui/Button.js';
 import { Input } from '../components/ui/Input.js';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/Card.js';
-import { Phone, Lock, Sparkles } from 'lucide-react';
+import { Phone, Lock, Sparkles, HeartPulse } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
   const [identifier, setIdentifier] = useState('01012345678');
@@ -57,8 +57,8 @@ export const LoginPage: React.FC = () => {
       <div className="w-full max-w-md space-y-6 relative z-10">
         {/* Brand Header */}
         <div className="text-center space-y-2">
-          <div className="inline-flex w-16 h-16 rounded-3xl bg-gradient-to-tr from-sky-600 to-cyan-500 text-white items-center justify-center text-3xl shadow-xl shadow-sky-500/25">
-            🏥
+          <div className="inline-flex w-16 h-16 rounded-3xl bg-gradient-to-tr from-sky-600 via-cyan-500 to-teal-400 text-white items-center justify-center shadow-xl shadow-sky-500/25">
+            <HeartPulse className="w-9 h-9 text-white animate-pulse" strokeWidth={2.5} />
           </div>
           <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">صيدلية الأمل الحديثة</h1>
           <p className="text-xs text-slate-500 dark:text-slate-400">Pharmacy POS & Management System</p>
