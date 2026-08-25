@@ -60,6 +60,21 @@
       "key": "createdInsuranceProviderId",
       "value": "",
       "type": "string"
+    },
+    {
+      "key": "createdReturnId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "createdExpenseId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "createdCommissionRuleId",
+      "value": "",
+      "type": "string"
     }
   ],
   "item": [
@@ -1571,6 +1586,280 @@
               "path": ["api", "v1", "insurance", "providers"]
             },
             "description": "Register an insurance provider."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "16. Sale Returns",
+      "item": [
+        {
+          "name": "Process Sale Return (Atomic Stock Restoration)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.id) {",
+                  "        pm.collectionVariables.set('createdReturnId', jsonData.data.id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"saleId\": \"{{createdSaleId}}\",\n  \"reason\": \"Patient prescribed different medication\",\n  \"items\": [\n    {\n      \"saleItemId\": \"PLACEHOLDER_SALE_ITEM_ID\",\n      \"quantity\": 1\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sale-returns",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "sale-returns"]
+            },
+            "description": "Atomically processes a full or partial product return, restores batch inventory quantities, writes ledger entries, and reverses proportional staff commission."
+          },
+          "response": []
+        },
+        {
+          "name": "List Sale Returns",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sale-returns?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "sale-returns"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            },
+            "description": "List all historical sale returns with pagination and search filters."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Sale Return by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sale-returns/{{createdReturnId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "sale-returns", "{{createdReturnId}}"]
+            },
+            "description": "Retrieve specific return invoice details and returned product item lines."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Returns for Sale Invoice",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sale-returns/sales/{{createdSaleId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "sale-returns", "sales", "{{createdSaleId}}"]
+            },
+            "description": "Get all return transactions associated with a specific sale invoice."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "17. Expenses",
+      "item": [
+        {
+          "name": "Record Operating Expense",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.id) {",
+                  "        pm.collectionVariables.set('createdExpenseId', jsonData.data.id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 4500.0,\n  \"category\": \"RENT\",\n  \"description\": \"Pharmacy Monthly Branch Rent\",\n  \"paymentMethod\": \"WALLET\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/expenses",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "expenses"]
+            },
+            "description": "Record an operating expense (Rent, Electricity, Maintenance, Supplies, Salaries, Other)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Expenses Financial Summary",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/expenses/summary",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "expenses", "summary"]
+            },
+            "description": "Aggregates overall expenses total, category breakdown, and payment method distribution."
+          },
+          "response": []
+        },
+        {
+          "name": "List Operating Expenses (Filter by Category)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/expenses?category=RENT&page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "expenses"],
+              "query": [
+                { "key": "category", "value": "RENT" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            },
+            "description": "List and filter operating expenses by category, payment method, or date range."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Expense Details",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 4800.0,\n  \"description\": \"Pharmacy Monthly Branch Rent (Updated with parking)\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/expenses/{{createdExpenseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "expenses", "{{createdExpenseId}}"]
+            },
+            "description": "Update an expense record (Managers only)."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Expense",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/expenses/{{createdExpenseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "expenses", "{{createdExpenseId}}"]
+            },
+            "description": "Delete an expense record (Managers only)."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "18. Commissions",
+      "item": [
+        {
+          "name": "Create Commission Rule",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.id) {",
+                  "        pm.collectionVariables.set('createdCommissionRuleId', jsonData.data.id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Pharmacist 3% Sales Commission\",\n  \"percentage\": 3.0\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/commissions/rules",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "commissions", "rules"]
+            },
+            "description": "Create a commission incentive rule for staff."
+          },
+          "response": []
+        },
+        {
+          "name": "List Commission Rules",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/commissions/rules",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "commissions", "rules"]
+            },
+            "description": "List all active and configured staff commission rules."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Commissions Summary Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/commissions/summary",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "commissions", "summary"]
+            },
+            "description": "Aggregated commissions overview with total volume and staff breakdown."
+          },
+          "response": []
+        },
+        {
+          "name": "List Commission Transactions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/commissions/transactions?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "commissions", "transactions"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            },
+            "description": "Query historical commission credit and return debit records."
           },
           "response": []
         }

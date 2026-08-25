@@ -14,6 +14,9 @@ import { salesRouter } from '../modules/sales/index.js';
 import { paymentsRouter } from '../modules/payments/index.js';
 import { discountsRouter } from '../modules/discounts/index.js';
 import { insuranceRouter } from '../modules/insurance/index.js';
+import { saleReturnsRouter } from '../modules/sale-returns/index.js';
+import { expensesRouter } from '../modules/expenses/index.js';
+import { commissionsRouter } from '../modules/commissions/index.js';
 
 export const apiRouter = Router();
 
@@ -61,3 +64,12 @@ apiRouter.use('/discounts', discountsRouter);
 
 // Insurance Module
 apiRouter.use('/insurance', insuranceRouter);
+
+// Sale Returns Module
+apiRouter.use('/sale-returns', saleReturnsRouter);
+
+// Operating Expenses Module
+apiRouter.use('/expenses', expensesRouter);
+
+// Staff Commissions Module
+apiRouter.use('/commissions', commissionsRouter);
