@@ -29,6 +29,17 @@ import { LowStockPage } from '../features/inventory/pages/LowStockPage.js';
 import { ExpiryAlertsPage } from '../features/inventory/pages/ExpiryAlertsPage.js';
 import { InventoryTransactionsPage } from '../features/inventory/pages/InventoryTransactionsPage.js';
 
+// F05: Suppliers Pages
+import { SuppliersPage } from '../features/suppliers/pages/SuppliersPage.js';
+import { CreateSupplierPage } from '../features/suppliers/pages/CreateSupplierPage.js';
+import { EditSupplierPage } from '../features/suppliers/pages/EditSupplierPage.js';
+import { SupplierDetailsPage } from '../features/suppliers/pages/SupplierDetailsPage.js';
+
+// F05: Purchases Pages
+import { PurchasesPage } from '../features/purchases/pages/PurchasesPage.js';
+import { CreatePurchasePage } from '../features/purchases/pages/CreatePurchasePage.js';
+import { PurchaseDetailsPage } from '../features/purchases/pages/PurchaseDetailsPage.js';
+
 export const AppRoutes: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -213,18 +224,70 @@ export const AppRoutes: React.FC = () => {
           }
         />
 
-        {/* Forbidden Page (403) */}
-        <Route path="/forbidden" element={<ForbiddenPage />} />
+        {/* Suppliers Module (F05) */}
+        <Route
+          path="/suppliers"
+          element={
+            <RoleGuard allowedRoles={['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT']}>
+              <SuppliersPage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/suppliers/new"
+          element={
+            <RoleGuard allowedRoles={['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST']}>
+              <CreateSupplierPage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/suppliers/:id/edit"
+          element={
+            <RoleGuard allowedRoles={['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST']}>
+              <EditSupplierPage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/suppliers/:id"
+          element={
+            <RoleGuard allowedRoles={['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT']}>
+              <SupplierDetailsPage />
+            </RoleGuard>
+          }
+        />
 
-        {/* Subsequent phase placeholders */}
+        {/* Purchases Module (F05) */}
         <Route
           path="/purchases"
           element={
             <RoleGuard allowedRoles={MODULE_PERMISSIONS.purchases}>
-              <div className="p-8 text-center text-slate-400">الموردين وأوامر الشراء (المرحلة F09)</div>
+              <PurchasesPage />
             </RoleGuard>
           }
         />
+        <Route
+          path="/purchases/new"
+          element={
+            <RoleGuard allowedRoles={['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST']}>
+              <CreatePurchasePage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/purchases/:id"
+          element={
+            <RoleGuard allowedRoles={MODULE_PERMISSIONS.purchases}>
+              <PurchaseDetailsPage />
+            </RoleGuard>
+          }
+        />
+
+        {/* Forbidden Page (403) */}
+        <Route path="/forbidden" element={<ForbiddenPage />} />
+
+        {/* Subsequent phase placeholders */}
         <Route
           path="/customers"
           element={

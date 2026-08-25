@@ -72,8 +72,38 @@ export const APP_ROUTES: Record<string, AppRouteDefinition> = {
     isProtected: true,
     allowedRoles: MODULE_PERMISSIONS.inventory,
   },
+  SUPPLIERS: {
+    path: '/suppliers',
+    isProtected: true,
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'],
+  },
+  SUPPLIERS_NEW: {
+    path: '/suppliers/new',
+    isProtected: true,
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'],
+  },
+  SUPPLIERS_EDIT: {
+    path: '/suppliers/:id/edit',
+    isProtected: true,
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'],
+  },
+  SUPPLIERS_DETAILS: {
+    path: '/suppliers/:id',
+    isProtected: true,
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'],
+  },
   PURCHASES: {
     path: '/purchases',
+    isProtected: true,
+    allowedRoles: MODULE_PERMISSIONS.purchases,
+  },
+  PURCHASES_NEW: {
+    path: '/purchases/new',
+    isProtected: true,
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'],
+  },
+  PURCHASES_DETAILS: {
+    path: '/purchases/:id',
     isProtected: true,
     allowedRoles: MODULE_PERMISSIONS.purchases,
   },

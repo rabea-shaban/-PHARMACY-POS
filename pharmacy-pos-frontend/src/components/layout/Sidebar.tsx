@@ -20,6 +20,7 @@ import {
   UsersRound,
   HeartPulse,
   Tag,
+  Building2,
 } from 'lucide-react';
 import { cn } from '../../lib/utils.js';
 import { Role } from '../../types/auth.types.js';
@@ -63,10 +64,16 @@ const navItemDefs: NavItemDef[] = [
     roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'],
   },
   {
+    key: 'suppliers',
+    href: '/suppliers',
+    icon: <Building2 className="w-5 h-5" />,
+    roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'],
+  },
+  {
     key: 'purchases',
     href: '/purchases',
     icon: <Truck className="w-5 h-5" />,
-    roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT'],
+    roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'],
   },
   {
     key: 'customers',
