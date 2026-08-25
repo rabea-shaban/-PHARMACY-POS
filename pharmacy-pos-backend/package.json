@@ -1,0 +1,63 @@
+{
+  "name": "pharmacy-pos-backend",
+  "version": "1.0.0",
+  "description": "Production-ready Pharmacy POS & Management System Backend Foundation",
+  "main": "dist/server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "seed": "tsx scripts/seed.ts",
+    "mig": "tsx scripts/migrate.ts",
+    "prisma:generate": "prisma generate",
+    "prisma:validate": "prisma validate",
+    "prisma:format": "prisma format",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:deploy": "prisma migrate deploy",
+    "prisma:studio": "prisma studio",
+    "prisma:pull": "prisma db pull",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:validate": "prisma validate",
+    "db:format": "prisma format",
+    "db:studio": "prisma studio"
+  },
+  "keywords": [
+    "pharmacy",
+    "pos",
+    "express",
+    "typescript",
+    "prisma",
+    "mysql",
+    "xampp"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/adapter-mariadb": "^7.9.1",
+    "@prisma/client": "^7.9.1",
+    "@prisma/config": "^7.9.1",
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.6.2",
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "mariadb": "^3.5.3",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^20.19.24",
+    "prisma": "^7.9.1",
+    "tsx": "^4.23.12",
+    "typescript": "^5.4.5"
+  }
+}

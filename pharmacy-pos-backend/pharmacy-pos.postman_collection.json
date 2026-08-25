@@ -1,0 +1,1580 @@
+{
+  "info": {
+    "_postman_id": "pharmacy-pos-api-collection-2026",
+    "name": "Pharmacy POS Backend API (Cookie-Based)",
+    "description": "Postman Collection for Pharmacy POS & Management System with 100% HttpOnly Cookie Authentication (Node.js + Express 5 + Prisma 7 + MySQL)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "createdUserId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "createdCustomerId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "createdCategoryId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "createdProductId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "createdBatchId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "createdSupplierId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "createdPurchaseId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "createdSaleId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "createdDiscountId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "createdInsuranceProviderId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Health & Connectivity",
+      "item": [
+        {
+          "name": "Root Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": ["{{baseUrl}}"],
+              "path": [""]
+            },
+            "description": "Returns basic API status and version."
+          },
+          "response": []
+        },
+        {
+          "name": "Health Check (Database Status)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "health"]
+            },
+            "description": "Verifies server and MySQL database connectivity."
+          },
+          "response": []
+        },
+        {
+          "name": "Test Database Operations (INSERT & SELECT)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/health/test-db",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "health", "test-db"]
+            },
+            "description": "Executes real INSERT and SELECT cycles on the connection_test table."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "2. Authentication (Cookie-Based)",
+      "item": [
+        {
+          "name": "Login - Platform Admin (Sets HttpOnly Cookie)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"01012345678\",\n  \"password\": \"AdminPass123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "login"]
+            },
+            "description": "Logs in as Platform Manager. Automatically sets the secure HttpOnly cookie in Postman's Cookie Jar!"
+          },
+          "response": []
+        },
+        {
+          "name": "Login - Pharmacist (Sets HttpOnly Cookie)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"01098765432\",\n  \"password\": \"PharmPass123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "login"]
+            },
+            "description": "Logs in as Pharmacist."
+          },
+          "response": []
+        },
+        {
+          "name": "Register Staff User (Super Admin / Admin only)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.id) {",
+                  "        pm.collectionVariables.set('createdUserId', jsonData.data.id);",
+                  "        console.log('✅ Registered User ID saved to variable: ' + jsonData.data.id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Dr. Mohamed Pharmacist\",\n  \"phone\": \"01199887766\",\n  \"email\": \"mohamed.pharm@pharmacy.local\",\n  \"password\": \"SecurePass123!\",\n  \"role\": \"PHARMACIST\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "register"]
+            },
+            "description": "Registers a new staff member. Automatically authenticated via HttpOnly Cookie."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current Profile (Me - via Cookie)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "me"]
+            },
+            "description": "Returns current authenticated profile using the HttpOnly cookie automatically."
+          },
+          "response": []
+        },
+        {
+          "name": "Logout (Clears HttpOnly Cookie)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "auth", "logout"]
+            },
+            "description": "Logs out and clears the HttpOnly cookie from Postman Cookie Jar."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "3. Staff Users Management (RBAC via Cookie)",
+      "item": [
+        {
+          "name": "Get Users (Paginated & Filtered)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "users"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "List staff users using the HttpOnly cookie automatically."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Staff User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.id) {",
+                  "        pm.collectionVariables.set('createdUserId', jsonData.data.id);",
+                  "        console.log('✅ Created User ID saved to variable: ' + jsonData.data.id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Dr. Ahmed Hesham\",\n  \"phone\": \"01155443322\",\n  \"email\": \"ahmed.hesham@pharmacy.local\",\n  \"password\": \"SecurePass123!\",\n  \"role\": \"PHARMACIST\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "users"]
+            },
+            "description": "Creates a new staff user (Uses HttpOnly cookie)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users/{{createdUserId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "users", "{{createdUserId}}"]
+            },
+            "description": "Retrieve a single user by their UUID using cookie."
+          },
+          "response": []
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Dr. Ahmed Hesham (Senior)\",\n  \"email\": \"ahmed.senior@pharmacy.local\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users/{{createdUserId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "users", "{{createdUserId}}"]
+            },
+            "description": "Update user profile details (Uses HttpOnly cookie)."
+          },
+          "response": []
+        },
+        {
+          "name": "Soft-Deactivate User",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users/{{createdUserId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "users", "{{createdUserId}}"]
+            },
+            "description": "Soft-deactivates staff user (Uses HttpOnly cookie)."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "4. Customers Module (Phase 3)",
+      "item": [
+        {
+          "name": "Search & List Customers (Paginated)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/customers?page=1&limit=20&search=",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "customers"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "search",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Fast customer lookup by phone, name, or email."
+          },
+          "response": []
+        },
+        {
+          "name": "Register Customer (Auto-initializes Loyalty)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.id) {",
+                  "        pm.collectionVariables.set('createdCustomerId', jsonData.data.id);",
+                  "        console.log('✅ Created Customer ID saved to variable: ' + jsonData.data.id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Mahmoud Hassan\",\n  \"phone\": \"01011223344\",\n  \"email\": \"mahmoud.hassan@gmail.com\",\n  \"address\": \"15 El-Tahrir St, Cairo\",\n  \"gender\": \"MALE\",\n  \"dateOfBirth\": \"1990-05-15\",\n  \"notes\": \"Regular customer\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/customers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "customers"]
+            },
+            "description": "Creates a new customer profile and automatically initializes their 0-point LoyaltyAccount."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Customer Profile by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/customers/{{createdCustomerId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "customers", "{{createdCustomerId}}"]
+            },
+            "description": "Returns full customer profile including active tier, loyalty account, and stats."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Customer Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"22 Nasr City, Cairo\",\n  \"notes\": \"Updated preferred delivery address\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/customers/{{createdCustomerId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "customers", "{{createdCustomerId}}"]
+            },
+            "description": "Updates customer contact and personal information."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Customer Purchase History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/customers/{{createdCustomerId}}/purchases?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "customers", "{{createdCustomerId}}", "purchases"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "Returns paginated purchase history and invoice records for this customer."
+          },
+          "response": []
+        },
+        {
+          "name": "Soft-Deactivate Customer",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/customers/{{createdCustomerId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "customers", "{{createdCustomerId}}"]
+            },
+            "description": "Soft-deactivates customer profile (preserves all sales and loyalty ledger records)."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "5. Loyalty & Rewards Module (Phase 3)",
+      "item": [
+        {
+          "name": "Get Customer Tiers (All Staff)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/loyalty/tiers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "loyalty", "tiers"]
+            },
+            "description": "Lists all active customer tiers (REGULAR, SILVER, GOLD, VIP) with discount % and minimum points thresholds."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Customer Loyalty Summary",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/customers/{{createdCustomerId}}/loyalty",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "customers", "{{createdCustomerId}}", "loyalty"]
+            },
+            "description": "Returns current loyalty point balance, current tier, and 10 most recent transactions."
+          },
+          "response": []
+        },
+        {
+          "name": "Earn Loyalty Points (Sale Reward)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"points\": 600,\n  \"referenceType\": \"SALE\",\n  \"referenceId\": \"INV-2026-0001\",\n  \"reason\": \"Reward points for invoice INV-2026-0001\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/customers/{{createdCustomerId}}/loyalty/earn",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "customers", "{{createdCustomerId}}", "loyalty", "earn"]
+            },
+            "description": "Atomically adds points to customer balance, writes immutable transaction ledger entry, and upgrades tier if eligible."
+          },
+          "response": []
+        },
+        {
+          "name": "Redeem Loyalty Points (Discount)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"points\": 100,\n  \"referenceType\": \"SALE\",\n  \"referenceId\": \"INV-2026-0002\",\n  \"reason\": \"Redeemed 100 points for discount\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/customers/{{createdCustomerId}}/loyalty/redeem",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "customers", "{{createdCustomerId}}", "loyalty", "redeem"]
+            },
+            "description": "Redeems points for discount. Enforces balance check (rejects 400 if insufficient)."
+          },
+          "response": []
+        },
+        {
+          "name": "Manual Adjustment (Managers Only)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"points\": 500,\n  \"reason\": \"Customer satisfaction goodwill credit\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/customers/{{createdCustomerId}}/loyalty/adjust",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "customers", "{{createdCustomerId}}", "loyalty", "adjust"]
+            },
+            "description": "Manual point adjustment by Managers with mandatory audit reason."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Loyalty Transaction History (Paginated)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/customers/{{createdCustomerId}}/loyalty/transactions?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "customers", "{{createdCustomerId}}", "loyalty", "transactions"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "Returns full paginated historical ledger of points earned, redeemed, adjusted, and expired."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "6. Categories Module (Phase 4)",
+      "item": [
+        {
+          "name": "List Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/categories?page=1&limit=20&search=",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "categories"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" },
+                { "key": "search", "value": "" }
+              ]
+            },
+            "description": "Lists product/medicine categories with product counts."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Category",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.id) {",
+                  "        pm.collectionVariables.set('createdCategoryId', jsonData.data.id);",
+                  "        console.log('✅ Created Category ID saved: ' + jsonData.data.id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Antibiotics & Antimicrobials\",\n  \"description\": \"Broad and narrow spectrum antibacterial medicines\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "categories"]
+            },
+            "description": "Creates a new category."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Category by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/categories/{{createdCategoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "categories", "{{createdCategoryId}}"]
+            },
+            "description": "Get category details and product counts."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Category",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Updated antibacterial category description\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/categories/{{createdCategoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "categories", "{{createdCategoryId}}"]
+            },
+            "description": "Update category details."
+          },
+          "response": []
+        },
+        {
+          "name": "Soft-Deactivate Category",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/categories/{{createdCategoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "categories", "{{createdCategoryId}}"]
+            },
+            "description": "Soft deactivates category safely."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "7. Products Module (Phase 4)",
+      "item": [
+        {
+          "name": "Search & List Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/products?page=1&limit=20&search=",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "products"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" },
+                { "key": "search", "value": "" }
+              ]
+            },
+            "description": "Search products by name, barcode, or category with current stock across batches."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.id) {",
+                  "        pm.collectionVariables.set('createdProductId', jsonData.data.id);",
+                  "        console.log('✅ Created Product ID saved: ' + jsonData.data.id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Augmentin 1g Tablets\",\n  \"barcode\": \"6221234567890\",\n  \"scientificName\": \"Amoxicillin + Clavulanic Acid\",\n  \"description\": \"14 film-coated tablets\",\n  \"categoryId\": \"{{createdCategoryId}}\",\n  \"purchasePrice\": 85.0,\n  \"sellingPrice\": 115.0,\n  \"taxRate\": 0.0,\n  \"minimumStock\": 10\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "products"]
+            },
+            "description": "Creates a new medicine/product record."
+          },
+          "response": []
+        },
+        {
+          "name": "Fast Barcode Lookup (POS)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/products/barcode/6221234567890",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "products", "barcode", "6221234567890"]
+            },
+            "description": "Fast barcode scanner lookup endpoint for POS checkout."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/products/{{createdProductId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "products", "{{createdProductId}}"]
+            },
+            "description": "Returns product details with all active batches and stock levels."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product Batches",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/products/{{createdProductId}}/batches",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "products", "{{createdProductId}}", "batches"]
+            },
+            "description": "Lists all batches of a specific product sorted by FEFO (earliest expiry first)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Low Stock Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/products/low-stock",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "products", "low-stock"]
+            },
+            "description": "Alert list of products below minimum stock threshold."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Expiring Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/products/expiring?days=30",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "products", "expiring"],
+              "query": [{ "key": "days", "value": "30" }]
+            },
+            "description": "Lists products with stock batches expiring within the specified days."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sellingPrice\": 120.0,\n  \"minimumStock\": 12\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/products/{{createdProductId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "products", "{{createdProductId}}"]
+            },
+            "description": "Update product details and pricing."
+          },
+          "response": []
+        },
+        {
+          "name": "Soft-Deactivate Product",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/products/{{createdProductId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "products", "{{createdProductId}}"]
+            },
+            "description": "Soft-deactivates product (preserves historical sales and batch records)."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "8. Batches Module (Phase 4)",
+      "item": [
+        {
+          "name": "List Batches",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/batches?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "batches"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            },
+            "description": "List all medicine batches with quantities and expiry dates."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Batch (with initial stock)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.id) {",
+                  "        pm.collectionVariables.set('createdBatchId', jsonData.data.id);",
+                  "        console.log('✅ Created Batch ID saved: ' + jsonData.data.id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"{{createdProductId}}\",\n  \"batchNumber\": \"AUG-2026-B1\",\n  \"expiryDate\": \"2027-08-30\",\n  \"quantity\": 50,\n  \"purchasePrice\": 85.0,\n  \"sellingPrice\": 115.0\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/batches",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "batches"]
+            },
+            "description": "Creates a batch and automatically logs initial MANUAL_IN inventory ledger entry."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Batch by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/batches/{{createdBatchId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "batches", "{{createdBatchId}}"]
+            },
+            "description": "Get batch information."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Expiring Batches",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/batches/expiring?days=30",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "batches", "expiring"],
+              "query": [{ "key": "days", "value": "30" }]
+            },
+            "description": "Lists batches expiring within the specified days."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Expired Batches",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/batches/expired",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "batches", "expired"]
+            },
+            "description": "Lists batches that have already passed their expiry date."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "9. Inventory & Stock Ledger Module (Phase 4)",
+      "item": [
+        {
+          "name": "List Inventory Transactions (Ledger)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/inventory/transactions?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "inventory", "transactions"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            },
+            "description": "Returns full historical stock ledger of all movements (PURCHASE, SALE, ADJUSTMENT, DAMAGE, MANUAL_IN, etc.)."
+          },
+          "response": []
+        },
+        {
+          "name": "Manual Stock Adjustment (Managers Only)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"{{createdProductId}}\",\n  \"batchId\": \"{{createdBatchId}}\",\n  \"quantity\": -2,\n  \"type\": \"DAMAGE\",\n  \"reason\": \"Damaged packaging during storage\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/inventory/adjustments",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "inventory", "adjustments"]
+            },
+            "description": "Performs atomic stock adjustment with mandatory audit reason."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Low Stock Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/inventory/low-stock",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "inventory", "low-stock"]
+            },
+            "description": "Inventory report of items requiring replenishment."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Expiring Stock Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/inventory/expiring?days=30",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "inventory", "expiring"],
+              "query": [{ "key": "days", "value": "30" }]
+            },
+            "description": "Inventory report of stock expiring soon."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product Stock History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/inventory/products/{{createdProductId}}?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "inventory", "products", "{{createdProductId}}"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            },
+            "description": "Full stock movement history for a specific product."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "10. Suppliers Module (Phase 5)",
+      "item": [
+        {
+          "name": "Search & List Suppliers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/suppliers?page=1&limit=20&search=",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "suppliers"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" },
+                { "key": "search", "value": "" }
+              ]
+            },
+            "description": "Lists pharmaceutical suppliers with purchase counts and aggregated totals."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Supplier",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.id) {",
+                  "        pm.collectionVariables.set('createdSupplierId', jsonData.data.id);",
+                  "        console.log('✅ Created Supplier ID saved: ' + jsonData.data.id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"United Pharma Wholesalers\",\n  \"phone\": \"01012349999\",\n  \"email\": \"orders@unitedpharma.eg\",\n  \"address\": \"Building 12, Smart Village, Giza\",\n  \"taxNumber\": \"TAX-EG-12345678\",\n  \"notes\": \"Main medicine and OTC distributor\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/suppliers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "suppliers"]
+            },
+            "description": "Registers a new supplier profile."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Supplier by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/suppliers/{{createdSupplierId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "suppliers", "{{createdSupplierId}}"]
+            },
+            "description": "Get supplier details and aggregate purchasing metrics."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Supplier Purchases History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/suppliers/{{createdSupplierId}}/purchases?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "suppliers", "{{createdSupplierId}}", "purchases"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            },
+            "description": "Lists all purchase invoices and procurement history for this supplier."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Supplier",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"notes\": \"Updated payment terms: Net 30 days\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/suppliers/{{createdSupplierId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "suppliers", "{{createdSupplierId}}"]
+            },
+            "description": "Update supplier contact information."
+          },
+          "response": []
+        },
+        {
+          "name": "Soft-Deactivate Supplier",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/suppliers/{{createdSupplierId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "suppliers", "{{createdSupplierId}}"]
+            },
+            "description": "Soft-deactivates supplier (preserves purchase invoices and audit trail)."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "11. Purchases Module (Phase 5)",
+      "item": [
+        {
+          "name": "List Purchases (Filter by Status)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/purchases?page=1&limit=20&status=PENDING",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "purchases"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" },
+                { "key": "status", "value": "PENDING" }
+              ]
+            },
+            "description": "Lists procurement invoices filtered by status (PENDING, RECEIVED, CANCELLED)."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Purchase Invoice (Draft / Pending)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.id) {",
+                  "        pm.collectionVariables.set('createdPurchaseId', jsonData.data.id);",
+                  "        console.log('✅ Created Purchase ID saved: ' + jsonData.data.id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"supplierId\": \"{{createdSupplierId}}\",\n  \"invoiceNumber\": \"INV-SUP-2026-001\",\n  \"discount\": 50.0,\n  \"tax\": 0.0,\n  \"paidAmount\": 1000.0,\n  \"notes\": \"Initial stock purchase for August\",\n  \"items\": [\n    {\n      \"productId\": \"{{createdProductId}}\",\n      \"quantity\": 100,\n      \"unitCost\": 85.0,\n      \"batchNumber\": \"AUG-2026-B10\",\n      \"expiryDate\": \"2027-12-31\",\n      \"sellingPrice\": 115.0\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/purchases",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "purchases"]
+            },
+            "description": "Creates a purchase invoice in PENDING state without modifying live stock yet."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Purchase by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/purchases/{{createdPurchaseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "purchases", "{{createdPurchaseId}}"]
+            },
+            "description": "Returns full purchase invoice details with all item rows, batches, and supplier info."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Pending Purchase",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paidAmount\": 2000.0,\n  \"notes\": \"Updated paid deposit\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/purchases/{{createdPurchaseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "purchases", "{{createdPurchaseId}}"]
+            },
+            "description": "Update financial or note details of a PENDING purchase."
+          },
+          "response": []
+        },
+        {
+          "name": "Receive Purchase (Increases Stock & Logs Ledger)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"productId\": \"{{createdProductId}}\",\n      \"batchNumber\": \"AUG-2026-B10\",\n      \"expiryDate\": \"2027-12-31\",\n      \"sellingPrice\": 115.0\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/purchases/{{createdPurchaseId}}/receive",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "purchases", "{{createdPurchaseId}}", "receive"]
+            },
+            "description": "Atomically marks invoice as RECEIVED, creates/updates batches, increases inventory, and writes PURCHASE ledger entries."
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Pending Purchase",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Supplier cancelled the order due to manufacturer shortages\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/purchases/{{createdPurchaseId}}/cancel",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "purchases", "{{createdPurchaseId}}", "cancel"]
+            },
+            "description": "Cancels a PENDING purchase. Blocked if already RECEIVED."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "12. Sales & POS Checkout",
+      "item": [
+        {
+          "name": "POS Fast Product Search",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/products/search?q=Panadol",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "products", "search"],
+              "query": [{ "key": "q", "value": "Panadol" }]
+            },
+            "description": "Fast cashier POS search by name, partial barcode, or category."
+          },
+          "response": []
+        },
+        {
+          "name": "Checkout Sale (FEFO + Split Payment + Loyalty)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.id) {",
+                  "        pm.collectionVariables.set('createdSaleId', jsonData.data.id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"{{createdCustomerId}}\",\n  \"items\": [\n    {\n      \"productId\": \"{{createdProductId}}\",\n      \"quantity\": 2\n    }\n  ],\n  \"payments\": [\n    {\n      \"paymentMethod\": \"CASH\",\n      \"amount\": 70.0\n    },\n    {\n      \"paymentMethod\": \"VISA\",\n      \"amount\": 10.0,\n      \"referenceNumber\": \"VISA-REF-123456\"\n    }\n  ],\n  \"notes\": \"POS walk-in sale with split payment\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sales",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "sales"]
+            },
+            "description": "Executes complete atomic checkout: FEFO stock deduction, invoice generation, split payments, loyalty rewards, and audit logs."
+          },
+          "response": []
+        },
+        {
+          "name": "List Sales (Paginated & Filtered)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sales?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "sales"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            },
+            "description": "List historical sales invoices with filters for date, payment method, customer, or cashier."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Sale by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sales/{{createdSaleId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "sales", "{{createdSaleId}}"]
+            },
+            "description": "Get complete sale invoice details including item lines, batch breakdown, and payment records."
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Completed Sale",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Customer returned all items immediately at cashier\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/sales/{{createdSaleId}}/cancel",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "sales", "{{createdSaleId}}", "cancel"]
+            },
+            "description": "Atomically cancels sale, restores batch stock quantities, and records ledger transactions."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "13. Payments",
+      "item": [
+        {
+          "name": "List All Payments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/payments?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "payments"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            },
+            "description": "Query all payments across sales transactions."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Payments for Specific Sale",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/payments/sales/{{createdSaleId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "payments", "sales", "{{createdSaleId}}"]
+            },
+            "description": "Get all payment lines recorded for a specific sale."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "14. Discounts",
+      "item": [
+        {
+          "name": "List Discounts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/discounts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "discounts"]
+            },
+            "description": "List all active and promotional discount codes."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Promotional Discount",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.id) {",
+                  "        pm.collectionVariables.set('createdDiscountId', jsonData.data.id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"SUMMER15\",\n  \"name\": \"Summer Promotion 15%\",\n  \"type\": \"PROMOTIONAL\",\n  \"value\": 15.0,\n  \"minimumPurchase\": 100.0\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/discounts",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "discounts"]
+            },
+            "description": "Create a promotional discount code with minimum purchase requirement."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "15. Insurance",
+      "item": [
+        {
+          "name": "List Insurance Providers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/insurance/providers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "insurance", "providers"]
+            },
+            "description": "List all contracted insurance providers."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Insurance Provider",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.id) {",
+                  "        pm.collectionVariables.set('createdInsuranceProviderId', jsonData.data.id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Misr Insurance Company\",\n  \"phone\": \"19001\",\n  \"defaultCoveragePercentage\": 80.0\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/insurance/providers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "insurance", "providers"]
+            },
+            "description": "Register an insurance provider."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
