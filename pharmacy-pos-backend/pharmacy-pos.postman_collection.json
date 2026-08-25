@@ -2065,6 +2065,176 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "28. Payroll",
+      "item": [
+        {
+          "name": "Get Payroll Summary Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/payroll/summary?from=2026-08-01&to=2026-08-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "payroll", "summary"],
+              "query": [
+                { "key": "from", "value": "2026-08-01" },
+                { "key": "to", "value": "2026-08-31" }
+              ]
+            },
+            "description": "Aggregated payroll overview: total base salaries, commissions, bonuses, deductions, net paid & pending."
+          },
+          "response": []
+        },
+        {
+          "name": "Generate Employee Payroll",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"<EMPLOYEE_USER_ID>\",\n  \"periodStart\": \"2026-08-01\",\n  \"periodEnd\": \"2026-08-31\",\n  \"baseSalary\": 10000,\n  \"bonus\": 500,\n  \"deductions\": 300\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/payroll/generate",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "payroll", "generate"]
+            },
+            "description": "Calculate and generate authoritative payroll settlement for a single employee."
+          },
+          "response": []
+        },
+        {
+          "name": "Generate Period Bulk Payroll",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"periodStart\": \"2026-08-01\",\n  \"periodEnd\": \"2026-08-31\",\n  \"defaultBaseSalary\": 6000\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/payroll/generate-period",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "payroll", "generate-period"]
+            },
+            "description": "Generate payrolls for all active employees for a monthly period."
+          },
+          "response": []
+        },
+        {
+          "name": "List Payrolls with Filters",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/payroll?page=1&limit=20&status=PENDING",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "payroll"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" },
+                { "key": "status", "value": "PENDING" }
+              ]
+            },
+            "description": "Query paginated list of payroll records."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Payroll Details by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/payroll/<PAYROLL_ID>",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "payroll", "<PAYROLL_ID>"]
+            },
+            "description": "Retrieve comprehensive payroll breakdown with earned & reversed commissions."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Employee Payroll History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/payroll/employee/<EMPLOYEE_USER_ID>",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "payroll", "employee", "<EMPLOYEE_USER_ID>"]
+            },
+            "description": "View historical payroll records for a specific staff member."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Pending Payroll",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bonus\": 700,\n  \"deductions\": 200\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/payroll/<PAYROLL_ID>",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "payroll", "<PAYROLL_ID>"]
+            },
+            "description": "Modify components (bonus, deductions, base salary) of unfinalized payroll."
+          },
+          "response": []
+        },
+        {
+          "name": "Approve Payroll",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/payroll/<PAYROLL_ID>/approve",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "payroll", "<PAYROLL_ID>", "approve"]
+            },
+            "description": "Approve payroll record ready for payout."
+          },
+          "response": []
+        },
+        {
+          "name": "Pay Payroll (Atomic Settlement)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paymentMethod\": \"WALLET\",\n  \"notes\": \"Monthly salary bank transfer\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/payroll/<PAYROLL_ID>/pay",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "payroll", "<PAYROLL_ID>", "pay"]
+            },
+            "description": "Atomically settle payroll payment, mark PAID, and record SALARY operating expense."
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Payroll",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/payroll/<PAYROLL_ID>/cancel",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "payroll", "<PAYROLL_ID>", "cancel"]
+            },
+            "description": "Cancel an unfinalized payroll record."
+          },
+          "response": []
+        }
+      ]
     }
   ]
 }

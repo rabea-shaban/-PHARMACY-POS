@@ -19,6 +19,7 @@ import { expensesRouter } from '../modules/expenses/index.js';
 import { commissionsRouter } from '../modules/commissions/index.js';
 import { dashboardRouter } from '../modules/dashboard/index.js';
 import { reportsRouter } from '../modules/reports/index.js';
+import { payrollRouter } from '../modules/payroll/index.js';
 
 export const apiRouter = Router();
 
@@ -81,3 +82,6 @@ apiRouter.use('/dashboard', dashboardRouter);
 
 // Reports & Business Intelligence Module
 apiRouter.use('/reports', reportsRouter);
+
+// Workforce Payroll Management Module
+apiRouter.use('/payroll', payrollRouter);
