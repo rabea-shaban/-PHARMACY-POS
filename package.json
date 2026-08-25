@@ -1,0 +1,18 @@
+{
+  "name": "pharmacy-pos",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Pharmacy POS & Management System - Full Stack",
+  "scripts": {
+    "dev": "concurrently -n \"BACKEND,FRONTEND\" -c \"blue.bold,green.bold\" \"npm --prefix pharmacy-pos-backend run dev\" \"npm --prefix pharmacy-pos-frontend run dev\"",
+    "dev:backend": "npm --prefix pharmacy-pos-backend run dev",
+    "dev:frontend": "npm --prefix pharmacy-pos-frontend run dev",
+    "build": "npm --prefix pharmacy-pos-backend run build && npm --prefix pharmacy-pos-frontend run build",
+    "build:backend": "npm --prefix pharmacy-pos-backend run build",
+    "build:frontend": "npm --prefix pharmacy-pos-frontend run build",
+    "seed": "npm --prefix pharmacy-pos-backend run seed"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
