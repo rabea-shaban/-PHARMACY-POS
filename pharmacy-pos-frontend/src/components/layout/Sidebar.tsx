@@ -19,6 +19,7 @@ import {
   Settings,
   UsersRound,
   HeartPulse,
+  Tag,
 } from 'lucide-react';
 import { cn } from '../../lib/utils.js';
 import { Role } from '../../types/auth.types.js';
@@ -47,6 +48,12 @@ const navItemDefs: NavItemDef[] = [
     key: 'products',
     href: '/products',
     icon: <Pill className="w-5 h-5" />,
+    roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'],
+  },
+  {
+    key: 'categories',
+    href: '/categories',
+    icon: <Tag className="w-5 h-5" />,
     roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'],
   },
   {

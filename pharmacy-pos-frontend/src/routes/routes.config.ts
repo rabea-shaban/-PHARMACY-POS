@@ -27,8 +27,48 @@ export const APP_ROUTES: Record<string, AppRouteDefinition> = {
     isProtected: true,
     allowedRoles: MODULE_PERMISSIONS.products,
   },
+  PRODUCTS_NEW: {
+    path: '/products/new',
+    isProtected: true,
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'],
+  },
+  PRODUCTS_EDIT: {
+    path: '/products/:id/edit',
+    isProtected: true,
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'],
+  },
+  PRODUCTS_DETAILS: {
+    path: '/products/:id',
+    isProtected: true,
+    allowedRoles: MODULE_PERMISSIONS.products,
+  },
+  CATEGORIES: {
+    path: '/categories',
+    isProtected: true,
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'],
+  },
   INVENTORY: {
     path: '/inventory',
+    isProtected: true,
+    allowedRoles: MODULE_PERMISSIONS.inventory,
+  },
+  INVENTORY_BATCHES: {
+    path: '/inventory/batches',
+    isProtected: true,
+    allowedRoles: MODULE_PERMISSIONS.inventory,
+  },
+  INVENTORY_LOW_STOCK: {
+    path: '/inventory/low-stock',
+    isProtected: true,
+    allowedRoles: MODULE_PERMISSIONS.inventory,
+  },
+  INVENTORY_EXPIRY: {
+    path: '/inventory/expiry',
+    isProtected: true,
+    allowedRoles: MODULE_PERMISSIONS.inventory,
+  },
+  INVENTORY_TRANSACTIONS: {
+    path: '/inventory/transactions',
     isProtected: true,
     allowedRoles: MODULE_PERMISSIONS.inventory,
   },

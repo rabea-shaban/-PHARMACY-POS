@@ -15,6 +15,20 @@ import { RoleGuard } from '../components/common/RoleGuard.js';
 import { AppLayout } from '../components/layout/AppLayout.js';
 import { MODULE_PERMISSIONS, getDefaultRouteForRole } from '../config/permissions.js';
 
+// F04: Products & Categories Pages
+import { ProductsPage } from '../features/products/pages/ProductsPage.js';
+import { CreateProductPage } from '../features/products/pages/CreateProductPage.js';
+import { EditProductPage } from '../features/products/pages/EditProductPage.js';
+import { ProductDetailsPage } from '../features/products/pages/ProductDetailsPage.js';
+import { CategoriesPage } from '../features/categories/pages/CategoriesPage.js';
+
+// F04: Inventory Pages
+import { InventoryPage } from '../features/inventory/pages/InventoryPage.js';
+import { BatchesPage } from '../features/inventory/pages/BatchesPage.js';
+import { LowStockPage } from '../features/inventory/pages/LowStockPage.js';
+import { ExpiryAlertsPage } from '../features/inventory/pages/ExpiryAlertsPage.js';
+import { InventoryTransactionsPage } from '../features/inventory/pages/InventoryTransactionsPage.js';
+
 export const AppRoutes: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -113,26 +127,96 @@ export const AppRoutes: React.FC = () => {
           }
         />
 
-        {/* Forbidden Page (403) */}
-        <Route path="/forbidden" element={<ForbiddenPage />} />
-
-        {/* Subsequent phase placeholders protected by RBAC */}
+        {/* Products Module */}
         <Route
           path="/products"
           element={
             <RoleGuard allowedRoles={MODULE_PERMISSIONS.products}>
-              <div className="p-8 text-center text-slate-400">إدارة الأدوية والتصنيفات (المرحلة F06)</div>
+              <ProductsPage />
             </RoleGuard>
           }
         />
         <Route
-          path="/inventory"
+          path="/products/new"
           element={
-            <RoleGuard allowedRoles={MODULE_PERMISSIONS.inventory}>
-              <div className="p-8 text-center text-slate-400">المخزون وتشغيلات FEFO (المرحلة F07)</div>
+            <RoleGuard allowedRoles={['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST']}>
+              <CreateProductPage />
             </RoleGuard>
           }
         />
+        <Route
+          path="/products/:id/edit"
+          element={
+            <RoleGuard allowedRoles={['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST']}>
+              <EditProductPage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/products/:id"
+          element={
+            <RoleGuard allowedRoles={MODULE_PERMISSIONS.products}>
+              <ProductDetailsPage />
+            </RoleGuard>
+          }
+        />
+
+        {/* Categories Module */}
+        <Route
+          path="/categories"
+          element={
+            <RoleGuard allowedRoles={['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT']}>
+              <CategoriesPage />
+            </RoleGuard>
+          }
+        />
+
+        {/* Inventory Module & Sub-routes */}
+        <Route
+          path="/inventory"
+          element={
+            <RoleGuard allowedRoles={MODULE_PERMISSIONS.inventory}>
+              <InventoryPage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/inventory/batches"
+          element={
+            <RoleGuard allowedRoles={MODULE_PERMISSIONS.inventory}>
+              <BatchesPage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/inventory/low-stock"
+          element={
+            <RoleGuard allowedRoles={MODULE_PERMISSIONS.inventory}>
+              <LowStockPage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/inventory/expiry"
+          element={
+            <RoleGuard allowedRoles={MODULE_PERMISSIONS.inventory}>
+              <ExpiryAlertsPage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/inventory/transactions"
+          element={
+            <RoleGuard allowedRoles={MODULE_PERMISSIONS.inventory}>
+              <InventoryTransactionsPage />
+            </RoleGuard>
+          }
+        />
+
+        {/* Forbidden Page (403) */}
+        <Route path="/forbidden" element={<ForbiddenPage />} />
+
+        {/* Subsequent phase placeholders */}
         <Route
           path="/purchases"
           element={
