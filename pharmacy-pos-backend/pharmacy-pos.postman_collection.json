@@ -2261,6 +2261,24 @@
       "item": [
         {
           "name": "Get User Notifications",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.items && jsonData.data.items.length > 0) {",
+                  "        pm.collectionVariables.set('notificationId', jsonData.data.items[0].id);",
+                  "        pm.environment.set('notificationId', jsonData.data.items[0].id);",
+                  "        console.log('✅ Auto-saved notificationId: ' + jsonData.data.items[0].id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
@@ -2298,9 +2316,9 @@
             "method": "PATCH",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/v1/notifications/<NOTIFICATION_ID>/read",
+              "raw": "{{baseUrl}}/api/v1/notifications/{{notificationId}}/read",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "notifications", "<NOTIFICATION_ID>", "read"]
+              "path": ["api", "v1", "notifications", "{{notificationId}}", "read"]
             },
             "description": "Mark a single notification as read."
           },
@@ -2327,6 +2345,24 @@
       "item": [
         {
           "name": "List WhatsApp Messages",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.data && jsonData.data.items && jsonData.data.items.length > 0) {",
+                  "        pm.collectionVariables.set('whatsAppMessageId', jsonData.data.items[0].id);",
+                  "        pm.environment.set('whatsAppMessageId', jsonData.data.items[0].id);",
+                  "        console.log('✅ Auto-saved whatsAppMessageId: ' + jsonData.data.items[0].id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
@@ -2349,9 +2385,9 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/v1/whatsapp/messages/<MESSAGE_ID>",
+              "raw": "{{baseUrl}}/api/v1/whatsapp/messages/{{whatsAppMessageId}}",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "whatsapp", "messages", "<MESSAGE_ID>"]
+              "path": ["api", "v1", "whatsapp", "messages", "{{whatsAppMessageId}}"]
             },
             "description": "Get detailed WhatsApp message record with provider ID and error log."
           },
@@ -2363,9 +2399,9 @@
             "method": "POST",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/v1/whatsapp/messages/<MESSAGE_ID>/retry",
+              "raw": "{{baseUrl}}/api/v1/whatsapp/messages/{{whatsAppMessageId}}/retry",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "whatsapp", "messages", "<MESSAGE_ID>", "retry"]
+              "path": ["api", "v1", "whatsapp", "messages", "{{whatsAppMessageId}}", "retry"]
             },
             "description": "Manually re-queue a permanently FAILED WhatsApp message for retry."
           },
