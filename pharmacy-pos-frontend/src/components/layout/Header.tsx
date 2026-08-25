@@ -38,21 +38,21 @@ export const Header: React.FC = () => {
       case 'PHARMACY_MANAGER':
         return <Badge variant="warning">مدير الصيدلية</Badge>;
       case 'PHARMACIST':
-        return <Badge variant="success">صيدلي</Badge>;
+        return <Badge variant="info">صيدلي</Badge>;
       case 'ACCOUNTANT':
-        return <Badge variant="info">محاسب</Badge>;
+        return <Badge variant="success">محاسب</Badge>;
       default:
         return null;
     }
   };
 
   return (
-    <header className="h-16 bg-white dark:bg-[#0E1522] border-b border-slate-200 dark:border-[#1E293B] px-6 flex items-center justify-between sticky top-0 z-30 shadow-xs">
+    <header className="h-16 bg-white dark:bg-[#0E1522] border-b border-slate-200/80 dark:border-[#1E293B] px-6 flex items-center justify-between sticky top-0 z-30 shadow-xs">
       {/* Left side: Hamburger Toggle */}
       <div className="flex items-center gap-4">
         <button
           onClick={() => dispatch(toggleSidebar())}
-          className="p-2 rounded-2xl text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-[#1A2639] dark:hover:text-white transition-colors"
+          className="p-2.5 rounded-2xl text-slate-600 hover:bg-sky-50 hover:text-sky-700 dark:text-slate-300 dark:hover:bg-[#1A2639] dark:hover:text-white transition-colors"
           aria-label="Toggle Sidebar"
         >
           <Menu className="w-5 h-5" />
@@ -64,7 +64,7 @@ export const Header: React.FC = () => {
         {/* Theme Toggle */}
         <button
           onClick={() => dispatch(setTheme(theme === 'light' ? 'dark' : 'light'))}
-          className="p-2.5 rounded-2xl text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-[#1A2639] dark:hover:text-amber-400 transition-colors"
+          className="p-2.5 rounded-2xl text-slate-600 hover:bg-sky-50 hover:text-sky-700 dark:text-slate-300 dark:hover:bg-[#1A2639] dark:hover:text-amber-400 transition-colors"
           aria-label="Toggle Theme"
         >
           {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
@@ -73,7 +73,7 @@ export const Header: React.FC = () => {
         {/* Notifications Icon */}
         <Link
           to="/notifications"
-          className="relative p-2.5 rounded-2xl text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-[#1A2639] dark:hover:text-white transition-colors"
+          className="relative p-2.5 rounded-2xl text-slate-600 hover:bg-sky-50 hover:text-sky-700 dark:text-slate-300 dark:hover:bg-[#1A2639] dark:hover:text-white transition-colors"
         >
           <Bell className="w-5 h-5" />
           {unreadCount > 0 && (
@@ -88,7 +88,7 @@ export const Header: React.FC = () => {
 
         {/* User Info & Avatar */}
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-2xl bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 flex items-center justify-center font-bold text-sm">
+          <div className="w-9 h-9 rounded-2xl bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-300 flex items-center justify-center font-bold text-sm">
             <UserIcon className="w-5 h-5" />
           </div>
           <div className="hidden md:block text-right">

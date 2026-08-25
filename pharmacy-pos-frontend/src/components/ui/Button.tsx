@@ -9,15 +9,17 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          'bg-emerald-600 text-white hover:bg-emerald-700 focus:ring-emerald-500 shadow-sm shadow-emerald-600/30 dark:bg-emerald-500 dark:text-slate-950 dark:hover:bg-emerald-400 dark:focus:ring-emerald-400 dark:shadow-emerald-500/20',
+          'bg-sky-600 text-white hover:bg-sky-700 focus:ring-sky-500 shadow-sm shadow-sky-600/20 dark:bg-sky-500 dark:text-slate-950 dark:hover:bg-sky-400 dark:focus:ring-sky-400 dark:shadow-sky-500/20',
         secondary:
-          'bg-slate-100 text-slate-900 hover:bg-slate-200 focus:ring-slate-400 dark:bg-[#1E293B] dark:text-slate-100 dark:hover:bg-[#2A374F]',
+          'bg-sky-100 text-sky-800 hover:bg-sky-200 focus:ring-sky-400 dark:bg-[#1E293B] dark:text-slate-100 dark:hover:bg-[#2A374F]',
         outline:
-          'border border-slate-200 text-slate-800 bg-white hover:bg-slate-50 focus:ring-emerald-500 dark:border-[#223049] dark:bg-[#131B2A] dark:text-slate-200 dark:hover:bg-[#1C273B]',
+          'border border-slate-200 text-slate-800 bg-white hover:bg-slate-50 focus:ring-sky-500 dark:border-[#223049] dark:bg-[#131B2A] dark:text-slate-200 dark:hover:bg-[#1C273B]',
         ghost:
-          'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-[#1A2639] dark:hover:text-white',
+          'text-slate-600 hover:bg-sky-50 hover:text-sky-700 dark:text-slate-300 dark:hover:bg-[#1A2639] dark:hover:text-white',
         danger:
           'bg-rose-600 text-white hover:bg-rose-700 focus:ring-rose-500 shadow-sm shadow-rose-600/20 dark:bg-rose-500 dark:text-white dark:hover:bg-rose-600',
+        success:
+          'bg-emerald-600 text-white hover:bg-emerald-700 focus:ring-emerald-500 shadow-sm dark:bg-emerald-500 dark:text-slate-950',
       },
       size: {
         sm: 'h-8 px-3 text-xs gap-1.5',

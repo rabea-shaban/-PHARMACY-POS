@@ -21,7 +21,7 @@ export const DashboardPage: React.FC = () => {
         }
       />
 
-      {/* KPI Cards Grid using Exact Palette */}
+      {/* KPI Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <StatCard
           title="إجمالي المبيعات (Total Sales)"
@@ -55,23 +55,23 @@ export const DashboardPage: React.FC = () => {
 
       {/* Overview Content */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="rounded-3xl border-[#D5E6E5] bg-[#F7FCFC]">
+        <Card className="rounded-3xl">
           <CardHeader>
-            <CardTitle className="text-[#0B3031]">حركة المبيعات الأسبوعية</CardTitle>
+            <CardTitle>حركة المبيعات الأسبوعية</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="p-10 text-center text-[#557274] text-sm">
-              سيتم دمج رسوم Recharts البيانية بألوان (Mint, Coral, Lime, Purple, Cyan) في مرحلة F04.
+            <div className="p-10 text-center text-slate-400 text-sm">
+              سيتم دمج رسوم Recharts البيانية في مرحلة F04.
             </div>
           </CardContent>
         </Card>
 
-        <Card className="rounded-3xl border-[#D5E6E5] bg-[#F7FCFC]">
+        <Card className="rounded-3xl">
           <CardHeader>
-            <CardTitle className="text-[#0B3031]">الأدوية الأكثر طلباً</CardTitle>
+            <CardTitle>الأدوية الأكثر طلباً</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="p-10 text-center text-[#557274] text-sm">
+            <div className="p-10 text-center text-slate-400 text-sm">
               سيتم عرض قائمة الأصناف الأكثر مبيعاً ونواقص المخزون في مرحلة F04.
             </div>
           </CardContent>

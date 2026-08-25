@@ -18,53 +18,38 @@
 
   --color-app-text: var(--app-text);
   --color-app-text-muted: var(--app-text-muted);
-  --color-app-text-faint: var(--app-text-faint);
 }
 
 :root {
-  /* Light Theme (Clean Fresh Medical) */
-  --app-bg: #F4FBF9;
+  /* Light Theme (Clean Crisp Pharmacy: Ice-Blue & Pure White) */
+  --app-bg: #F0F6FA;
   --app-surface: #FFFFFF;
   --app-surface-hover: #F8FAFC;
-  --app-border: #E2E8F0;
-  --app-border-hover: #CBD5E1;
+  --app-border: #E1EDF4;
+  --app-border-hover: #CBDDE7;
 
-  --brand-primary: #003C3D;
-  --brand-primary-hover: #005456;
-  --brand-accent: #10B981;
+  --brand-primary: #0284C7;
+  --brand-primary-hover: #0369A1;
+  --brand-accent: #0EA5E9;
 
   --app-text: #0F172A;
   --app-text-muted: #64748B;
-  --app-text-faint: #94A3B8;
-
-  /* Status */
-  --status-success: #10B981;
-  --status-warning: #F59E0B;
-  --status-danger: #EF4444;
-  --status-info: #06B6D4;
 }
 
 .dark {
-  /* Dark Theme (Modern Sleek High-Contrast Dark Slate) */
+  /* Dark Theme (Modern Sleek High-Contrast Obsidian Slate) */
   --app-bg: #0B0F17;
   --app-surface: #131B2A;
   --app-surface-hover: #1C273B;
   --app-border: #223049;
   --app-border-hover: #334666;
 
-  --brand-primary: #10B981;
-  --brand-primary-hover: #059669;
-  --brand-accent: #34D399;
+  --brand-primary: #38BDF8;
+  --brand-primary-hover: #0EA5E9;
+  --brand-accent: #10B981;
 
   --app-text: #F8FAFC;
   --app-text-muted: #94A3B8;
-  --app-text-faint: #64748B;
-
-  /* Status */
-  --status-success: #34D399;
-  --status-warning: #FBBF24;
-  --status-danger: #F87171;
-  --status-info: #22D3EE;
 }
 
 @layer base {
@@ -87,7 +72,7 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #64748B;
+  background: #CBDDE7;
   border-radius: 9999px;
 }
 .dark ::-webkit-scrollbar-thumb {

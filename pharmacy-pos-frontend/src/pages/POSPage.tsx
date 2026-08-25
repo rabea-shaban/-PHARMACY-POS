@@ -55,10 +55,10 @@ export const POSPage: React.FC = () => {
 
         {/* Right Column: POS Cart & Checkout Summary */}
         <div className="space-y-4">
-          <Card className="border-emerald-600/30 dark:border-emerald-500/30">
+          <Card className="border-sky-200 dark:border-sky-500/30">
             <CardHeader className="flex flex-row items-center justify-between pb-3">
               <div className="flex items-center gap-2">
-                <div className="p-2 rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400">
+                <div className="p-2 rounded-xl bg-sky-50 text-sky-600 dark:bg-sky-950/60 dark:text-sky-400">
                   <ShoppingCart className="w-4 h-4" />
                 </div>
                 <CardTitle className="text-base">سلة الفاتورة</CardTitle>
@@ -90,7 +90,7 @@ export const POSPage: React.FC = () => {
                         <p className="font-bold text-slate-800 dark:text-slate-100">{item.product.name}</p>
                         <p className="text-slate-400">{formatCurrency(item.unitPrice)} × {item.quantity}</p>
                       </div>
-                      <span className="font-black text-emerald-600 dark:text-emerald-400">{formatCurrency(item.total)}</span>
+                      <span className="font-black text-sky-600 dark:text-sky-400">{formatCurrency(item.total)}</span>
                     </div>
                   ))}
                 </div>
@@ -110,14 +110,14 @@ export const POSPage: React.FC = () => {
                 )}
                 <div className="flex justify-between text-base font-black text-slate-900 dark:text-white pt-3 border-t border-slate-100 dark:border-[#1E293B]">
                   <span>الإجمالي النهائي:</span>
-                  <span className="text-emerald-600 dark:text-emerald-400 text-xl">{formatCurrency(total)}</span>
+                  <span className="text-sky-600 dark:text-sky-400 text-xl">{formatCurrency(total)}</span>
                 </div>
               </div>
 
               <Button
                 variant="primary"
                 size="lg"
-                className="w-full text-base py-3 font-black shadow-lg"
+                className="w-full text-base py-3 font-black shadow-lg shadow-sky-600/20"
                 disabled={items.length === 0}
               >
                 إتمام عملية البيع (Checkout)
