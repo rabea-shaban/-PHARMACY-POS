@@ -83,3 +83,68 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #94A3B8;
 }
+
+/* ==========================================================================
+   Thermal POS Receipt Print Styles (80mm Strict Isolation)
+   ========================================================================== */
+@page {
+  size: 80mm auto;
+  margin: 0;
+}
+
+@media print {
+  /* Hide all app layouts, headers, sidebars, modals, backdrops and buttons */
+  html, body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  body * {
+    visibility: hidden !important;
+  }
+
+  /* Show ONLY the Receipt and its children */
+  #pos-receipt-print,
+  #pos-receipt-print * {
+    visibility: visible !important;
+  }
+
+  #pos-receipt-print {
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: 0 !important;
+    width: 76mm !important;
+    max-width: 76mm !important;
+    margin: 0 auto !important;
+    padding: 8px !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+  #pos-receipt-print .border-dashed {
+    border-color: #000000 !important;
+  }
+
+  #pos-receipt-print text,
+  #pos-receipt-print span,
+  #pos-receipt-print p,
+  #pos-receipt-print h2 {
+    color: #000000 !important;
+  }
+
+  /* Disable animations and transitions in print */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}

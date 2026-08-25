@@ -8,6 +8,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui
 import { Button } from '../../../components/ui/Button.js';
 import { Badge } from '../../../components/ui/Badge.js';
 import { EmptyState } from '../../../components/common/EmptyState.js';
+import { ReceiptPreview } from '../components/ReceiptPreview.js';
 import {
   ReceiptText,
   Printer,
@@ -268,6 +269,11 @@ export const SaleDetailsPage: React.FC = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Hidden container that prints ONLY the receipt in @media print */}
+      <div className="hidden print:block">
+        <ReceiptPreview sale={sale} />
+      </div>
     </div>
   );
 };
