@@ -120,7 +120,7 @@ export const LoginPage: React.FC = () => {
                   onClick={() => handleQuickFill('01012345678', 'AdminPass123!')}
                   className="p-2 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-800 dark:bg-[#1E293B] dark:text-slate-200 text-center font-bold transition-colors cursor-pointer"
                 >
-                  Admin
+                  {t('roles.PLATFORM_MANAGER')}
                 </button>
                 <button
                   type="button"
