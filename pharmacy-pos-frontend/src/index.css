@@ -85,13 +85,8 @@
 }
 
 /* ==========================================================================
-   Thermal POS Receipt Print Styles (80mm Strict Isolation)
+   Print Styles (Strict Isolation for POS Receipts & Salary Payslips)
    ========================================================================== */
-@page {
-  size: 80mm auto;
-  margin: 0;
-}
-
 @media print {
   /* Hide all app layouts, headers, sidebars, modals, backdrops and buttons */
   html, body {
@@ -107,7 +102,7 @@
     visibility: hidden !important;
   }
 
-  /* Show ONLY the Receipt and its children */
+  /* Show ONLY POS Thermal Receipt */
   #pos-receipt-print,
   #pos-receipt-print * {
     visibility: visible !important;
@@ -137,6 +132,41 @@
   #pos-receipt-print span,
   #pos-receipt-print p,
   #pos-receipt-print h2 {
+    color: #000000 !important;
+  }
+
+  /* Show ONLY Salary Slip Document */
+  #salary-slip-print,
+  #salary-slip-print * {
+    visibility: visible !important;
+  }
+
+  #salary-slip-print {
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: 180mm !important;
+    margin: 10mm auto !important;
+    padding: 24px !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: none !important;
+    border-radius: 16px !important;
+  }
+
+  #salary-slip-print .border-dashed {
+    border-color: #94a3b8 !important;
+  }
+
+  #salary-slip-print text,
+  #salary-slip-print span,
+  #salary-slip-print p,
+  #salary-slip-print h2,
+  #salary-slip-print td,
+  #salary-slip-print th {
     color: #000000 !important;
   }
 
