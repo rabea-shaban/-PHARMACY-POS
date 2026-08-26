@@ -30,7 +30,9 @@ export const SaleSummary: React.FC<SaleSummaryProps> = ({ onOpenCheckout }) => {
 
         {discountAmount > 0 && (
           <div className="flex justify-between items-center text-rose-600 dark:text-rose-400 font-bold">
-            <span>{t('pos.discount')}:</span>
+            <span>
+              {t('pos.discount')} ({subtotal > 0 ? ((discountAmount / subtotal) * 100).toFixed(1).replace(/\.0$/, '') : 0}%):
+            </span>
             <span>-{formatCurrency(discountAmount)}</span>
           </div>
         )}

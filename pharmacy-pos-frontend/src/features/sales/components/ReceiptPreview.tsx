@@ -76,8 +76,10 @@ export const ReceiptPreview: React.FC<ReceiptPreviewProps> = ({ sale }) => {
           <span>{formatCurrency(sale.subtotal)}</span>
         </div>
         {sale.discount > 0 && (
-          <div className="flex justify-between text-rose-600">
-            <span>الخصم:</span>
+          <div className="flex justify-between text-rose-600 font-bold">
+            <span>
+              الخصم ({sale.subtotal > 0 ? ((sale.discount / sale.subtotal) * 100).toFixed(1).replace(/\.0$/, '') : 0}%):
+            </span>
             <span>-{formatCurrency(sale.discount)}</span>
           </div>
         )}
