@@ -9,6 +9,7 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "seed": "tsx scripts/seed.ts",
+    "import:drugs": "tsx scripts/import-egyptian-drugs.ts",
     "mig": "tsx scripts/migrate.ts",
     "prisma:generate": "prisma generate",
     "prisma:validate": "prisma validate",
