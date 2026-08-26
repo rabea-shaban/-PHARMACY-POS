@@ -170,6 +170,59 @@
     color: #000000 !important;
   }
 
+  /* Show ONLY Comprehensive Reports Document */
+  #report-print-container,
+  #report-print-container * {
+    visibility: visible !important;
+  }
+
+  #report-print-container {
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: 210mm !important;
+    margin: 0 auto !important;
+    padding: 20px !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  #report-print-container table {
+    width: 100% !important;
+    page-break-inside: auto !important;
+  }
+
+  #report-print-container tr {
+    page-break-inside: avoid !important;
+    page-break-after: auto !important;
+  }
+
+  #report-print-container thead {
+    display: table-header-group !important;
+  }
+
+  #report-print-container tfoot {
+    display: table-footer-group !important;
+  }
+
+  #report-print-container .border-dashed {
+    border-color: #94a3b8 !important;
+  }
+
+  #report-print-container text,
+  #report-print-container span,
+  #report-print-container p,
+  #report-print-container h1,
+  #report-print-container h2,
+  #report-print-container td,
+  #report-print-container th {
+    color: #000000 !important;
+  }
+
   /* Disable animations and transitions in print */
   * {
     -webkit-print-color-adjust: exact !important;

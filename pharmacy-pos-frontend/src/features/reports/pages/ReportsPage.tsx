@@ -19,6 +19,7 @@ import { CustomerReportView } from '../components/CustomerReportView.js';
 import { StaffReportView } from '../components/StaffReportView.js';
 import { FinancialSummaryReportView } from '../components/FinancialSummaryReportView.js';
 import { ReportExportActions, exportToCsv } from '../components/ReportExportActions.js';
+import { ReportPrintHeader, ReportPrintFooter } from '../components/ReportPrintHeader.js';
 import {
   FileSpreadsheet,
   TrendingUp,
@@ -232,8 +233,31 @@ export const ReportsPage: React.FC = () => {
         )}
       </div>
 
-      {/* Active Tab View */}
-      <div>
+      {/* Active Tab View with Print Isolation Container */}
+      <div id="report-print-container">
+        {/* Printable Official Header */}
+        <ReportPrintHeader
+          reportTitle={
+            activeTab === 'sales'
+              ? 'تقرير المبيعات الشامل وتحليل الإيرادات'
+              : activeTab === 'products'
+              ? 'تقرير حركة وأداء الأصناف والأدوية'
+              : activeTab === 'inventory'
+              ? 'تقرير تقييم المخزون وصحة التشغيلات'
+              : activeTab === 'purchases'
+              ? 'تقرير المشتريات والتوريد وحجم الإنفاق'
+              : activeTab === 'expenses'
+              ? 'تقرير المصروفات التشغيلية والمصروفات الإدارية'
+              : activeTab === 'customers'
+              ? 'تقرير العملاء وسجل نقاط الولاء والشرائح'
+              : activeTab === 'staff'
+              ? 'تقرير إنتاجية الصيادلة ومستحقات العمولات'
+              : 'تقرير الملخص المالي وقائمة الدخل (P&L)'
+          }
+          from={from}
+          to={to}
+        />
+
         {activeTab === 'sales' && salesQuery.data && (
           <SalesReportView data={salesQuery.data} isLoading={salesQuery.isLoading} />
         )}
@@ -258,6 +282,9 @@ export const ReportsPage: React.FC = () => {
         {activeTab === 'financial-summary' && financialQuery.data && (
           <FinancialSummaryReportView data={financialQuery.data} isLoading={financialQuery.isLoading} />
         )}
+
+        {/* Printable Official Footer */}
+        <ReportPrintFooter />
       </div>
     </div>
   );
