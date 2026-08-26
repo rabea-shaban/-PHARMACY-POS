@@ -75,6 +75,12 @@ import { AuditDetailsPage } from '../features/audit/pages/AuditDetailsPage.js';
 import { SystemActivityPage } from '../features/audit/pages/SystemActivityPage.js';
 import { NotificationsPage } from '../features/notifications/pages/NotificationsPage.js';
 
+// F12: Payroll & Staff Wages Pages
+import { PayrollPage } from '../features/payroll/pages/PayrollPage.js';
+import { CreatePayrollPage } from '../features/payroll/pages/CreatePayrollPage.js';
+import { PayrollDetailsPage } from '../features/payroll/pages/PayrollDetailsPage.js';
+import { SalarySlipPage } from '../features/payroll/pages/SalarySlipPage.js';
+
 export const AppRoutes: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -448,11 +454,36 @@ export const AppRoutes: React.FC = () => {
             </RoleGuard>
           }
         />
+        {/* Payroll & Staff Wages Module (F12) */}
         <Route
           path="/payroll"
           element={
             <RoleGuard allowedRoles={MODULE_PERMISSIONS.payroll}>
-              <div className="p-8 text-center text-slate-400">مسيرات الرواتب والأجور (المرحلة F12)</div>
+              <PayrollPage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/payroll/new"
+          element={
+            <RoleGuard allowedRoles={MODULE_PERMISSIONS.payroll}>
+              <CreatePayrollPage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/payroll/:id"
+          element={
+            <RoleGuard allowedRoles={MODULE_PERMISSIONS.payroll}>
+              <PayrollDetailsPage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/payroll/:id/slip"
+          element={
+            <RoleGuard allowedRoles={MODULE_PERMISSIONS.payroll}>
+              <SalarySlipPage />
             </RoleGuard>
           }
         />

@@ -187,6 +187,21 @@ export const APP_ROUTES: Record<string, AppRouteDefinition> = {
     isProtected: true,
     allowedRoles: MODULE_PERMISSIONS.payroll,
   },
+  PAYROLL_NEW: {
+    path: '/payroll/new',
+    isProtected: true,
+    allowedRoles: MODULE_PERMISSIONS.payroll,
+  },
+  PAYROLL_DETAILS: {
+    path: '/payroll/:id',
+    isProtected: true,
+    allowedRoles: MODULE_PERMISSIONS.payroll,
+  },
+  PAYROLL_SLIP: {
+    path: '/payroll/:id/slip',
+    isProtected: true,
+    allowedRoles: MODULE_PERMISSIONS.payroll,
+  },
   REPORTS: {
     path: '/reports',
     isProtected: true,

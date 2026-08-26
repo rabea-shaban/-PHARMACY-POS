@@ -500,5 +500,22 @@
     "beforeChanges": "Before Changes",
     "afterChanges": "After Changes",
     "metadata": "Context & Environment Metadata"
+  },
+  "payroll": {
+    "pageTitle": "Staff Payroll & Wages",
+    "pageSubtitle": "Manage salaries, sales commissions, bonuses, deductions, and issue payslips",
+    "generatePayroll": "Generate Employee Payroll",
+    "generatePeriod": "Generate Monthly Payroll Batch",
+    "colEmployee": "Employee",
+    "colPeriod": "Payroll Period",
+    "colBaseSalary": "Base Salary",
+    "colCommission": "Commissions",
+    "colNetSalary": "Net Payable",
+    "colStatus": "Status",
+    "noPayrollFound": "No Payroll Records Found",
+    "noPayrollFoundDesc": "No payroll records matching the current filter criteria were found.",
+    "approvePayroll": "Approve Payroll",
+    "payPayroll": "Settle & Pay Wages",
+    "salarySlip": "Salary Payslip"
   }
 }

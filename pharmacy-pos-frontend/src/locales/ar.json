@@ -500,5 +500,22 @@
     "beforeChanges": "البيانات السابقة (Before)",
     "afterChanges": "البيانات الجديدة (After)",
     "metadata": "بيانات السياق والبيئة (Metadata)"
+  },
+  "payroll": {
+    "pageTitle": "مسيرات الرواتب والأجور",
+    "pageSubtitle": "إدارة المرتبات، العمولات البيعية المكتسبة، المكافآت، الاستقطاعات، وإصدار قسائم الرواتب",
+    "generatePayroll": "توليد مسير راتب",
+    "generatePeriod": "توليد مسير شهري جماعي",
+    "colEmployee": "الموظف",
+    "colPeriod": "فترة المسير",
+    "colBaseSalary": "الراتب الأساسي",
+    "colCommission": "العمولات",
+    "colNetSalary": "صافي الراتب",
+    "colStatus": "الحالة",
+    "noPayrollFound": "لا توجد مسيرات رواتب مسجلة",
+    "noPayrollFoundDesc": "لم يتم العثور على أي مسيرات رواتب تطابق خيارات الفلترة المحددة.",
+    "approvePayroll": "اعتماد المسير",
+    "payPayroll": "صرف وتسوية الراتب",
+    "salarySlip": "قسيمة الراتب"
   }
 }
