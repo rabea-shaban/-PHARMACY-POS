@@ -63,6 +63,12 @@ import { ExpenseDetailsPage } from '../features/expenses/pages/ExpenseDetailsPag
 import { FinanceDashboardPage } from '../features/finance/pages/FinanceDashboardPage.js';
 import { PaymentsLedgerPage } from '../features/finance/pages/PaymentsLedgerPage.js';
 
+// F10: Users & Staff Management Pages
+import { UsersPage } from '../features/users/pages/UsersPage.js';
+import { CreateUserPage } from '../features/users/pages/CreateUserPage.js';
+import { EditUserPage } from '../features/users/pages/EditUserPage.js';
+import { UserDetailsPage } from '../features/users/pages/UserDetailsPage.js';
+
 export const AppRoutes: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -476,11 +482,36 @@ export const AppRoutes: React.FC = () => {
             </RoleGuard>
           }
         />
+        {/* Users & Staff Management Module (F10) */}
         <Route
           path="/users"
           element={
             <RoleGuard allowedRoles={MODULE_PERMISSIONS.users}>
-              <div className="p-8 text-center text-slate-400">إدارة الموظفين والصلاحيات (المرحلة F17)</div>
+              <UsersPage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/users/new"
+          element={
+            <RoleGuard allowedRoles={['PLATFORM_MANAGER', 'PHARMACY_MANAGER']}>
+              <CreateUserPage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/users/:id/edit"
+          element={
+            <RoleGuard allowedRoles={['PLATFORM_MANAGER', 'PHARMACY_MANAGER']}>
+              <EditUserPage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/users/:id"
+          element={
+            <RoleGuard allowedRoles={MODULE_PERMISSIONS.users}>
+              <UserDetailsPage />
             </RoleGuard>
           }
         />

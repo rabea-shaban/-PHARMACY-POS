@@ -212,6 +212,21 @@ export const APP_ROUTES: Record<string, AppRouteDefinition> = {
     isProtected: true,
     allowedRoles: MODULE_PERMISSIONS.users,
   },
+  USERS_NEW: {
+    path: '/users/new',
+    isProtected: true,
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER'],
+  },
+  USERS_EDIT: {
+    path: '/users/:id/edit',
+    isProtected: true,
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER'],
+  },
+  USERS_DETAILS: {
+    path: '/users/:id',
+    isProtected: true,
+    allowedRoles: MODULE_PERMISSIONS.users,
+  },
   FORBIDDEN: {
     path: '/forbidden',
     isProtected: true,

@@ -457,5 +457,25 @@
     "colAmountPaid": "Paid Amount",
     "noPaymentsFound": "No Payment Transactions Recorded",
     "noPaymentsFoundDesc": "No payment transactions matching the current search criteria were found."
+  },
+  "users": {
+    "pageTitle": "Staff & RBAC Access Management",
+    "pageSubtitle": "Directory of pharmacists, managers, accountants, and system role-based access control",
+    "createUser": "Add New Staff Member",
+    "editUser": "Edit Staff Profile",
+    "searchPlaceholder": "Search by name, phone number, or email...",
+    "allRoles": "All Roles & Permissions",
+    "allStatuses": "All Statuses",
+    "colUser": "Staff Member / User",
+    "colPhone": "Phone",
+    "colRole": "Role / Access Level",
+    "colStatus": "Account Status",
+    "colCreatedAt": "Creation Date",
+    "noUsersFound": "No Staff Members Found",
+    "noUsersFoundDesc": "No staff members matching the current search criteria were found.",
+    "profileInfo": "Contact & Profile Information",
+    "accessInfo": "Access Permissions & Registration Details",
+    "resetPassword": "Reset Password",
+    "auditTrail": "Staff Activity & Security Audit Trail"
   }
 }
