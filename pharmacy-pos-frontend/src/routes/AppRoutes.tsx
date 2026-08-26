@@ -89,7 +89,10 @@ import { CommissionStatementPage } from '../features/commissions/pages/Commissio
 // F14: Comprehensive Reports & Analytics Pages
 import { ReportsPage } from '../features/reports/pages/ReportsPage.js';
 
-// F15: System Settings, Tax Configuration & Pharmacy Branding Pages
+// F15: Insurance & Third-Party Claims Billing Pages
+import { InsuranceProvidersPage } from '../features/insurance/pages/InsuranceProvidersPage.js';
+
+// F16: System Settings, Tax Configuration & Pharmacy Branding Pages
 import { SettingsPage } from '../features/settings/pages/SettingsPage.js';
 import { usePublicSettings } from '../features/settings/hooks/useSettings.js';
 
@@ -577,7 +580,16 @@ export const AppRoutes: React.FC = () => {
             </RoleGuard>
           }
         />
-        {/* F15: System Settings, Tax Configuration & Pharmacy Branding */}
+        {/* F15: Insurance & Third-Party Claims Billing Module */}
+        <Route
+          path="/insurance"
+          element={
+            <RoleGuard allowedRoles={['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT']}>
+              <InsuranceProvidersPage />
+            </RoleGuard>
+          }
+        />
+        {/* F16: System Settings, Tax Configuration & Pharmacy Branding */}
         <Route
           path="/settings"
           element={

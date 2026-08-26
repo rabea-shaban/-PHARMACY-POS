@@ -8,6 +8,8 @@ import { LoyaltyProgress } from '../components/LoyaltyProgress.js';
 import { LoyaltyTransactionsTable } from '../components/LoyaltyTransactionsTable.js';
 import { CustomerPurchaseHistory } from '../components/CustomerPurchaseHistory.js';
 import { AdjustPointsModal } from '../components/AdjustPointsModal.js';
+import { CustomerInsuranceList } from '../../insurance/components/CustomerInsuranceList.js';
+import { useCustomerInsurances } from '../../insurance/hooks/useInsurance.js';
 import { Badge } from '../../../components/ui/Badge.js';
 import { Button } from '../../../components/ui/Button.js';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/Card.js';
@@ -62,6 +64,8 @@ export const CustomerDetailsPage: React.FC = () => {
       />
     );
   }
+
+  const { data: policies = [], isLoading: isLoadingPolicies, refetch: refetchPolicies } = useCustomerInsurances(id);
 
   const transactions = transactionsData?.items || loyaltySummary?.recentTransactions || [];
   const purchases = purchasesData?.items || [];
@@ -192,6 +196,15 @@ export const CustomerDetailsPage: React.FC = () => {
           />
         </div>
       </div>
+
+      {/* Insurance Policies Section */}
+      <CustomerInsuranceList
+        customerId={customer.id}
+        customerName={customer.name}
+        policies={policies}
+        isLoading={isLoadingPolicies}
+        onRefresh={() => refetchPolicies()}
+      />
 
       {/* Tables: Purchases and Loyalty Points History */}
       <div className="space-y-6">

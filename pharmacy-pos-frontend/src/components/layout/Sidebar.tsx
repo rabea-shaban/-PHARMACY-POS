@@ -23,6 +23,7 @@ import {
   Tag,
   Building2,
   Award,
+  ShieldPlus,
 } from 'lucide-react';
 import { cn } from '../../lib/utils.js';
 import { Role } from '../../types/auth.types.js';
@@ -131,6 +132,12 @@ const navItemDefs: NavItemDef[] = [
     href: '/reports',
     icon: <FileSpreadsheet className="w-5 h-5" />,
     roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT'],
+  },
+  {
+    key: 'insurance',
+    href: '/insurance',
+    icon: <ShieldPlus className="w-5 h-5" />,
+    roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT', 'PHARMACIST'],
   },
   {
     key: 'notifications',
