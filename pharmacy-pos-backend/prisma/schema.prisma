@@ -117,11 +117,11 @@ model Category {
 model Product {
   id                    String                 @id @default(uuid())
   name                  String
-  barcode               String                 @unique
+  barcode               String?                @unique
   scientificName        String?                @map("scientific_name")
   description           String?
   categoryId            String                 @map("category_id")
-  purchasePrice         Decimal                @map("purchase_price") @db.Decimal(12, 2)
+  purchasePrice         Decimal                @default(0.00) @map("purchase_price") @db.Decimal(12, 2)
   sellingPrice          Decimal                @map("selling_price") @db.Decimal(12, 2)
   taxRate               Decimal                @default(0.00) @map("tax_rate") @db.Decimal(5, 2)
   minimumStock          Int                    @default(5) @map("minimum_stock")

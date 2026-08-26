@@ -45,7 +45,7 @@ export const CreatePurchasePage: React.FC = () => {
     const newItem: PurchaseItemFormValues = {
       productId: product.id,
       productName: product.name,
-      barcode: product.barcode,
+      barcode: product.barcode || '',
       quantity: 1,
       unitCost: product.purchasePrice || 0,
       discount: 0,

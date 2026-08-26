@@ -56,7 +56,7 @@ export const EditProductPage: React.FC = () => {
       <ProductForm
         initialValues={{
           name: product.name,
-          barcode: product.barcode,
+          barcode: product.barcode || '',
           scientificName: product.scientificName,
           description: product.description,
           categoryId: product.categoryId,

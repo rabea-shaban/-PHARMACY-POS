@@ -15,7 +15,7 @@ export interface ProductBatchSummary {
 export interface ProductResponse {
   id: string;
   name: string;
-  barcode: string;
+  barcode: string | null;
   scientificName: string | null;
   description: string | null;
   categoryId: string;
@@ -39,7 +39,7 @@ export interface ProductStockSummaryResponse {
   product: {
     id: string;
     name: string;
-    barcode: string;
+    barcode: string | null;
     category: string;
     minimumStock: number;
     purchasePrice: number;
@@ -55,7 +55,7 @@ export interface ProductStockSummaryResponse {
 
 export interface CreateProductInput {
   name: string;
-  barcode: string;
+  barcode?: string | null;
   scientificName?: string | null;
   description?: string | null;
   categoryId: string;
@@ -67,7 +67,7 @@ export interface CreateProductInput {
 
 export interface UpdateProductInput {
   name?: string;
-  barcode?: string;
+  barcode?: string | null;
   scientificName?: string | null;
   description?: string | null;
   categoryId?: string;
@@ -106,7 +106,7 @@ export interface PaginatedProductsResponse {
 export interface LowStockProductItem {
   id: string;
   name: string;
-  barcode: string;
+  barcode: string | null;
   category: string;
   minimumStock: number;
   currentStock: number;
@@ -116,7 +116,7 @@ export interface LowStockProductItem {
 export interface ExpiringProductItem {
   id: string;
   name: string;
-  barcode: string;
+  barcode: string | null;
   category: string;
   batchNumber: string;
   expiryDate: Date;

@@ -116,7 +116,7 @@ export class ProductsRepository {
 
   async create(data: {
     name: string;
-    barcode: string;
+    barcode?: string | null;
     scientificName?: string | null;
     description?: string | null;
     categoryId: string;
@@ -128,7 +128,7 @@ export class ProductsRepository {
     return prisma.product.create({
       data: {
         name: data.name,
-        barcode: data.barcode,
+        barcode: data.barcode || null,
         scientificName: data.scientificName || null,
         description: data.description || null,
         categoryId: data.categoryId,
@@ -146,7 +146,7 @@ export class ProductsRepository {
     id: string,
     data: {
       name?: string;
-      barcode?: string;
+      barcode?: string | null;
       scientificName?: string | null;
       description?: string | null;
       categoryId?: string;

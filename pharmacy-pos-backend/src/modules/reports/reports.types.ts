@@ -37,7 +37,7 @@ export interface SalesReportResponse {
   topSellingProducts: {
     productId: string;
     productName: string;
-    barcode: string;
+    barcode: string | null;
     quantitySold: number;
     revenue: number;
   }[];
@@ -78,7 +78,7 @@ export interface ProductReportQueryFilters {
 export interface ProductPerformanceItem {
   productId: string;
   name: string;
-  barcode: string;
+  barcode: string | null;
   categoryName: string;
   purchasePrice: number;
   sellingPrice: number;
@@ -135,7 +135,7 @@ export interface InventoryReportResponse {
   lowStockItems: {
     productId: string;
     productName: string;
-    barcode: string;
+    barcode: string | null;
     categoryName: string;
     currentStock: number;
     minimumStock: number;

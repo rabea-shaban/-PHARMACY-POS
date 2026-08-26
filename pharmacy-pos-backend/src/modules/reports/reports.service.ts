@@ -31,7 +31,7 @@ export class ReportsService {
 
     let totalGrossSales = 0;
     let totalItemsSold = 0;
-    const productMap = new Map<string, { productId: string; productName: string; barcode: string; quantitySold: number; revenue: number }>();
+    const productMap = new Map<string, { productId: string; productName: string; barcode: string | null; quantitySold: number; revenue: number }>();
     const categoryMap = new Map<string, { categoryId: string; categoryName: string; quantitySold: number; revenue: number }>();
     const dailyMap = new Map<string, { date: string; salesCount: number; grossAmount: number }>();
 

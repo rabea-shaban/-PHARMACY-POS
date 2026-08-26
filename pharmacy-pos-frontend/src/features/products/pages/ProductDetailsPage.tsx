@@ -123,7 +123,7 @@ export const ProductDetailsPage: React.FC = () => {
             <CardContent className="space-y-3 text-xs">
               <div className="flex justify-between items-center py-1 border-b border-slate-100 dark:border-[#1E293B]">
                 <span className="text-slate-500">{t('products.colBarcode')}:</span>
-                <span className="font-mono font-bold">{product.barcode}</span>
+                <span className="font-mono font-bold">{product.barcode || '—'}</span>
               </div>
               <div className="flex justify-between items-center py-1 border-b border-slate-100 dark:border-[#1E293B]">
                 <span className="text-slate-500">{t('products.colCategory')}:</span>

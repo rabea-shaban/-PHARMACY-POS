@@ -19,16 +19,18 @@ export const createProductSchema = z.object({
     .min(2, 'Product name must be at least 2 characters')
     .max(200, 'Product name cannot exceed 200 characters'),
   barcode: z
-    .string({ message: 'Barcode is required' })
+    .string()
     .trim()
-    .min(1, 'Barcode cannot be empty')
-    .max(100, 'Barcode cannot exceed 100 characters'),
+    .max(100, 'Barcode cannot exceed 100 characters')
+    .optional()
+    .nullable(),
   scientificName: z.string().trim().max(200).optional().nullable(),
   description: z.string().trim().max(1000).optional().nullable(),
   categoryId: z.string().uuid('Category ID must be a valid UUID'),
   purchasePrice: z
-    .number({ message: 'Purchase price is required' })
-    .min(0, 'Purchase price cannot be negative'),
+    .number()
+    .min(0, 'Purchase price cannot be negative')
+    .default(0.0),
   sellingPrice: z
     .number({ message: 'Selling price is required' })
     .min(0, 'Selling price cannot be negative'),
@@ -38,7 +40,7 @@ export const createProductSchema = z.object({
 
 export const updateProductSchema = z.object({
   name: z.string().trim().min(2).max(200).optional(),
-  barcode: z.string().trim().min(1).max(100).optional(),
+  barcode: z.string().trim().min(1).max(100).optional().nullable(),
   scientificName: z.string().trim().max(200).optional().nullable(),
   description: z.string().trim().max(1000).optional().nullable(),
   categoryId: z.string().uuid('Category ID must be a valid UUID').optional(),

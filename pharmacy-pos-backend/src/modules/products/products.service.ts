@@ -169,15 +169,17 @@ export class ProductsService {
   }
 
   async createProduct(input: CreateProductDTO, actorId?: string): Promise<ProductResponse> {
-    const barcode = input.barcode.trim();
+    const barcode = input.barcode ? input.barcode.trim() : null;
 
     // 1. Verify category exists
     await this.categories.getCategoryById(input.categoryId);
 
-    // 2. Duplicate barcode check
-    const existing = await this.repo.findByBarcode(barcode);
-    if (existing) {
-      throw new ConflictError(`Product with barcode '${barcode}' already exists ('${existing.name}')`);
+    // 2. Duplicate barcode check if barcode is provided
+    if (barcode) {
+      const existing = await this.repo.findByBarcode(barcode);
+      if (existing) {
+        throw new ConflictError(`Product with barcode '${barcode}' already exists ('${existing.name}')`);
+      }
     }
 
     const created = await this.repo.create({
@@ -215,23 +217,25 @@ export class ProductsService {
       throw new NotFoundError(`Product with ID '${id}' not found`);
     }
 
-    // Verify category if updated
+    // Verify category exists if updated
     if (input.categoryId && input.categoryId !== existing.categoryId) {
       await this.categories.getCategoryById(input.categoryId);
     }
 
     // Duplicate barcode check if updated
-    if (input.barcode && input.barcode.trim() !== existing.barcode) {
-      const barcode = input.barcode.trim();
-      const duplicate = await this.repo.findByBarcode(barcode);
-      if (duplicate && duplicate.id !== id) {
-        throw new ConflictError(`Product with barcode '${barcode}' already exists ('${duplicate.name}')`);
+    if (input.barcode !== undefined) {
+      const newBarcode = input.barcode ? input.barcode.trim() : null;
+      if (newBarcode && newBarcode !== existing.barcode) {
+        const duplicate = await this.repo.findByBarcode(newBarcode);
+        if (duplicate && duplicate.id !== id) {
+          throw new ConflictError(`Product with barcode '${newBarcode}' already exists ('${duplicate.name}')`);
+        }
       }
     }
 
     const updateData: {
       name?: string;
-      barcode?: string;
+      barcode?: string | null;
       scientificName?: string | null;
       description?: string | null;
       categoryId?: string;
@@ -243,7 +247,7 @@ export class ProductsService {
     } = {};
 
     if (input.name) updateData.name = input.name.trim();
-    if (input.barcode) updateData.barcode = input.barcode.trim();
+    if (input.barcode !== undefined) updateData.barcode = input.barcode ? input.barcode.trim() : null;
     if (input.scientificName !== undefined) updateData.scientificName = input.scientificName ? input.scientificName.trim() : null;
     if (input.description !== undefined) updateData.description = input.description ? input.description.trim() : null;
     if (input.categoryId) updateData.categoryId = input.categoryId;

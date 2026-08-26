@@ -16,16 +16,9 @@ interface EgyptianDrugRaw {
   price_egp: number;
 }
 
-// Generate a deterministic unique barcode from index and name
-function generateBarcode(index: number, name: string): string {
-  const cleanIndex = (index + 1).toString().padStart(6, '0');
-  // Egyptian GS1 prefix 622
-  return `6220${cleanIndex}`;
-}
-
-async function importDrugs() {
+async function importDrugsMaster() {
   console.log('================================================================');
-  console.log('🇪🇬 Starting Import of Egyptian Drug Database into Pharmacy POS');
+  console.log('🇪🇬 Egyptian Drug Master Data Import (ZERO Fabricated Data)');
   console.log('================================================================\n');
 
   const jsonPath = path.resolve(__dirname, '../../egyptian-drug-database/data/egyptian-drugs.json');
@@ -35,142 +28,139 @@ async function importDrugs() {
     process.exit(1);
   }
 
-  console.log(`📖 Reading JSON file from ${jsonPath}...`);
+  console.log(`📖 Reading Master dataset from ${jsonPath}...`);
   const rawData = fs.readFileSync(jsonPath, 'utf-8');
   const drugs: EgyptianDrugRaw[] = JSON.parse(rawData);
-  console.log(`📦 Loaded ${drugs.length} total drug records.\n`);
+  console.log(`📦 Loaded ${drugs.length} drug master records.\n`);
 
-  // 1. Extract and upsert Categories
-  console.log('1️⃣  Extracting and creating drug categories...');
+  // 1. Sync Categories safely
+  console.log('1️⃣  Syncing therapeutic categories from drug_class...');
+  const existingCategories = await prisma.category.findMany();
+  const categoryMap = new Map<string, string>();
+  for (const c of existingCategories) {
+    categoryMap.set(c.name.trim().toLowerCase(), c.id);
+  }
+
   const categoryNames = new Set<string>();
   for (const d of drugs) {
     const cat = d.drug_class ? d.drug_class.trim() : 'GENERAL PHARMACEUTICALS';
     if (cat) categoryNames.add(cat);
   }
 
-  const categoryMap = new Map<string, string>();
   for (const catName of categoryNames) {
-    const category = await prisma.category.upsert({
-      where: { name: catName },
-      create: {
-        name: catName,
-        description: `تصنيف دوائي: ${catName}`,
-        isActive: true,
-      },
-      update: {},
-    });
-    categoryMap.set(catName, category.id);
+    const lowerKey = catName.toLowerCase();
+    if (!categoryMap.has(lowerKey)) {
+      try {
+        const created = await prisma.category.create({
+          data: {
+            name: catName,
+            description: `تصنيف دوائي: ${catName}`,
+            isActive: true,
+          },
+        });
+        categoryMap.set(lowerKey, created.id);
+      } catch {
+        const found = await prisma.category.findFirst({
+          where: { name: catName },
+        });
+        if (found) {
+          categoryMap.set(lowerKey, found.id);
+        }
+      }
+    }
   }
-  console.log(`   ✅ Synced ${categoryMap.size} Categories.\n`);
+  console.log(`   ✅ Synced ${categoryMap.size} Categories in database.\n`);
 
-  // 2. Batch Process and Upsert Products with Active Stock & Batches
-  console.log('2️⃣  Upserting medicines with available stock & valid FEFO batches...');
+  // 2. Upsert Drug Master Records (Pure Catalog - ZERO Stock, ZERO Batches, ZERO Fake Barcodes)
+  console.log('2️⃣  Syncing Drug Master products (Stock: 0, Batches: 0, Barcode: NULL)...');
 
-  const BATCH_SIZE = 250;
+  const defaultCatId = Array.from(categoryMap.values())[0];
+  const BATCH_SIZE = 500;
   let importedCount = 0;
   let skippedCount = 0;
 
   for (let i = 0; i < drugs.length; i += BATCH_SIZE) {
     const chunk = drugs.slice(i, i + BATCH_SIZE);
 
-    await prisma.$transaction(async (tx) => {
-      for (let j = 0; j < chunk.length; j++) {
-        const drug = chunk[j];
-        const globalIndex = i + j;
+    for (let j = 0; j < chunk.length; j++) {
+      const drug = chunk[j];
+      const globalIndex = i + j;
 
-        const nameEn = drug.commercial_name_en ? drug.commercial_name_en.trim() : '';
-        const nameAr = drug.commercial_name_ar ? drug.commercial_name_ar.trim() : '';
-        
-        // Composite display name
-        let displayName = nameAr && nameEn ? `${nameAr} - ${nameEn}` : (nameAr || nameEn || `دواء مصري رقم ${globalIndex + 1}`);
+      const nameEn = drug.commercial_name_en ? drug.commercial_name_en.trim() : '';
+      const nameAr = drug.commercial_name_ar ? drug.commercial_name_ar.trim() : '';
+      
+      let displayName = nameAr && nameEn ? `${nameAr} - ${nameEn}` : (nameAr || nameEn || `دواء مصري رقم ${globalIndex + 1}`);
 
-        const barcode = generateBarcode(globalIndex, displayName);
-        const catName = drug.drug_class ? drug.drug_class.trim() : 'GENERAL PHARMACEUTICALS';
-        const categoryId = categoryMap.get(catName) || Array.from(categoryMap.values())[0];
+      const catName = drug.drug_class ? drug.drug_class.trim() : 'GENERAL PHARMACEUTICALS';
+      const categoryId = categoryMap.get(catName.toLowerCase()) || defaultCatId;
 
-        const sellingPrice = drug.price_egp && drug.price_egp > 0 ? Number(drug.price_egp) : 25.0;
-        const purchasePrice = Number((sellingPrice * 0.75).toFixed(2));
+      const referencePrice = drug.price_egp && drug.price_egp > 0 ? Number(drug.price_egp) : 0.0;
+      const manufacturer = drug.manufacturer ? drug.manufacturer.trim() : '';
+      const route = drug.route ? drug.route.trim() : '';
+      const description = [
+        manufacturer ? `الشركة المصنعة: ${manufacturer}` : null,
+        route ? `الشكل الدوائي: ${route}` : null,
+      ].filter(Boolean).join(' | ') || null;
 
-        const manufacturer = drug.manufacturer ? drug.manufacturer.trim() : 'مصنع أدوية مصري';
-        const route = drug.route ? drug.route.trim() : 'أقراص / علاج';
-        const description = `الشركة المصنعة: ${manufacturer} | الشكل الدوائي: ${route}`;
+      try {
+        const existing = await prisma.product.findFirst({
+          where: { name: displayName },
+        });
 
-        try {
-          const product = await tx.product.upsert({
-            where: { barcode },
-            create: {
-              name: displayName,
-              barcode,
+        if (existing) {
+          await prisma.product.update({
+            where: { id: existing.id },
+            data: {
               scientificName: drug.scientific_name ? drug.scientific_name.trim() : null,
               description,
               categoryId,
-              purchasePrice,
-              sellingPrice,
+              sellingPrice: referencePrice,
+              purchasePrice: 0.0,
+              barcode: null,
+              isActive: true,
+            },
+          });
+        } else {
+          await prisma.product.create({
+            data: {
+              name: displayName,
+              barcode: null,
+              scientificName: drug.scientific_name ? drug.scientific_name.trim() : null,
+              description,
+              categoryId,
+              purchasePrice: 0.0,
+              sellingPrice: referencePrice,
               taxRate: 0.0,
               minimumStock: 5,
               isActive: true,
             },
-            update: {
-              name: displayName,
-              scientificName: drug.scientific_name ? drug.scientific_name.trim() : null,
-              description,
-              sellingPrice,
-              purchasePrice,
-              isActive: true,
-            },
           });
-
-          // Ensure an active, non-expired batch with available quantity (e.g. 50 units)
-          const batchNumber = `EGY-${globalIndex + 1}`;
-          // Expiry date in 2027 or 2028
-          const expiryDate = new Date(Date.now() + (365 * 2 + (globalIndex % 300)) * 24 * 60 * 60 * 1000);
-          const initialQuantity = 30 + (globalIndex % 70); // 30 to 99 units available
-
-          await tx.batch.upsert({
-            where: {
-              productId_batchNumber: {
-                productId: product.id,
-                batchNumber,
-              },
-            },
-            create: {
-              productId: product.id,
-              batchNumber,
-              expiryDate,
-              quantity: initialQuantity,
-              purchasePrice,
-              sellingPrice,
-            },
-            update: {
-              quantity: initialQuantity,
-              expiryDate,
-              purchasePrice,
-              sellingPrice,
-            },
-          });
-
-          importedCount++;
-        } catch (err) {
-          skippedCount++;
         }
-      }
-    });
 
-    if ((i + BATCH_SIZE) % 2500 === 0 || i + BATCH_SIZE >= drugs.length) {
-      console.log(`   ⏳ Processed ${Math.min(i + BATCH_SIZE, drugs.length)} / ${drugs.length} drugs... (${importedCount} imported, ${skippedCount} skipped)`);
+        importedCount++;
+      } catch (err) {
+        skippedCount++;
+      }
+    }
+
+    if ((i + BATCH_SIZE) % 5000 === 0 || i + BATCH_SIZE >= drugs.length) {
+      console.log(`   ⏳ Processed ${Math.min(i + BATCH_SIZE, drugs.length)} / ${drugs.length} drug master records... (${importedCount} cataloged, ${skippedCount} skipped)`);
     }
   }
 
   console.log('\n================================================================');
-  console.log(`🎉 IMPORT COMPLETED SUCCESSFULLY!`);
-  console.log(`📊 Total Imported Products: ${importedCount}`);
-  console.log(`💊 All products are now in stock with valid FEFO batches & ready in POS!`);
+  console.log(`🎉 DRUG MASTER IMPORT COMPLETED SUCCESSFULLY!`);
+  console.log(`📦 Master Cataloged Products: ${importedCount}`);
+  console.log(`📊 Fabricated Batches Created: 0`);
+  console.log(`📊 Fabricated Inventory Created: 0`);
+  console.log(`📊 Fabricated Barcodes Created: 0`);
+  console.log(`🔒 Real Inventory Status: Preserved and separated from master catalog`);
   console.log('================================================================\n');
 }
 
-importDrugs()
+importDrugsMaster()
   .catch((e) => {
-    console.error('❌ Error during drug import:', e);
+    console.error('❌ Error during drug master import:', e);
     process.exit(1);
   })
   .finally(async () => {

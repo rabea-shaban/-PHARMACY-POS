@@ -102,7 +102,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({
 
                 {/* Barcode */}
                 <td className="py-3.5 px-4 font-mono text-slate-600 dark:text-slate-300">
-                  {product.barcode}
+                  {product.barcode || <span className="text-slate-400 dark:text-slate-600 text-[11px]">—</span>}
                 </td>
 
                 {/* Category */}

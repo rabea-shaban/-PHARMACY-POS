@@ -60,7 +60,7 @@ export const ProductSearch: React.FC<ProductSearchProps> = ({ inputRef: external
 
   const handleSelectProduct = (product: Product) => {
     if (product.currentStock <= 0) {
-      alert(`${product.name} نفد من المخزون تماماً!`);
+      alert(`${product.name} غير متوفر بالمخزون حالياً! يجب تسجيل فاتورة استلام مشتريات أو تسوية رصيد أولاً.`);
       return;
     }
     dispatch(addItem({ product, quantity: 1 }));
@@ -139,7 +139,7 @@ export const ProductSearch: React.FC<ProductSearchProps> = ({ inputRef: external
                       {product.name}
                     </p>
                     <p className="text-[11px] text-slate-400 font-mono truncate">
-                      {product.barcode} {product.scientificName ? `• ${product.scientificName}` : ''}
+                      {product.barcode ? `${product.barcode} • ` : ''}{product.scientificName || product.description || ''}
                     </p>
                   </div>
                 </div>

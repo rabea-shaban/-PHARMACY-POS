@@ -27,7 +27,7 @@ export interface ProductBatch {
 export interface Product {
   id: string;
   name: string;
-  barcode: string;
+  barcode: string | null;
   scientificName?: string | null;
   description?: string | null;
   categoryId: string;
@@ -46,7 +46,7 @@ export interface Product {
 export interface ProductStockSummary {
   productId: string;
   productName: string;
-  barcode: string;
+  barcode: string | null;
   totalStock: number;
   minimumStock: number;
   isLowStock: boolean;
