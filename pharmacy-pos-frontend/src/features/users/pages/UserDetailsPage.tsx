@@ -5,6 +5,8 @@ import { UserRoleBadge } from '../components/UserRoleBadge.js';
 import { UserStatusBadge } from '../components/UserStatusBadge.js';
 import { ResetPasswordModal } from '../components/ResetPasswordModal.js';
 import { UserAuditHistory } from '../components/UserAuditHistory.js';
+import { UserPayrollHistory } from '../components/UserPayrollHistory.js';
+import { UserSalesPerformance } from '../components/UserSalesPerformance.js';
 import { Button } from '../../../components/ui/Button.js';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/Card.js';
 import { EmptyState } from '../../../components/common/EmptyState.js';
@@ -21,14 +23,40 @@ import {
   UserCheck,
   ShieldCheck,
   Users,
+  Coins,
+  Receipt,
+  History,
+  Clock,
 } from 'lucide-react';
 import { useAppSelector } from '../../../store/hooks.js';
+
+function calculateTenure(createdAtDate: string | Date): string {
+  const start = new Date(createdAtDate);
+  const now = new Date();
+  const diffTime = Math.abs(now.getTime() - start.getTime());
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  if (diffDays < 30) {
+    return `منذ ${diffDays} يوم`;
+  }
+  const months = Math.floor(diffDays / 30);
+  const remainingDays = diffDays % 30;
+  if (months < 12) {
+    return `منذ ${months} شهر ${remainingDays > 0 ? `و ${remainingDays} يوم` : ''}`;
+  }
+  const years = Math.floor(months / 12);
+  const remainingMonths = months % 12;
+  return `منذ ${years} سنة ${remainingMonths > 0 ? `و ${remainingMonths} شهر` : ''}`;
+}
+
+type TabType = 'payroll' | 'sales' | 'audit';
 
 export const UserDetailsPage: React.FC = () => {
   const { id = '' } = useParams<{ id: string }>();
   const { direction } = useAppSelector((state) => state.ui);
   const { user: currentUser, role } = useAppSelector((state) => state.auth);
 
+  const [activeTab, setActiveTab] = useState<TabType>('payroll');
   const [isResetPasswordOpen, setIsResetPasswordOpen] = useState(false);
 
   const { data: user, isLoading, isError } = useUser(id);
@@ -76,6 +104,8 @@ export const UserDetailsPage: React.FC = () => {
     );
   }
 
+  const tenureText = calculateTenure(user.createdAt);
+
   return (
     <div className="space-y-6 max-w-4xl mx-auto animate-in fade-in duration-300">
       {/* Header Bar */}
@@ -88,21 +118,26 @@ export const UserDetailsPage: React.FC = () => {
             {direction === 'rtl' ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
           </Link>
           <div>
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2.5 flex-wrap">
               <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
                 {user.name}
               </h1>
               <UserRoleBadge role={user.role} />
               <UserStatusBadge isActive={user.isActive} />
             </div>
-            <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5 font-mono">
-              معرف الموظف: {user.id}
-            </p>
+            <div className="flex items-center gap-3 text-xs text-slate-400 dark:text-slate-500 mt-0.5 font-mono">
+              <span>معرف: #{user.id.slice(0, 8)}</span>
+              <span>•</span>
+              <span className="text-sky-600 dark:text-sky-400 font-bold flex items-center gap-1 font-sans">
+                <Clock className="w-3.5 h-3.5" />
+                مدة العمل: {tenureText}
+              </span>
+            </div>
           </div>
         </div>
 
         {canManage && (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <Button
               variant="outline"
               size="md"
@@ -141,7 +176,7 @@ export const UserDetailsPage: React.FC = () => {
         )}
       </div>
 
-      {/* Main Profile Info */}
+      {/* Main Profile Info Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Contact Info Card */}
         <Card className="rounded-3xl shadow-xs">
@@ -175,10 +210,10 @@ export const UserDetailsPage: React.FC = () => {
           </CardContent>
         </Card>
 
-        {/* Access & Audit Dates Card */}
+        {/* Access & Work Duration Card */}
         <Card className="rounded-3xl shadow-xs">
           <CardHeader className="pb-3 border-b border-slate-100 dark:border-[#1E293B]">
-            <CardTitle className="text-sm">الصلاحيات وتواريخ التسجيل</CardTitle>
+            <CardTitle className="text-sm">الصلاحيات والالتحاق بالعمل</CardTitle>
           </CardHeader>
           <CardContent className="p-5 space-y-4 text-xs">
             <div className="flex items-center gap-3">
@@ -194,13 +229,13 @@ export const UserDetailsPage: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-[#0B0F17] text-slate-500 border border-slate-200 dark:border-[#223049]">
+              <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-[#0B0F17] text-emerald-600 border border-slate-200 dark:border-[#223049]">
                 <Calendar className="w-4 h-4" />
               </div>
               <div>
-                <p className="text-[11px] text-slate-400 font-bold">تاريخ إنشاء الحساب</p>
+                <p className="text-[11px] text-slate-400 font-bold">تاريخ بدء العمل والالتحاق</p>
                 <p className="font-mono font-bold text-slate-800 dark:text-slate-200 mt-0.5">
-                  {formatDate(user.createdAt)}
+                  {formatDate(user.createdAt)} ({tenureText})
                 </p>
               </div>
             </div>
@@ -208,8 +243,58 @@ export const UserDetailsPage: React.FC = () => {
         </Card>
       </div>
 
-      {/* Audit Trail for this staff */}
-      <UserAuditHistory userId={user.id} />
+      {/* Tabs Navigation: Payroll Statement vs Sales Performance vs Audit Trail */}
+      <div className="border-b border-slate-200 dark:border-[#1E293B] flex items-center gap-2 pt-2">
+        <button
+          type="button"
+          onClick={() => setActiveTab('payroll')}
+          className={`pb-3 px-4 text-xs font-bold transition-all flex items-center gap-2 border-b-2 cursor-pointer ${
+            activeTab === 'payroll'
+              ? 'border-sky-600 text-sky-600 dark:border-sky-400 dark:text-sky-400'
+              : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+          }`}
+        >
+          <Coins className="w-4 h-4" />
+          <span>كشف حساب وسجل الرواتب (Payroll History)</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab('sales')}
+          className={`pb-3 px-4 text-xs font-bold transition-all flex items-center gap-2 border-b-2 cursor-pointer ${
+            activeTab === 'sales'
+              ? 'border-sky-600 text-sky-600 dark:border-sky-400 dark:text-sky-400'
+              : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+          }`}
+        >
+          <Receipt className="w-4 h-4" />
+          <span>إحصائيات وحركات المبيعات (Sales Performance)</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab('audit')}
+          className={`pb-3 px-4 text-xs font-bold transition-all flex items-center gap-2 border-b-2 cursor-pointer ${
+            activeTab === 'audit'
+              ? 'border-sky-600 text-sky-600 dark:border-sky-400 dark:text-sky-400'
+              : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+          }`}
+        >
+          <History className="w-4 h-4" />
+          <span>سجل حركات النظام والأمان (Audit Trail)</span>
+        </button>
+      </div>
+
+      {/* Tab Content */}
+      <div className="pt-2">
+        {activeTab === 'payroll' && (
+          <UserPayrollHistory userId={user.id} userName={user.name} />
+        )}
+        {activeTab === 'sales' && (
+          <UserSalesPerformance userId={user.id} userName={user.name} />
+        )}
+        {activeTab === 'audit' && <UserAuditHistory userId={user.id} />}
+      </div>
 
       {/* Reset Password Modal */}
       {isResetPasswordOpen && (
