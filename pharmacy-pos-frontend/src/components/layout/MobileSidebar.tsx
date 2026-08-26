@@ -13,6 +13,8 @@ import {
   Receipt,
   RotateCcw,
   Wallet,
+  Landmark,
+  CreditCard,
   Coins,
   FileSpreadsheet,
   BellRing,
@@ -96,9 +98,21 @@ const navItemDefs: NavItemDef[] = [
     roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'],
   },
   {
+    key: 'payments',
+    href: '/payments',
+    icon: <CreditCard className="w-5 h-5" />,
+    roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT', 'PHARMACIST'],
+  },
+  {
     key: 'expenses',
     href: '/expenses',
     icon: <Wallet className="w-5 h-5" />,
+    roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT'],
+  },
+  {
+    key: 'finance',
+    href: '/finance',
+    icon: <Landmark className="w-5 h-5" />,
     roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT'],
   },
   {

@@ -55,6 +55,14 @@ import { CreateCustomerPage } from '../features/customers/pages/CreateCustomerPa
 import { EditCustomerPage } from '../features/customers/pages/EditCustomerPage.js';
 import { CustomerDetailsPage } from '../features/customers/pages/CustomerDetailsPage.js';
 
+// F09: Expenses & Financial Management Pages
+import { ExpensesPage } from '../features/expenses/pages/ExpensesPage.js';
+import { CreateExpensePage } from '../features/expenses/pages/CreateExpensePage.js';
+import { EditExpensePage } from '../features/expenses/pages/EditExpensePage.js';
+import { ExpenseDetailsPage } from '../features/expenses/pages/ExpenseDetailsPage.js';
+import { FinanceDashboardPage } from '../features/finance/pages/FinanceDashboardPage.js';
+import { PaymentsLedgerPage } from '../features/finance/pages/PaymentsLedgerPage.js';
+
 export const AppRoutes: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -377,11 +385,54 @@ export const AppRoutes: React.FC = () => {
             </RoleGuard>
           }
         />
+        {/* Expenses Module (F09) */}
         <Route
           path="/expenses"
           element={
             <RoleGuard allowedRoles={MODULE_PERMISSIONS.expenses}>
-              <div className="p-8 text-center text-slate-400">المصروفات والعمولات (المرحلة F11)</div>
+              <ExpensesPage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/expenses/new"
+          element={
+            <RoleGuard allowedRoles={['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT']}>
+              <CreateExpensePage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/expenses/:id/edit"
+          element={
+            <RoleGuard allowedRoles={['PLATFORM_MANAGER', 'PHARMACY_MANAGER']}>
+              <EditExpensePage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/expenses/:id"
+          element={
+            <RoleGuard allowedRoles={MODULE_PERMISSIONS.expenses}>
+              <ExpenseDetailsPage />
+            </RoleGuard>
+          }
+        />
+
+        {/* Finance & Payments Module (F09) */}
+        <Route
+          path="/finance"
+          element={
+            <RoleGuard allowedRoles={MODULE_PERMISSIONS.finance}>
+              <FinanceDashboardPage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/payments"
+          element={
+            <RoleGuard allowedRoles={MODULE_PERMISSIONS.payments}>
+              <PaymentsLedgerPage />
             </RoleGuard>
           }
         />

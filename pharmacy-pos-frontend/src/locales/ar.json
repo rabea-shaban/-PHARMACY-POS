@@ -417,5 +417,43 @@
     "loyaltyTransactions": "سجل حركات نقاط الولاء والمكافآت",
     "newSale": "فتح فاتورة بيع جديدة",
     "editProfile": "تعديل البيانات"
+  },
+  "expenses": {
+    "pageTitle": "المصروفات التشغيلية والنثريات",
+    "pageSubtitle": "سجل التدقيق لكافة المصروفات التشغيلية، الإيجارات، المرافق، وسندات الصرف النقدية",
+    "createExpense": "تسجيل مصروف جديد",
+    "editExpense": "تعديل سند المصروف",
+    "searchPlaceholder": "ابحث في وصف المصروف...",
+    "allCategories": "جميع بنود المصروفات",
+    "colCategory": "بند المصروف",
+    "colDescription": "الوصف والبيان",
+    "colAmount": "المبلغ",
+    "colPaymentMethod": "طريقة الدفع",
+    "colExpenseDate": "تاريخ الصرف",
+    "colCreatedBy": "المسؤول",
+    "noExpensesFound": "لا توجد مصروفات مسجلة",
+    "noExpensesFoundDesc": "لم يتم العثور على أي سندات صرف تطابق معايير البحث الحالية.",
+    "totalExpenses": "إجمالي المصروفات التشغيلية",
+    "expensesCount": "عدد سندات الصرف",
+    "averageExpense": "متوسط قيمة السند",
+    "expenseDetails": "تفاصيل سند الصرف",
+    "financialSummary": "البيان المالي"
+  },
+  "finance": {
+    "pageTitle": "لوحة المؤشرات والتقارير المالية",
+    "pageSubtitle": "ملخص الأداء المالي، تدفقات المبيعات، تكاليف المشتريات، والمصروفات التشغيلية",
+    "netMovement": "صافي الحركة التشغيلية",
+    "netSales": "صافي المبيعات",
+    "receivedPurchases": "مشتريات الأدوية المستلمة",
+    "operatingExpenses": "المصروفات التشغيلية",
+    "grossSales": "إجمالي مبيعات الفواتير",
+    "returnsAndRefunds": "المرتجعات والمستردات",
+    "staffCommissions": "عمولات الصيادلة والموظفين",
+    "paymentsLedger": "سجل المعاملات والمدفوعات المالية",
+    "paymentsLedgerSubtitle": "دفتر المعاملات النقدية والإلكترونية لكافة فواتير المبيعات",
+    "colInvoice": "رقم الفاتورة / المرجع",
+    "colAmountPaid": "المبلغ المدفوع",
+    "noPaymentsFound": "لا توجد عمليات دفع مسجلة",
+    "noPaymentsFoundDesc": "لم يتم العثور على أي حركات دفع مطابقة لمعايير البحث الحالية."
   }
 }

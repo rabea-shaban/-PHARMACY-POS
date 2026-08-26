@@ -157,6 +157,31 @@ export const APP_ROUTES: Record<string, AppRouteDefinition> = {
     isProtected: true,
     allowedRoles: MODULE_PERMISSIONS.expenses,
   },
+  EXPENSES_NEW: {
+    path: '/expenses/new',
+    isProtected: true,
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT'],
+  },
+  EXPENSES_EDIT: {
+    path: '/expenses/:id/edit',
+    isProtected: true,
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER'],
+  },
+  EXPENSES_DETAILS: {
+    path: '/expenses/:id',
+    isProtected: true,
+    allowedRoles: MODULE_PERMISSIONS.expenses,
+  },
+  PAYMENTS: {
+    path: '/payments',
+    isProtected: true,
+    allowedRoles: MODULE_PERMISSIONS.payments,
+  },
+  FINANCE: {
+    path: '/finance',
+    isProtected: true,
+    allowedRoles: MODULE_PERMISSIONS.finance,
+  },
   PAYROLL: {
     path: '/payroll',
     isProtected: true,

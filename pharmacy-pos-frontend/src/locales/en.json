@@ -417,5 +417,43 @@
     "loyaltyTransactions": "Points & Rewards Transaction History",
     "newSale": "New POS Sale",
     "editProfile": "Edit Profile"
+  },
+  "expenses": {
+    "pageTitle": "Operating Expenses & Petty Cash",
+    "pageSubtitle": "Audit ledger for operational expenses, rent, utilities, and cash payment vouchers",
+    "createExpense": "Record New Expense",
+    "editExpense": "Edit Expense Voucher",
+    "searchPlaceholder": "Search expense descriptions...",
+    "allCategories": "All Expense Categories",
+    "colCategory": "Expense Category",
+    "colDescription": "Description & Purpose",
+    "colAmount": "Amount",
+    "colPaymentMethod": "Payment Method",
+    "colExpenseDate": "Expense Date",
+    "colCreatedBy": "Recorded By",
+    "noExpensesFound": "No Expenses Found",
+    "noExpensesFoundDesc": "No expense vouchers matching the current search criteria were found.",
+    "totalExpenses": "Total Operating Expenses",
+    "expensesCount": "Expense Vouchers Count",
+    "averageExpense": "Average Voucher Value",
+    "expenseDetails": "Expense Voucher Details",
+    "financialSummary": "Financial Statement"
+  },
+  "finance": {
+    "pageTitle": "Financial Metrics & Executive Overview",
+    "pageSubtitle": "Summary of financial performance, sales revenue, procurement costs, and operating expenses",
+    "netMovement": "Net Operational Movement",
+    "netSales": "Net Sales",
+    "receivedPurchases": "Received Inventory Procurement",
+    "operatingExpenses": "Operating Expenses",
+    "grossSales": "Gross Invoiced Sales",
+    "returnsAndRefunds": "Returns & Refunds",
+    "staffCommissions": "Staff Sales Commissions",
+    "paymentsLedger": "Payments & Transaction Ledger",
+    "paymentsLedgerSubtitle": "Cash and electronic transactions journal for all sales invoices",
+    "colInvoice": "Invoice # / Reference",
+    "colAmountPaid": "Paid Amount",
+    "noPaymentsFound": "No Payment Transactions Recorded",
+    "noPaymentsFoundDesc": "No payment transactions matching the current search criteria were found."
   }
 }
