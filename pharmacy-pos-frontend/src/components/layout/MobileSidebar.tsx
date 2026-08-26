@@ -24,6 +24,7 @@ import {
   HeartPulse,
   Tag,
   Building2,
+  Award,
   X,
 } from 'lucide-react';
 import { cn } from '../../lib/utils.js';
@@ -120,6 +121,12 @@ const navItemDefs: NavItemDef[] = [
     href: '/payroll',
     icon: <Coins className="w-5 h-5" />,
     roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT'],
+  },
+  {
+    key: 'commissions',
+    href: '/commissions',
+    icon: <Award className="w-5 h-5" />,
+    roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT', 'PHARMACIST'],
   },
   {
     key: 'reports',

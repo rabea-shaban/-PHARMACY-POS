@@ -7,6 +7,7 @@ import { ResetPasswordModal } from '../components/ResetPasswordModal.js';
 import { UserAuditHistory } from '../components/UserAuditHistory.js';
 import { UserPayrollHistory } from '../components/UserPayrollHistory.js';
 import { UserSalesPerformance } from '../components/UserSalesPerformance.js';
+import { EmployeeCommissionHistory } from '../../commissions/components/EmployeeCommissionHistory.js';
 import { Button } from '../../../components/ui/Button.js';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/Card.js';
 import { EmptyState } from '../../../components/common/EmptyState.js';
@@ -27,6 +28,7 @@ import {
   Receipt,
   History,
   Clock,
+  Award,
 } from 'lucide-react';
 import { useAppSelector } from '../../../store/hooks.js';
 
@@ -49,7 +51,7 @@ function calculateTenure(createdAtDate: string | Date): string {
   return `منذ ${years} سنة ${remainingMonths > 0 ? `و ${remainingMonths} شهر` : ''}`;
 }
 
-type TabType = 'payroll' | 'sales' | 'audit';
+type TabType = 'payroll' | 'commissions' | 'sales' | 'audit';
 
 export const UserDetailsPage: React.FC = () => {
   const { id = '' } = useParams<{ id: string }>();
@@ -243,8 +245,8 @@ export const UserDetailsPage: React.FC = () => {
         </Card>
       </div>
 
-      {/* Tabs Navigation: Payroll Statement vs Sales Performance vs Audit Trail */}
-      <div className="border-b border-slate-200 dark:border-[#1E293B] flex items-center gap-2 pt-2">
+      {/* Tabs Navigation: Payroll Statement vs Commissions vs Sales Performance vs Audit Trail */}
+      <div className="border-b border-slate-200 dark:border-[#1E293B] flex items-center gap-2 pt-2 flex-wrap">
         <button
           type="button"
           onClick={() => setActiveTab('payroll')}
@@ -255,7 +257,20 @@ export const UserDetailsPage: React.FC = () => {
           }`}
         >
           <Coins className="w-4 h-4" />
-          <span>كشف حساب وسجل الرواتب (Payroll History)</span>
+          <span>كشف الرواتب (Payroll History)</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab('commissions')}
+          className={`pb-3 px-4 text-xs font-bold transition-all flex items-center gap-2 border-b-2 cursor-pointer ${
+            activeTab === 'commissions'
+              ? 'border-sky-600 text-sky-600 dark:border-sky-400 dark:text-sky-400'
+              : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+          }`}
+        >
+          <Award className="w-4 h-4" />
+          <span>عمولات المبيعات (Sales Commissions)</span>
         </button>
 
         <button
@@ -268,7 +283,7 @@ export const UserDetailsPage: React.FC = () => {
           }`}
         >
           <Receipt className="w-4 h-4" />
-          <span>إحصائيات وحركات المبيعات (Sales Performance)</span>
+          <span>حركات المبيعات (Sales Performance)</span>
         </button>
 
         <button
@@ -281,7 +296,7 @@ export const UserDetailsPage: React.FC = () => {
           }`}
         >
           <History className="w-4 h-4" />
-          <span>سجل حركات النظام والأمان (Audit Trail)</span>
+          <span>سجل نشاط النظام (Audit Trail)</span>
         </button>
       </div>
 
@@ -289,6 +304,13 @@ export const UserDetailsPage: React.FC = () => {
       <div className="pt-2">
         {activeTab === 'payroll' && (
           <UserPayrollHistory userId={user.id} userName={user.name} />
+        )}
+        {activeTab === 'commissions' && (
+          <EmployeeCommissionHistory
+            userId={user.id}
+            userName={user.name}
+            userRole={user.role}
+          />
         )}
         {activeTab === 'sales' && (
           <UserSalesPerformance userId={user.id} userName={user.name} />

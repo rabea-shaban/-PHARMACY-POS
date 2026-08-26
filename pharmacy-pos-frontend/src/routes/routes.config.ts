@@ -202,6 +202,21 @@ export const APP_ROUTES: Record<string, AppRouteDefinition> = {
     isProtected: true,
     allowedRoles: MODULE_PERMISSIONS.payroll,
   },
+  COMMISSIONS: {
+    path: '/commissions',
+    isProtected: true,
+    allowedRoles: MODULE_PERMISSIONS.commissions,
+  },
+  COMMISSION_RULES: {
+    path: '/commissions/rules',
+    isProtected: true,
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT'],
+  },
+  COMMISSION_STATEMENT: {
+    path: '/commissions/statement/:userId',
+    isProtected: true,
+    allowedRoles: MODULE_PERMISSIONS.commissions,
+  },
   REPORTS: {
     path: '/reports',
     isProtected: true,

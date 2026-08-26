@@ -81,6 +81,11 @@ import { CreatePayrollPage } from '../features/payroll/pages/CreatePayrollPage.j
 import { PayrollDetailsPage } from '../features/payroll/pages/PayrollDetailsPage.js';
 import { SalarySlipPage } from '../features/payroll/pages/SalarySlipPage.js';
 
+// F13: Staff Sales Commissions & Incentives Pages
+import { CommissionsPage } from '../features/commissions/pages/CommissionsPage.js';
+import { CommissionRulesPage } from '../features/commissions/pages/CommissionRulesPage.js';
+import { CommissionStatementPage } from '../features/commissions/pages/CommissionStatementPage.js';
+
 export const AppRoutes: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -484,6 +489,31 @@ export const AppRoutes: React.FC = () => {
           element={
             <RoleGuard allowedRoles={MODULE_PERMISSIONS.payroll}>
               <SalarySlipPage />
+            </RoleGuard>
+          }
+        />
+        {/* Staff Sales Commissions & Incentives Module (F13) */}
+        <Route
+          path="/commissions"
+          element={
+            <RoleGuard allowedRoles={MODULE_PERMISSIONS.commissions}>
+              <CommissionsPage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/commissions/rules"
+          element={
+            <RoleGuard allowedRoles={['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT']}>
+              <CommissionRulesPage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/commissions/statement/:userId"
+          element={
+            <RoleGuard allowedRoles={MODULE_PERMISSIONS.commissions}>
+              <CommissionStatementPage />
             </RoleGuard>
           }
         />

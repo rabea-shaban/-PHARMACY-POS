@@ -39,6 +39,7 @@
     "expenses": "Expenses & Operating Costs",
     "finance": "Financial Overview",
     "payroll": "Staff Payroll & Wages",
+    "commissions": "Sales Commissions & Incentives",
     "reports": "Reports & Financial Analytics",
     "notifications": "Notifications & WhatsApp",
     "audit": "Audit & Security Logs",
@@ -517,5 +518,23 @@
     "approvePayroll": "Approve Payroll",
     "payPayroll": "Settle & Pay Wages",
     "salarySlip": "Salary Payslip"
+  },
+  "commissions": {
+    "pageTitle": "Staff Sales Commissions & Incentives",
+    "pageSubtitle": "Track pharmacist and cashier sales commissions, commission policy rules, and performance payouts",
+    "rules": "Commission Rules & Policies",
+    "rulesSubtitle": "Configure percentage rates and fixed bonus rewards for pharmaceutical sales",
+    "addRule": "Create Commission Rule",
+    "colRuleName": "Rule Name",
+    "colRate": "Commission Rate",
+    "colFixedAmount": "Fixed Amount",
+    "colEffectiveDate": "Effective Date",
+    "colStatus": "Status",
+    "colSalesVolume": "Sales Volume",
+    "colCommissionAmount": "Commission Amount",
+    "colSalesCount": "Sales Count",
+    "leaderboard": "Staff Commission Leaderboard",
+    "noCommissions": "No Commission Records Found",
+    "noRules": "No Commission Rules Found"
   }
 }
