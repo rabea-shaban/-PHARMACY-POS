@@ -477,5 +477,28 @@
     "accessInfo": "Access Permissions & Registration Details",
     "resetPassword": "Reset Password",
     "auditTrail": "Staff Activity & Security Audit Trail"
+  },
+  "notifications": {
+    "pageTitle": "Notifications & Alerts Center",
+    "pageSubtitle": "Track low-stock items, upcoming expirations, completed sales, and real-time system events",
+    "markAllAsRead": "Mark All As Read",
+    "markAsRead": "Mark As Read",
+    "noNotifications": "No Notifications Found",
+    "allTypes": "All Alert Types",
+    "unreadOnly": "Unread Only"
+  },
+  "audit": {
+    "pageTitle": "Audit & Security Logs",
+    "pageSubtitle": "Immutable audit trail of system operations, sales, alterations, and staff logins",
+    "activityTitle": "System Activity Analytics",
+    "activitySubtitle": "Aggregated metrics of security actions, modified entities, and active staff members",
+    "colTimestamp": "Timestamp",
+    "colActor": "Responsible Staff",
+    "colAction": "Action / Operation",
+    "colEntity": "Entity / Resource",
+    "colEntityId": "Entity ID",
+    "beforeChanges": "Before Changes",
+    "afterChanges": "After Changes",
+    "metadata": "Context & Environment Metadata"
   }
 }

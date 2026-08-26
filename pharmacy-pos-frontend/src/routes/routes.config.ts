@@ -202,6 +202,16 @@ export const APP_ROUTES: Record<string, AppRouteDefinition> = {
     isProtected: true,
     allowedRoles: MODULE_PERMISSIONS.audit,
   },
+  AUDIT_DETAILS: {
+    path: '/audit/:id',
+    isProtected: true,
+    allowedRoles: MODULE_PERMISSIONS.audit,
+  },
+  ACTIVITY: {
+    path: '/activity',
+    isProtected: true,
+    allowedRoles: MODULE_PERMISSIONS.audit,
+  },
   SETTINGS: {
     path: '/settings',
     isProtected: true,

@@ -69,6 +69,12 @@ import { CreateUserPage } from '../features/users/pages/CreateUserPage.js';
 import { EditUserPage } from '../features/users/pages/EditUserPage.js';
 import { UserDetailsPage } from '../features/users/pages/UserDetailsPage.js';
 
+// F11: Audit Logs, Notifications & System Activity Pages
+import { AuditLogsPage } from '../features/audit/pages/AuditLogsPage.js';
+import { AuditDetailsPage } from '../features/audit/pages/AuditDetailsPage.js';
+import { SystemActivityPage } from '../features/audit/pages/SystemActivityPage.js';
+import { NotificationsPage } from '../features/notifications/pages/NotificationsPage.js';
+
 export const AppRoutes: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -458,19 +464,38 @@ export const AppRoutes: React.FC = () => {
             </RoleGuard>
           }
         />
+        {/* Notifications Module (F11) */}
         <Route
           path="/notifications"
           element={
             <RoleGuard allowedRoles={MODULE_PERMISSIONS.notifications}>
-              <div className="p-8 text-center text-slate-400">مركز التنبيهات والواتساب (المرحلة F14)</div>
+              <NotificationsPage />
             </RoleGuard>
           }
         />
+
+        {/* Audit Logs & System Activity Module (F11) */}
         <Route
           path="/audit"
           element={
             <RoleGuard allowedRoles={MODULE_PERMISSIONS.audit}>
-              <div className="p-8 text-center text-slate-400">سجلات التدقيق والأمان (المرحلة F15)</div>
+              <AuditLogsPage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/audit/:id"
+          element={
+            <RoleGuard allowedRoles={MODULE_PERMISSIONS.audit}>
+              <AuditDetailsPage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/activity"
+          element={
+            <RoleGuard allowedRoles={MODULE_PERMISSIONS.audit}>
+              <SystemActivityPage />
             </RoleGuard>
           }
         />
