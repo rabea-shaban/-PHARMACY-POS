@@ -20,13 +20,13 @@ import {
   ShieldCheck,
   Settings,
   UsersRound,
-  HeartPulse,
   Tag,
   Building2,
   Award,
 } from 'lucide-react';
 import { cn } from '../../lib/utils.js';
 import { Role } from '../../types/auth.types.js';
+import { PharmacyBrandLogo } from '../common/PharmacyBrandLogo.js';
 
 interface NavItemDef {
   key: string;
@@ -162,6 +162,7 @@ export const Sidebar: React.FC = () => {
   const { t } = useTranslation();
   const { sidebarOpen, direction } = useAppSelector((state) => state.ui);
   const { role } = useAppSelector((state) => state.auth);
+  const { publicSettings } = useAppSelector((state) => state.settings);
 
   const filteredItems = navItemDefs.filter((item) => {
     if (!item.roles) return true;
@@ -179,18 +180,16 @@ export const Sidebar: React.FC = () => {
       )}
     >
       {/* Brand Logo Header */}
-      <div className="h-16 flex items-center justify-between px-5 border-b border-slate-200/80 dark:border-[#1E293B] shrink-0 bg-[#F4F9FC] dark:bg-[#0B0F17]/50">
+      <div className="h-16 flex items-center justify-between px-4 border-b border-slate-200/80 dark:border-[#1E293B] shrink-0 bg-[#F4F9FC] dark:bg-[#0B0F17]/50">
         <div className="flex items-center gap-3 overflow-hidden">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-sky-600 via-cyan-500 to-teal-400 text-white flex items-center justify-center shadow-md shadow-sky-500/25 shrink-0">
-            <HeartPulse className="w-5 h-5 text-white animate-pulse" strokeWidth={2.5} />
-          </div>
+          <PharmacyBrandLogo size="md" />
           {sidebarOpen && (
             <div className="truncate">
-              <h2 className="text-sm font-bold tracking-tight text-slate-900 dark:text-white">
-                {t('common.pharmacyName')}
+              <h2 className="text-xs sm:text-sm font-black tracking-tight text-slate-900 dark:text-white truncate">
+                {publicSettings.pharmacyName || t('common.pharmacyName')}
               </h2>
-              <p className="text-[10px] text-sky-600 dark:text-sky-400 font-bold tracking-wider uppercase">
-                {t('common.posAndManagement')}
+              <p className="text-[10px] text-sky-600 dark:text-sky-400 font-bold tracking-wider uppercase truncate">
+                {publicSettings.pharmacySlogan || t('common.posAndManagement')}
               </p>
             </div>
           )}

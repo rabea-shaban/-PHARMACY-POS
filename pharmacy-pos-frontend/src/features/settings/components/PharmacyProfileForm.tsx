@@ -7,6 +7,7 @@ import { useUpdateSettings } from '../hooks/useSettings.js';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/Card.js';
 import { Input } from '../../../components/ui/Input.js';
 import { SettingsSaveBar } from './SettingsSaveBar.js';
+import { LogoSelector } from './LogoSelector.js';
 import { Building2, Phone, MapPin, ShieldCheck, Mail, Sparkles, CheckCircle2, AlertCircle } from 'lucide-react';
 
 export interface PharmacyProfileFormProps {
@@ -26,6 +27,8 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
     register,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { errors, isDirty },
   } = useForm<PharmacyProfileFormData>({
     resolver: zodResolver(pharmacyProfileSchema),
@@ -37,8 +40,11 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
       pharmacy_tax_number: settingsMap['pharmacy_tax_number'] || '',
       pharmacy_email: settingsMap['pharmacy_email'] || '',
       pharmacy_slogan: settingsMap['pharmacy_slogan'] || '',
+      pharmacy_logo: settingsMap['pharmacy_logo'] || '',
     },
   });
+
+  const currentLogo = watch('pharmacy_logo');
 
   useEffect(() => {
     reset({
@@ -49,6 +55,7 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
       pharmacy_tax_number: settingsMap['pharmacy_tax_number'] || '',
       pharmacy_email: settingsMap['pharmacy_email'] || '',
       pharmacy_slogan: settingsMap['pharmacy_slogan'] || '',
+      pharmacy_logo: settingsMap['pharmacy_logo'] || '',
     });
   }, [settingsMap, reset]);
 
@@ -64,13 +71,14 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
       { key: 'pharmacy_tax_number', value: data.pharmacy_tax_number || '', isPublic: true, description: 'Tax Registration ID' },
       { key: 'pharmacy_email', value: data.pharmacy_email || '', isPublic: true, description: 'Official Email' },
       { key: 'pharmacy_slogan', value: data.pharmacy_slogan || '', isPublic: true, description: 'Branding Slogan' },
+      { key: 'pharmacy_logo', value: data.pharmacy_logo || '', isPublic: true, description: 'Pharmacy Logo & Visual Identity' },
     ];
 
     updateSettingsMutation.mutate(
       { settings: entries },
       {
         onSuccess: () => {
-          setSuccessMessage('تم حفظ وتحديث بيانات وهوية الصيدلية بنجاح');
+          setSuccessMessage('تم حفظ وتحديث بيانات وهوية وشعار الصيدلية بنجاح');
           reset(data);
         },
         onError: (err: any) => {
@@ -95,6 +103,13 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
           <span>{errorMessage}</span>
         </div>
       )}
+
+      {/* Logo Selection Component */}
+      <LogoSelector
+        value={currentLogo}
+        disabled={isReadOnly}
+        onChange={(newLogo) => setValue('pharmacy_logo', newLogo, { shouldDirty: true })}
+      />
 
       <Card className="rounded-3xl shadow-xs overflow-hidden border-slate-200/80 dark:border-[#1E293B]">
         <CardHeader className="pb-4 border-b border-slate-100 dark:border-[#1E293B]">

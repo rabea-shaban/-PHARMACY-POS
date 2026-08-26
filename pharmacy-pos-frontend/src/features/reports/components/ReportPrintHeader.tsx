@@ -1,8 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { HeartPulse, Calendar, Clock, User, ShieldCheck } from 'lucide-react';
+import { Calendar, Clock, User, ShieldCheck } from 'lucide-react';
 import { formatDate, formatDateTime } from '../../../lib/utils.js';
 import { useAppSelector } from '../../../store/hooks.js';
+import { PharmacyBrandLogo } from '../../../components/common/PharmacyBrandLogo.js';
 
 export interface ReportPrintHeaderProps {
   reportTitle: string;
@@ -17,6 +18,7 @@ export const ReportPrintHeader: React.FC<ReportPrintHeaderProps> = ({
 }) => {
   const { t } = useTranslation();
   const { user } = useAppSelector((state) => state.auth);
+  const { publicSettings } = useAppSelector((state) => state.settings);
 
   return (
     <div className="hidden print:block mb-6 text-slate-900 border-b-2 border-slate-900 pb-4">
@@ -25,16 +27,16 @@ export const ReportPrintHeader: React.FC<ReportPrintHeaderProps> = ({
         {/* Right: Pharmacy Info */}
         <div className="space-y-1 text-start">
           <div className="flex items-center gap-2">
-            <HeartPulse className="w-6 h-6 text-sky-700 inline" />
+            <PharmacyBrandLogo size="md" showFallbackGradient={false} />
             <h1 className="text-xl font-black tracking-tight text-slate-900">
-              {t('common.pharmacyName')}
+              {publicSettings.pharmacyName || t('common.pharmacyName')}
             </h1>
           </div>
           <p className="text-xs text-slate-600 font-bold">
-            {t('common.posAndManagement')} • سجل تجاري وترخيص رقم 10482
+            {publicSettings.pharmacySlogan || t('common.posAndManagement')} • ترخيص رقم: {publicSettings.pharmacyLicense || '10482'}
           </p>
           <p className="text-[11px] text-slate-500 font-mono">
-            جمهورية مصر العربية — فرع الإدارة الرئيسي
+            {publicSettings.pharmacyAddress || 'جمهورية مصر العربية'}
           </p>
         </div>
 

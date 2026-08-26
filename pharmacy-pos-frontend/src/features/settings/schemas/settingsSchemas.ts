@@ -8,6 +8,7 @@ export const pharmacyProfileSchema = z.object({
   pharmacy_tax_number: z.string().max(100).optional(),
   pharmacy_email: z.string().email('بريد إلكتروني غير صالح').or(z.literal('')).optional(),
   pharmacy_slogan: z.string().max(150).optional(),
+  pharmacy_logo: z.string().optional(),
 });
 
 export const taxSettingsSchema = z.object({

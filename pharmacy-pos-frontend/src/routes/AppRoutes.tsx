@@ -91,12 +91,23 @@ import { ReportsPage } from '../features/reports/pages/ReportsPage.js';
 
 // F15: System Settings, Tax Configuration & Pharmacy Branding Pages
 import { SettingsPage } from '../features/settings/pages/SettingsPage.js';
+import { usePublicSettings } from '../features/settings/hooks/useSettings.js';
 
 export const AppRoutes: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const { isAuthenticated, role } = useAppSelector((state) => state.auth);
+  const { publicSettings } = useAppSelector((state) => state.settings);
+
+  // Synchronize public pharmacy settings across the entire app
+  usePublicSettings();
+
+  useEffect(() => {
+    if (publicSettings.pharmacyName) {
+      document.title = `${publicSettings.pharmacyName} — POS & Management`;
+    }
+  }, [publicSettings.pharmacyName]);
 
   // Register session expired handler for Axios 401 interceptor
   useEffect(() => {

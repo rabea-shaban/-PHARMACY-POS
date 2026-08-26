@@ -1,7 +1,8 @@
 import React from 'react';
 import { SystemSettingsMap } from '../types/settings.types.js';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/Card.js';
-import { HeartPulse, Printer, QrCode } from 'lucide-react';
+import { Printer, QrCode } from 'lucide-react';
+import { PharmacyBrandLogo } from '../../../components/common/PharmacyBrandLogo.js';
 
 export interface BrandingPreviewProps {
   settingsMap: SystemSettingsMap;
@@ -13,6 +14,7 @@ export const BrandingPreview: React.FC<BrandingPreviewProps> = ({ settingsMap })
   const pharmacyAddress = settingsMap['pharmacy_address'] || 'القاهرة، مصر';
   const pharmacyLicense = settingsMap['pharmacy_license'] || '10482 / 2026';
   const pharmacyTaxNumber = settingsMap['pharmacy_tax_number'] || '300-123-456';
+  const pharmacyLogo = settingsMap['pharmacy_logo'] || '';
   const invoicePrefix = settingsMap['invoice_prefix'] || 'INV';
   const receiptWidth = settingsMap['receipt_width'] || '80mm';
   const receiptFooter = settingsMap['receipt_footer_text'] || 'شكراً لتعاملكم معنا، مع تمنياتنا لكم بالشفاء العاجل';
@@ -51,8 +53,8 @@ export const BrandingPreview: React.FC<BrandingPreviewProps> = ({ settingsMap })
               {/* Receipt Header */}
               <div className="text-center space-y-1 border-b border-dashed border-slate-300 pb-3">
                 {showLogo && (
-                  <div className="inline-flex items-center justify-center p-2 rounded-full bg-sky-50 text-sky-600 mb-1">
-                    <HeartPulse className="w-6 h-6" />
+                  <div className="flex justify-center mb-1">
+                    <PharmacyBrandLogo logo={pharmacyLogo} size="lg" showFallbackGradient={false} />
                   </div>
                 )}
                 <h3 className="font-black text-sm text-slate-900 tracking-tight">{pharmacyName}</h3>

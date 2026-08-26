@@ -33,6 +33,10 @@ export interface PublicSettingsResponse {
   pharmacyName: string;
   pharmacyPhone: string;
   pharmacyAddress: string;
+  pharmacyLogo?: string;
+  pharmacySlogan?: string;
+  pharmacyLicense?: string;
+  pharmacyTaxNumber?: string;
   currency: string;
   taxRate: number;
   invoicePrefix: string;

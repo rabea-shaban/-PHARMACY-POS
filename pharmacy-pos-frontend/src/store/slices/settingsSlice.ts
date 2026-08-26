@@ -1,9 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface PublicSettings {
+export interface PublicSettings {
   pharmacyName: string;
   pharmacyPhone: string;
   pharmacyAddress: string;
+  pharmacyLogo?: string;
+  pharmacySlogan?: string;
+  pharmacyLicense?: string;
+  pharmacyTaxNumber?: string;
   currency: string;
   taxRate: number;
   invoicePrefix: string;
@@ -19,6 +23,10 @@ const initialState: SettingsSliceState = {
     pharmacyName: 'Al-Amal Modern Pharmacy (صيدلية الأمل الحديثة)',
     pharmacyPhone: '+201012345678',
     pharmacyAddress: 'Cairo, Egypt',
+    pharmacyLogo: '',
+    pharmacySlogan: 'رعاية صحية متكاملة لأسرتك',
+    pharmacyLicense: '10482 / 2026',
+    pharmacyTaxNumber: '321-654-987',
     currency: 'EGP',
     taxRate: 0,
     invoicePrefix: 'INV',
@@ -30,8 +38,11 @@ export const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
-    setPublicSettings: (state, action: PayloadAction<PublicSettings>) => {
-      state.publicSettings = action.payload;
+    setPublicSettings: (state, action: PayloadAction<Partial<PublicSettings>>) => {
+      state.publicSettings = {
+        ...state.publicSettings,
+        ...action.payload,
+      };
       state.isLoaded = true;
     },
   },

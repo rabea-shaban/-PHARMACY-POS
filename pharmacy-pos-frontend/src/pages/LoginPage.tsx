@@ -3,11 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../store/hooks.js';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/Card.js';
 import { LoginForm } from '../features/auth/components/LoginForm.js';
-import { Sparkles, HeartPulse, AlertCircle } from 'lucide-react';
+import { Sparkles, AlertCircle } from 'lucide-react';
+import { PharmacyBrandLogo } from '../components/common/PharmacyBrandLogo.js';
 
 export const LoginPage: React.FC = () => {
   const { t } = useTranslation();
   const { sessionExpired } = useAppSelector((state) => state.auth);
+  const { publicSettings } = useAppSelector((state) => state.settings);
 
   const handleQuickFill = (identifier: string, pass: string) => {
     const btn = document.getElementById('btn-quick-fill') as HTMLButtonElement | null;
@@ -27,14 +29,14 @@ export const LoginPage: React.FC = () => {
       <div className="w-full max-w-md space-y-6 relative z-10">
         {/* Brand Header */}
         <div className="text-center space-y-2">
-          <div className="inline-flex w-16 h-16 rounded-3xl bg-gradient-to-tr from-sky-600 via-cyan-500 to-teal-400 text-white items-center justify-center shadow-xl shadow-sky-500/25">
-            <HeartPulse className="w-9 h-9 text-white animate-pulse" strokeWidth={2.5} />
+          <div className="flex justify-center">
+            <PharmacyBrandLogo size="xl" />
           </div>
           <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-            {t('common.pharmacyName')}
+            {publicSettings.pharmacyName || t('common.pharmacyName')}
           </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-            {t('common.posAndManagement')}
+            {publicSettings.pharmacySlogan || t('common.posAndManagement')}
           </p>
         </div>
 
