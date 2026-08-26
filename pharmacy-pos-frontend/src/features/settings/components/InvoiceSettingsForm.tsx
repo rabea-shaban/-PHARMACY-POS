@@ -95,33 +95,18 @@ export const InvoiceSettingsForm: React.FC<InvoiceSettingsFormProps> = ({
 
       <Card className="rounded-3xl shadow-xs overflow-hidden border-slate-200/80 dark:border-[#1E293B]">
         <CardHeader className="pb-4 border-b border-slate-100 dark:border-[#1E293B]">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-2.5">
-              <div className="p-2 rounded-2xl bg-purple-500/10 text-purple-600 dark:text-purple-400">
-                <Printer className="w-5 h-5" />
-              </div>
-              <div>
-                <CardTitle className="text-base font-black text-slate-900 dark:text-white">
-                  إعدادات ترقيم الفواتير وطباعة الإيصالات (Invoices & POS Thermal Printing)
-                </CardTitle>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  تخصيص بادئة أرقام فواتير البيع، عرض ورق الطباعة الحرارية، نصوص الترحيب وسياسة الاسترجاع
-                </p>
-              </div>
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 rounded-2xl bg-purple-500/10 text-purple-600 dark:text-purple-400">
+              <Printer className="w-5 h-5" />
             </div>
-
-            {!isReadOnly && (
-              <Button
-                type="submit"
-                variant="primary"
-                size="md"
-                isLoading={updateSettingsMutation.isPending}
-                leftIcon={<Save className="w-4 h-4" />}
-                className="shadow-md shadow-purple-600/20"
-              >
-                حفظ التعديلات
-              </Button>
-            )}
+            <div>
+              <CardTitle className="text-base font-black text-slate-900 dark:text-white">
+                إعدادات ترقيم الفواتير والطباعة الحرارية
+              </CardTitle>
+              <p className="text-xs text-slate-500 mt-0.5">
+                تخصيص بادئة أرقام فواتير البيع، عرض ورق الطباعة الحرارية، نصوص الترحيب وسياسة الاسترجاع
+              </p>
+            </div>
           </div>
         </CardHeader>
 
