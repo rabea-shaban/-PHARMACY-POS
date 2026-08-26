@@ -38,21 +38,16 @@ const initialState: CartSliceState = {
 
 function calculateTotals(state: CartSliceState) {
   let subtotal = 0;
-  let taxAmount = 0;
 
   for (const item of state.items) {
     const itemSubtotal = item.quantity * item.unitPrice;
     item.subtotal = Number(itemSubtotal.toFixed(2));
     item.total = Number(Math.max(0, item.subtotal - (item.discount || 0)).toFixed(2));
     subtotal += item.total;
-
-    if (item.product.taxRate && item.product.taxRate > 0) {
-      taxAmount += (item.total * item.product.taxRate) / 100;
-    }
   }
 
   state.subtotal = Number(subtotal.toFixed(2));
-  state.taxAmount = Number(taxAmount.toFixed(2));
+  state.taxAmount = 0;
 
   // 1. Calculate General Discount (Percentage or Fixed)
   let discountAmount = 0;
@@ -79,7 +74,7 @@ function calculateTotals(state: CartSliceState) {
 
   state.discountAmount = Number(Math.min(state.subtotal, discountAmount).toFixed(2));
 
-  const afterDiscount = Math.max(0, state.subtotal - state.discountAmount);
+  const afterDiscount = Number(Math.max(0, state.subtotal - state.discountAmount).toFixed(2));
 
   // 4. Insurance Coverage (if active policy selected)
   let insuranceAmount = 0;
@@ -88,9 +83,9 @@ function calculateTotals(state: CartSliceState) {
   }
   state.insuranceAmount = Number(insuranceAmount.toFixed(2));
 
-  // 5. Final Grand Total Due from Customer
-  const grandTotal = Math.max(0, afterDiscount - state.insuranceAmount + state.taxAmount);
-  state.total = Number(grandTotal.toFixed(2));
+  // 5. Final Grand Total Due from Customer (exact match with backend payableByCustomer)
+  const grandTotal = Number(Math.max(0, afterDiscount - state.insuranceAmount).toFixed(2));
+  state.total = grandTotal;
 }
 
 export const cartSlice = createSlice({

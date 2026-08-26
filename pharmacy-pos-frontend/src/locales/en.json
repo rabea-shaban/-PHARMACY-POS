@@ -369,6 +369,8 @@
     "discount": "Total Discount:",
     "grandTotal": "Grand Total Due:",
     "checkoutButton": "Complete Sale & Confirm Invoice",
+    "checkoutModalTitle": "Complete Sale Checkout",
+    "confirmAndPrint": "Confirm Payment & Print Receipt",
     "fefoNotice": "Real-time medicine search and FEFO batches will be connected in the next phase."
   },
   "returns": {
