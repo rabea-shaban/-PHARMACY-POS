@@ -5,9 +5,9 @@ import { invoiceReceiptSettingsSchema, InvoiceReceiptSettingsFormData } from '..
 import { SystemSettingsMap } from '../types/settings.types.js';
 import { useUpdateSettings } from '../hooks/useSettings.js';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/Card.js';
+import { Button } from '../../../components/ui/Button.js';
 import { Input } from '../../../components/ui/Input.js';
-import { SettingsSaveBar } from './SettingsSaveBar.js';
-import { Printer, FileText, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Printer, FileText, CheckCircle2, AlertCircle, Save, RotateCcw } from 'lucide-react';
 
 export interface InvoiceSettingsFormProps {
   settingsMap: SystemSettingsMap;
@@ -95,18 +95,33 @@ export const InvoiceSettingsForm: React.FC<InvoiceSettingsFormProps> = ({
 
       <Card className="rounded-3xl shadow-xs overflow-hidden border-slate-200/80 dark:border-[#1E293B]">
         <CardHeader className="pb-4 border-b border-slate-100 dark:border-[#1E293B]">
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-2xl bg-purple-500/10 text-purple-600 dark:text-purple-400">
-              <Printer className="w-5 h-5" />
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-2xl bg-purple-500/10 text-purple-600 dark:text-purple-400">
+                <Printer className="w-5 h-5" />
+              </div>
+              <div>
+                <CardTitle className="text-base font-black text-slate-900 dark:text-white">
+                  إعدادات ترقيم الفواتير وطباعة الإيصالات (Invoices & POS Thermal Printing)
+                </CardTitle>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  تخصيص بادئة أرقام فواتير البيع، عرض ورق الطباعة الحرارية، نصوص الترحيب وسياسة الاسترجاع
+                </p>
+              </div>
             </div>
-            <div>
-              <CardTitle className="text-base font-black text-slate-900 dark:text-white">
-                إعدادات ترقيم الفواتير وطباعة الإيصالات (Invoices & POS Thermal Printing)
-              </CardTitle>
-              <p className="text-xs text-slate-500 mt-0.5">
-                تخصيص بادئة أرقام فواتير البيع، عرض ورق الطباعة الحرارية، نصوص الترحيب وسياسة الاسترجاع
-              </p>
-            </div>
+
+            {!isReadOnly && (
+              <Button
+                type="submit"
+                variant="primary"
+                size="md"
+                isLoading={updateSettingsMutation.isPending}
+                leftIcon={<Save className="w-4 h-4" />}
+                className="shadow-md shadow-purple-600/20"
+              >
+                حفظ التعديلات
+              </Button>
+            )}
           </div>
         </CardHeader>
 
@@ -183,15 +198,35 @@ export const InvoiceSettingsForm: React.FC<InvoiceSettingsFormProps> = ({
               {...register('receipt_return_policy')}
             />
           </div>
+
+          {/* Action Footer Button */}
+          {!isReadOnly && (
+            <div className="pt-4 border-t border-slate-100 dark:border-[#1E293B] flex items-center justify-end gap-3">
+              <Button
+                type="button"
+                variant="outline"
+                size="md"
+                disabled={!isDirty || updateSettingsMutation.isPending}
+                onClick={() => reset()}
+                leftIcon={<RotateCcw className="w-4 h-4" />}
+              >
+                تراجع عن التعديلات
+              </Button>
+
+              <Button
+                type="submit"
+                variant="primary"
+                size="md"
+                isLoading={updateSettingsMutation.isPending}
+                leftIcon={<Save className="w-4 h-4" />}
+                className="shadow-md shadow-purple-600/20"
+              >
+                حفظ التعديلات (Save Changes)
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
-
-      <SettingsSaveBar
-        isDirty={isDirty}
-        isLoading={updateSettingsMutation.isPending}
-        onSave={handleSubmit(onSubmit)}
-        onReset={() => reset()}
-      />
     </form>
   );
 };

@@ -5,9 +5,9 @@ import { taxSettingsSchema, TaxSettingsFormData } from '../schemas/settingsSchem
 import { SystemSettingsMap } from '../types/settings.types.js';
 import { useUpdateSettings } from '../hooks/useSettings.js';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/Card.js';
+import { Button } from '../../../components/ui/Button.js';
 import { Input } from '../../../components/ui/Input.js';
-import { SettingsSaveBar } from './SettingsSaveBar.js';
-import { Receipt, Percent, Info, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Receipt, Percent, Info, CheckCircle2, AlertCircle, Save, RotateCcw } from 'lucide-react';
 
 export interface TaxSettingsFormProps {
   settingsMap: SystemSettingsMap;
@@ -92,18 +92,33 @@ export const TaxSettingsForm: React.FC<TaxSettingsFormProps> = ({
 
       <Card className="rounded-3xl shadow-xs overflow-hidden border-slate-200/80 dark:border-[#1E293B]">
         <CardHeader className="pb-4 border-b border-slate-100 dark:border-[#1E293B]">
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-              <Percent className="w-5 h-5" />
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                <Percent className="w-5 h-5" />
+              </div>
+              <div>
+                <CardTitle className="text-base font-black text-slate-900 dark:text-white">
+                  إعدادات الضرائب وضريبة القيمة المضافة (VAT & Tax Configuration)
+                </CardTitle>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  تحديد النسبة الضريبية الافتراضية، الرقم الضريبي، وتطبيقها آلياً في فواتير الـ POS ونقاط البيع
+                </p>
+              </div>
             </div>
-            <div>
-              <CardTitle className="text-base font-black text-slate-900 dark:text-white">
-                إعدادات الضرائب وضريبة القيمة المضافة (VAT & Tax Configuration)
-              </CardTitle>
-              <p className="text-xs text-slate-500 mt-0.5">
-                تحديد النسبة الضريبية الافتراضية، الرقم الضريبي، وتطبيقها آلياً في فواتير الـ POS ونقاط البيع
-              </p>
-            </div>
+
+            {!isReadOnly && (
+              <Button
+                type="submit"
+                variant="primary"
+                size="md"
+                isLoading={updateSettingsMutation.isPending}
+                leftIcon={<Save className="w-4 h-4" />}
+                className="shadow-md shadow-emerald-600/20"
+              >
+                حفظ التعديلات
+              </Button>
+            )}
           </div>
         </CardHeader>
 
@@ -174,15 +189,35 @@ export const TaxSettingsForm: React.FC<TaxSettingsFormProps> = ({
               بنسبة (<span className="font-mono font-bold">{Number(currentTaxRate) || 0}%</span>)، وتنعكس تلقائياً في خانة الضريبة بفاتورة الكاشير والتقارير المالية.
             </p>
           </div>
+
+          {/* Action Footer Button */}
+          {!isReadOnly && (
+            <div className="pt-4 border-t border-slate-100 dark:border-[#1E293B] flex items-center justify-end gap-3">
+              <Button
+                type="button"
+                variant="outline"
+                size="md"
+                disabled={!isDirty || updateSettingsMutation.isPending}
+                onClick={() => reset()}
+                leftIcon={<RotateCcw className="w-4 h-4" />}
+              >
+                تراجع عن التعديلات
+              </Button>
+
+              <Button
+                type="submit"
+                variant="primary"
+                size="md"
+                isLoading={updateSettingsMutation.isPending}
+                leftIcon={<Save className="w-4 h-4" />}
+                className="shadow-md shadow-emerald-600/20"
+              >
+                حفظ التعديلات (Save Changes)
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
-
-      <SettingsSaveBar
-        isDirty={isDirty}
-        isLoading={updateSettingsMutation.isPending}
-        onSave={handleSubmit(onSubmit)}
-        onReset={() => reset()}
-      />
     </form>
   );
 };
