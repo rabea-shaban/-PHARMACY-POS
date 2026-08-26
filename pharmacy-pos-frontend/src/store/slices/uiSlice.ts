@@ -24,7 +24,7 @@ if (typeof document !== 'undefined') {
 }
 
 const initialState: UISliceState = {
-  sidebarOpen: true,
+  sidebarOpen: typeof window !== 'undefined' ? window.innerWidth >= 768 : true,
   theme: initialTheme,
   language: initialLang,
   direction: initialLang === 'ar' ? 'rtl' : 'ltr',

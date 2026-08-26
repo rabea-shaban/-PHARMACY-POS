@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../store/hooks.js';
-import { toggleSidebar } from '../../store/slices/uiSlice.js';
+import { setSidebarOpen } from '../../store/slices/uiSlice.js';
 import {
   LayoutDashboard,
   ShoppingCart,
@@ -170,9 +170,13 @@ const navItemDefs: NavItemDef[] = [
 export const MobileSidebar: React.FC = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { direction } = useAppSelector((state) => state.ui);
+  const { sidebarOpen, direction } = useAppSelector((state) => state.ui);
   const { role } = useAppSelector((state) => state.auth);
   const { publicSettings } = useAppSelector((state) => state.settings);
+
+  if (!sidebarOpen) {
+    return null;
+  }
 
   const filteredItems = navItemDefs.filter((item) => {
     if (!item.roles) return true;
@@ -184,7 +188,7 @@ export const MobileSidebar: React.FC = () => {
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"
-        onClick={() => dispatch(toggleSidebar())}
+        onClick={() => dispatch(setSidebarOpen(false))}
       />
 
       {/* Drawer Panel */}
@@ -210,8 +214,9 @@ export const MobileSidebar: React.FC = () => {
 
           <button
             type="button"
-            onClick={() => dispatch(toggleSidebar())}
-            className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer shrink-0"
+            onClick={() => dispatch(setSidebarOpen(false))}
+            aria-label="Close sidebar"
+            className="p-2 rounded-xl text-slate-500 hover:text-slate-700 hover:bg-slate-200/60 dark:text-slate-400 dark:hover:text-white dark:hover:bg-[#1A2639] transition-colors cursor-pointer shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
@@ -223,7 +228,7 @@ export const MobileSidebar: React.FC = () => {
             <NavLink
               key={item.href}
               to={item.href}
-              onClick={() => dispatch(toggleSidebar())}
+              onClick={() => dispatch(setSidebarOpen(false))}
               className={({ isActive }) =>
                 cn(
                   'flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-sm font-medium transition-all',
