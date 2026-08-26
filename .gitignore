@@ -27,7 +27,9 @@ yarn-debug.log*
 **/certs/
 certs/
 *.pem
-*.crt
+# Backups
+backups/*.sql
+*.sql
 *.key
 
 # OS & IDE metadata

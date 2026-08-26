@@ -10,6 +10,7 @@
     "start": "node dist/server.js",
     "seed": "tsx scripts/seed.ts",
     "import:drugs": "tsx scripts/import-egyptian-drugs.ts",
+    "db:backup": "tsx scripts/backup-database.ts",
     "mig": "tsx scripts/migrate.ts",
     "prisma:generate": "prisma generate",
     "prisma:validate": "prisma validate",
