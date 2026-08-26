@@ -89,6 +89,9 @@ import { CommissionStatementPage } from '../features/commissions/pages/Commissio
 // F14: Comprehensive Reports & Analytics Pages
 import { ReportsPage } from '../features/reports/pages/ReportsPage.js';
 
+// F15: System Settings, Tax Configuration & Pharmacy Branding Pages
+import { SettingsPage } from '../features/settings/pages/SettingsPage.js';
+
 export const AppRoutes: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -563,11 +566,12 @@ export const AppRoutes: React.FC = () => {
             </RoleGuard>
           }
         />
+        {/* F15: System Settings, Tax Configuration & Pharmacy Branding */}
         <Route
           path="/settings"
           element={
             <RoleGuard allowedRoles={MODULE_PERMISSIONS.settings}>
-              <div className="p-8 text-center text-slate-400">إعدادات النظام والضرائب (المرحلة F16)</div>
+              <SettingsPage />
             </RoleGuard>
           }
         />

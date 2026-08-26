@@ -549,5 +549,18 @@
     "customersTab": "Customers",
     "staffTab": "Staff Performance",
     "financialTab": "Financial P&L"
+  },
+  "settings": {
+    "pageTitle": "System Settings, Tax Configuration & Branding",
+    "pageSubtitle": "Manage legal identity, VAT tax rate, invoice numbering, thermal receipt printing, and WhatsApp gateway",
+    "pharmacyTab": "Pharmacy Profile",
+    "taxTab": "Tax & VAT",
+    "invoicesTab": "Invoices & Printing",
+    "generalTab": "Rules & Alerts",
+    "brandingTab": "Branding & Receipt Preview",
+    "whatsappTab": "WhatsApp Gateway",
+    "readOnlyNotice": "Read-Only Mode (Accountant Access)",
+    "saveSuccess": "Settings saved successfully",
+    "saveError": "Failed to save settings"
   }
 }
