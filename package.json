@@ -13,7 +13,8 @@
     "build": "npm --prefix pharmacy-pos-backend run build && npm --prefix pharmacy-pos-frontend run build",
     "build:backend": "npm --prefix pharmacy-pos-backend run build",
     "build:frontend": "npm --prefix pharmacy-pos-frontend run build",
-    "seed": "npm run db:start && npm --prefix pharmacy-pos-backend run seed"
+    "seed": "npm run db:start && npm --prefix pharmacy-pos-backend run seed",
+    "shortcuts:create": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/create-desktop-shortcuts.ps1"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
