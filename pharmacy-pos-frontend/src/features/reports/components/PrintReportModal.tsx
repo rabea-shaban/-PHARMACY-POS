@@ -43,7 +43,6 @@ export interface PrintReportModalProps {
     from: string,
     to: string,
     options: {
-      includeCharts: boolean;
       includeSignatures: boolean;
     }
   ) => void;
@@ -130,7 +129,6 @@ export const PrintReportModal: React.FC<PrintReportModalProps> = ({
   const [selectedReport, setSelectedReport] = useState<ReportTypeKey>(initialReportType);
   const [from, setFrom] = useState(initialFrom);
   const [to, setTo] = useState(initialTo);
-  const [includeCharts, setIncludeCharts] = useState(true);
   const [includeSignatures, setIncludeSignatures] = useState(true);
 
   const isManagerOrAccountant = role && ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT'].includes(role);
@@ -168,7 +166,6 @@ export const PrintReportModal: React.FC<PrintReportModalProps> = ({
 
   const handleExecutePrint = () => {
     onSelectAndPrint(selectedReport, from, to, {
-      includeCharts,
       includeSignatures,
     });
     onClose();
@@ -293,24 +290,7 @@ export const PrintReportModal: React.FC<PrintReportModalProps> = ({
             <span>3. خيارات وتنسيق المستند المطبوع:</span>
           </span>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <label className="flex items-center gap-2.5 p-3 rounded-2xl border border-slate-200 dark:border-[#223049] hover:bg-slate-50 dark:hover:bg-[#1A2639] cursor-pointer">
-              <input
-                type="checkbox"
-                checked={includeCharts}
-                onChange={(e) => setIncludeCharts(e.target.checked)}
-                className="rounded text-sky-600 focus:ring-sky-500 w-4 h-4"
-              />
-              <div>
-                <span className="font-bold text-slate-900 dark:text-white block">
-                  تضمين الرسوم والمنحنيات البيانية
-                </span>
-                <span className="text-[10px] text-slate-400">
-                  عرض المخططات التحليلية في صدر التقرير
-                </span>
-              </div>
-            </label>
-
+          <div className="grid grid-cols-1 gap-3">
             <label className="flex items-center gap-2.5 p-3 rounded-2xl border border-slate-200 dark:border-[#223049] hover:bg-slate-50 dark:hover:bg-[#1A2639] cursor-pointer">
               <input
                 type="checkbox"
@@ -323,7 +303,7 @@ export const PrintReportModal: React.FC<PrintReportModalProps> = ({
                   تضمين خانات الاعتماد والتوقيع الرسمي
                 </span>
                 <span className="text-[10px] text-slate-400">
-                  توقيع المحاسب وإدارة الصيدلية وتدقيق البيانات
+                  توقيع المحاسب وإدارة الصيدلية وتدقيق البيانات في أسفل التقرير
                 </span>
               </div>
             </label>
