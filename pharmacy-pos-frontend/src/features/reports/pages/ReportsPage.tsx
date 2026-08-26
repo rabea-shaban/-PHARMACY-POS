@@ -18,7 +18,7 @@ import { ExpenseReportView } from '../components/ExpenseReportView.js';
 import { CustomerReportView } from '../components/CustomerReportView.js';
 import { StaffReportView } from '../components/StaffReportView.js';
 import { FinancialSummaryReportView } from '../components/FinancialSummaryReportView.js';
-import { Button } from '../../../components/ui/Button.js';
+import { ReportExportActions, exportToCsv } from '../components/ReportExportActions.js';
 import {
   FileSpreadsheet,
   TrendingUp,
@@ -29,7 +29,6 @@ import {
   Users,
   Award,
   Landmark,
-  Printer,
 } from 'lucide-react';
 import { useAppSelector } from '../../../store/hooks.js';
 
@@ -70,8 +69,22 @@ export const ReportsPage: React.FC = () => {
     setTo('');
   };
 
-  const handlePrint = () => {
-    window.print();
+  const handleExportCsv = () => {
+    if (activeTab === 'sales' && salesQuery.data?.topSellingProducts) {
+      exportToCsv('sales-top-products-report', salesQuery.data.topSellingProducts);
+    } else if (activeTab === 'products' && productsQuery.data?.allProducts) {
+      exportToCsv('products-performance-report', productsQuery.data.allProducts);
+    } else if (activeTab === 'inventory' && inventoryQuery.data?.lowStockItems) {
+      exportToCsv('inventory-low-stock-report', inventoryQuery.data.lowStockItems);
+    } else if (activeTab === 'purchases' && purchaseQuery.data?.supplierSpendingBreakdown) {
+      exportToCsv('purchases-supplier-spend-report', purchaseQuery.data.supplierSpendingBreakdown);
+    } else if (activeTab === 'expenses' && expenseQuery.data?.categoryBreakdown) {
+      exportToCsv('operating-expenses-report', expenseQuery.data.categoryBreakdown);
+    } else if (activeTab === 'customers' && customerQuery.data?.topCustomersByRevenue) {
+      exportToCsv('top-customers-revenue-report', customerQuery.data.topCustomersByRevenue);
+    } else if (activeTab === 'staff' && staffQuery.data?.staffPerformance) {
+      exportToCsv('staff-sales-commission-report', staffQuery.data.staffPerformance);
+    }
   };
 
   const isManagerOrAccountant = role && ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT'].includes(role);
@@ -90,14 +103,7 @@ export const ReportsPage: React.FC = () => {
           </p>
         </div>
 
-        <Button
-          variant="outline"
-          size="md"
-          onClick={handlePrint}
-          leftIcon={<Printer className="w-4 h-4" />}
-        >
-          طباعة التقرير
-        </Button>
+        <ReportExportActions onExportCsv={handleExportCsv} />
       </div>
 
       {/* Date Period Filter */}

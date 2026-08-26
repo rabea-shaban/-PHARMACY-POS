@@ -2,13 +2,28 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ExpenseReportResponse } from '../types/report.types.js';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/Card.js';
-import { formatCurrency } from '../../../lib/utils.js';
-import { Wallet, PieChart, CreditCard } from 'lucide-react';
+import { formatCurrency, formatDate } from '../../../lib/utils.js';
+import { Wallet, PieChart as PieIcon, CreditCard, BarChart3 } from 'lucide-react';
+import {
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+} from 'recharts';
 
 export interface ExpenseReportViewProps {
   data: ExpenseReportResponse;
   isLoading: boolean;
 }
+
+const COLORS = ['#ef4444', '#f97316', '#eab308', '#06b6d4', '#6366f1', '#a855f7'];
 
 export const ExpenseReportView: React.FC<ExpenseReportViewProps> = ({ data, isLoading }) => {
   const { t } = useTranslation();
@@ -25,7 +40,12 @@ export const ExpenseReportView: React.FC<ExpenseReportViewProps> = ({ data, isLo
     );
   }
 
-  const { summary, categoryBreakdown, paymentMethodBreakdown } = data;
+  const { summary, categoryBreakdown, paymentMethodBreakdown, dailyTrend } = data;
+
+  const pieData = categoryBreakdown.map((cat) => ({
+    name: cat.category,
+    value: cat.amount,
+  }));
 
   return (
     <div className="space-y-6">
@@ -50,7 +70,7 @@ export const ExpenseReportView: React.FC<ExpenseReportViewProps> = ({ data, isLo
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-indigo-700 dark:text-indigo-300">متوسط قيمة سند الصرف</span>
             <div className="p-2 rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
-              <PieChart className="w-5 h-5" />
+              <PieIcon className="w-5 h-5" />
             </div>
           </div>
           <div className="mt-2 text-xl font-black text-indigo-600 dark:text-indigo-400 font-mono">
@@ -79,12 +99,89 @@ export const ExpenseReportView: React.FC<ExpenseReportViewProps> = ({ data, isLo
         </Card>
       </div>
 
+      {/* Daily Expense Trend & Category Pie Chart */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* Daily Expense Trend Chart */}
+        {dailyTrend && dailyTrend.length > 0 && (
+          <Card className="rounded-3xl shadow-xs overflow-hidden">
+            <CardHeader className="pb-3 border-b border-slate-100 dark:border-[#1E293B]">
+              <div className="flex items-center gap-2">
+                <BarChart3 className="w-4 h-4 text-rose-600" />
+                <CardTitle className="text-sm">حركة المصروفات اليومية</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="p-4">
+              <div className="h-56 w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={dailyTrend} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                    <defs>
+                      <linearGradient id="expenseGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#ef4444" stopOpacity={0.4} />
+                        <stop offset="95%" stopColor="#ef4444" stopOpacity={0.0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" opacity={0.15} />
+                    <XAxis dataKey="date" tickFormatter={(val) => formatDate(val)} tick={{ fontSize: 10 }} />
+                    <YAxis tick={{ fontSize: 10 }} />
+                    <Tooltip
+                      formatter={(value: any) => [`${formatCurrency(Number(value))} ${t('common.currency')}`, 'المصروفات']}
+                      labelFormatter={(label) => formatDate(String(label))}
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="amount"
+                      stroke="#ef4444"
+                      strokeWidth={2}
+                      fillOpacity={1}
+                      fill="url(#expenseGrad)"
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Category Pie Chart */}
+        <Card className="rounded-3xl shadow-xs overflow-hidden">
+          <CardHeader className="pb-3 border-b border-slate-100 dark:border-[#1E293B]">
+            <div className="flex items-center gap-2">
+              <PieIcon className="w-4 h-4 text-rose-600" />
+              <CardTitle className="text-sm">توزيع المصروفات حسب البنود</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent className="p-4">
+            <div className="h-56 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={pieData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={50}
+                    outerRadius={80}
+                    paddingAngle={4}
+                    dataKey="value"
+                  >
+                    {pieData.map((_, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip formatter={(value: any) => `${formatCurrency(Number(value))} ${t('common.currency')}`} />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
       {/* Category Breakdown Table */}
       <Card className="rounded-3xl shadow-xs overflow-hidden">
         <CardHeader className="pb-3 border-b border-slate-100 dark:border-[#1E293B]">
           <div className="flex items-center gap-2">
-            <PieChart className="w-4 h-4 text-rose-600" />
-            <CardTitle className="text-sm">توزيع المصروفات حسب التصنيف والنسبة</CardTitle>
+            <PieIcon className="w-4 h-4 text-rose-600" />
+            <CardTitle className="text-sm">بيان المصروفات التفصيلي</CardTitle>
           </div>
         </CardHeader>
         <CardContent className="p-0">

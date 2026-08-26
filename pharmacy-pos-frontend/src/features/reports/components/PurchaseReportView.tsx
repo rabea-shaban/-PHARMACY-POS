@@ -3,7 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { PurchaseReportResponse } from '../types/report.types.js';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/Card.js';
 import { formatCurrency } from '../../../lib/utils.js';
-import { Truck, CheckCircle2, Clock, Building2 } from 'lucide-react';
+import { Truck, CheckCircle2, Clock, Building2, BarChart3 } from 'lucide-react';
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+} from 'recharts';
 
 export interface PurchaseReportViewProps {
   data: PurchaseReportResponse;
@@ -25,7 +34,7 @@ export const PurchaseReportView: React.FC<PurchaseReportViewProps> = ({ data, is
     );
   }
 
-  const { summary, supplierSpendingBreakdown } = data;
+  const { summary, supplierSpendingBreakdown, monthlyTrend } = data;
 
   return (
     <div className="space-y-6">
@@ -89,6 +98,33 @@ export const PurchaseReportView: React.FC<PurchaseReportViewProps> = ({ data, is
           </div>
         </Card>
       </div>
+
+      {/* Monthly Trend Chart */}
+      {monthlyTrend && monthlyTrend.length > 0 && (
+        <Card className="rounded-3xl shadow-xs overflow-hidden">
+          <CardHeader className="pb-3 border-b border-slate-100 dark:border-[#1E293B]">
+            <div className="flex items-center gap-2">
+              <BarChart3 className="w-4 h-4 text-indigo-600" />
+              <CardTitle className="text-sm">حجم التوريد والمشتريات الشهري</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent className="p-4">
+            <div className="h-56 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={monthlyTrend} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" opacity={0.15} />
+                  <XAxis dataKey="month" tick={{ fontSize: 10 }} />
+                  <YAxis tick={{ fontSize: 10 }} />
+                  <Tooltip
+                    formatter={(value: any) => [`${formatCurrency(Number(value))} ${t('common.currency')}`, 'المشتريات']}
+                  />
+                  <Bar dataKey="totalAmount" fill="#6366f1" radius={[8, 8, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Supplier Spend Table */}
       <Card className="rounded-3xl shadow-xs overflow-hidden">

@@ -2,13 +2,36 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SalesReportResponse } from '../types/report.types.js';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/Card.js';
-import { formatCurrency } from '../../../lib/utils.js';
-import { TrendingUp, Receipt, RotateCcw, ShoppingBag, CreditCard, Award } from 'lucide-react';
+import { formatCurrency, formatDate } from '../../../lib/utils.js';
+import {
+  TrendingUp,
+  Receipt,
+  RotateCcw,
+  ShoppingBag,
+  CreditCard,
+  Award,
+  BarChart3,
+} from 'lucide-react';
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
+} from 'recharts';
 
 export interface SalesReportViewProps {
   data: SalesReportResponse;
   isLoading: boolean;
 }
+
+const COLORS = ['#0284c7', '#10b981', '#8b5cf6', '#f59e0b', '#ec4899', '#64748b'];
 
 export const SalesReportView: React.FC<SalesReportViewProps> = ({ data, isLoading }) => {
   const { t } = useTranslation();
@@ -25,7 +48,18 @@ export const SalesReportView: React.FC<SalesReportViewProps> = ({ data, isLoadin
     );
   }
 
-  const { summary, paymentMethodBreakdown, topSellingProducts, topSellingCategories } = data;
+  const {
+    summary,
+    paymentMethodBreakdown,
+    topSellingProducts,
+    topSellingCategories,
+    dailyTrend,
+  } = data;
+
+  const pieData = paymentMethodBreakdown.map((pm) => ({
+    name: pm.paymentMethod,
+    value: pm.amount,
+  }));
 
   return (
     <div className="space-y-6">
@@ -92,9 +126,54 @@ export const SalesReportView: React.FC<SalesReportViewProps> = ({ data, isLoadin
         </Card>
       </div>
 
+      {/* Daily Sales Trend Chart */}
+      {dailyTrend && dailyTrend.length > 0 && (
+        <Card className="rounded-3xl shadow-xs overflow-hidden">
+          <CardHeader className="pb-3 border-b border-slate-100 dark:border-[#1E293B]">
+            <div className="flex items-center gap-2">
+              <BarChart3 className="w-4 h-4 text-sky-600" />
+              <CardTitle className="text-sm">منحنى المبيعات اليومية خلال الفترة</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent className="p-4">
+            <div className="h-64 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={dailyTrend} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="salesGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#0284c7" stopOpacity={0.4} />
+                      <stop offset="95%" stopColor="#0284c7" stopOpacity={0.0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" opacity={0.15} />
+                  <XAxis
+                    dataKey="date"
+                    tickFormatter={(val) => formatDate(val)}
+                    tick={{ fontSize: 10 }}
+                  />
+                  <YAxis tick={{ fontSize: 10 }} />
+                  <Tooltip
+                    formatter={(value: any) => [`${formatCurrency(Number(value))} ${t('common.currency')}`, 'المبيعات']}
+                    labelFormatter={(label) => formatDate(String(label))}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="grossAmount"
+                    stroke="#0284c7"
+                    strokeWidth={2.5}
+                    fillOpacity={1}
+                    fill="url(#salesGrad)"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Payment Methods & Top Categories */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Payment Methods Breakdown */}
+        {/* Payment Methods Breakdown Chart */}
         <Card className="rounded-3xl shadow-xs overflow-hidden">
           <CardHeader className="pb-3 border-b border-slate-100 dark:border-[#1E293B]">
             <div className="flex items-center gap-2">
@@ -102,18 +181,28 @@ export const SalesReportView: React.FC<SalesReportViewProps> = ({ data, isLoadin
               <CardTitle className="text-sm">توزيع طرق الدفع والتحصيل</CardTitle>
             </div>
           </CardHeader>
-          <CardContent className="p-4 space-y-3 text-xs">
-            {paymentMethodBreakdown.map((pm) => (
-              <div key={pm.paymentMethod} className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 dark:bg-[#0B0F17]">
-                <div className="flex items-center gap-2">
-                  <span className="font-bold text-slate-800 dark:text-slate-200">{pm.paymentMethod}</span>
-                  <span className="text-[10px] text-slate-400">({pm.count} حركة)</span>
-                </div>
-                <span className="font-mono font-black text-slate-900 dark:text-white">
-                  {formatCurrency(pm.amount)} {t('common.currency')}
-                </span>
-              </div>
-            ))}
+          <CardContent className="p-4">
+            <div className="h-56 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={pieData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={50}
+                    outerRadius={80}
+                    paddingAngle={4}
+                    dataKey="value"
+                  >
+                    {pieData.map((_, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip formatter={(value: any) => `${formatCurrency(Number(value))} ${t('common.currency')}`} />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
           </CardContent>
         </Card>
 
