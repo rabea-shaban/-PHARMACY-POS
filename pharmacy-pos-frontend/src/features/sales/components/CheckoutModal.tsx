@@ -24,7 +24,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
 }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { items, customer, discount, insurance, loyalty, total } = useAppSelector(
+  const { items, customer, discount, discountAmount, insurance, loyalty, total } = useAppSelector(
     (state) => state.cart
   );
 
@@ -92,6 +92,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
         })),
         discountId: discount?.id || null,
         discountCode: discount?.code || null,
+        discountAmount: discount && discountAmount > 0 ? discountAmount : null,
         customerInsuranceId: insurance?.policyId || null,
         redeemPoints: loyalty?.pointsToRedeem || 0,
         payments: payments.map((p) => ({

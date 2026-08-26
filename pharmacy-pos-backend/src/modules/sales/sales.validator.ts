@@ -24,6 +24,7 @@ export const checkoutRequestSchema = z.object({
   items: z.array(checkoutItemSchema).min(1, 'At least one product item is required for checkout'),
   discountId: z.string().uuid().optional().nullable(),
   discountCode: z.string().trim().optional().nullable(),
+  discountAmount: z.number().min(0).optional().nullable(),
   customerInsuranceId: z.string().uuid().optional().nullable(),
   redeemPoints: z.number().int().min(0).default(0),
   payments: z.array(checkoutPaymentSchema).min(1, 'At least one payment record is required'),

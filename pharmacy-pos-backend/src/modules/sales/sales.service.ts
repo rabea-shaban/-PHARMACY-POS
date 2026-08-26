@@ -169,7 +169,7 @@ export class SalesService {
       discountReason = `${customer.tier.name} Tier Discount (${tierDiscountPercent}%)`;
     }
 
-    // 2b. Promotional / Code Discount
+    // 2b. Promotional / Code / Custom Discount
     const discountIdentifier = input.discountId || input.discountCode;
     if (discountIdentifier) {
       const promoDiscount = await this.discounts.validateAndCalculateDiscount(
@@ -180,6 +180,10 @@ export class SalesService {
       discountReason = discountReason
         ? `${discountReason} + ${promoDiscount.discountReason}`
         : promoDiscount.discountReason;
+    } else if (input.discountAmount && input.discountAmount > 0) {
+      const customDiscount = Math.min(input.discountAmount, subtotal - totalDiscount);
+      totalDiscount += Number(customDiscount.toFixed(2));
+      discountReason = discountReason ? `${discountReason} + Custom Discount` : 'Custom Discount';
     }
 
     // 2c. Loyalty Points Redemption (10 points = 1 EGP)

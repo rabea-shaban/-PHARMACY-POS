@@ -18,6 +18,7 @@ export interface CheckoutRequestInput {
   items: CheckoutItemInput[];
   discountId?: string | null;
   discountCode?: string | null;
+  discountAmount?: number | null;
   customerInsuranceId?: string | null;
   redeemPoints?: number;
   payments: CheckoutPaymentInput[];
