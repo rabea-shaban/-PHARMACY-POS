@@ -1,0 +1,400 @@
+﻿==================================================
+[2026-08-26 09:58:35] Starting Pharmacy POS via launcher...
+==================================================
+
+> pharmacy-pos@1.0.0 dev
+> npm run db:start && concurrently -n "BACKEND,FRONTEND" -c "blue.bold,green.bold" "npm --prefix pharmacy-pos-backend run dev" "npm --prefix pharmacy-pos-frontend run dev"
+
+
+> pharmacy-pos@1.0.0 db:start
+> powershell -Command "if (-not (Get-Process mysqld -ErrorAction SilentlyContinue)) { Start-Process -FilePath 'C:\xampp\mysql\bin\mysqld.exe' -ArgumentList '--defaults-file=C:\xampp\mysql\bin\my.ini','--standalone' -WorkingDirectory 'C:\xampp' -WindowStyle Hidden; Start-Sleep -Seconds 2; Write-Host '🟢 MySQL (XAMPP) started successfully.' } else { Write-Host '🟢 MySQL is already running.' }"
+
+?? MySQL (XAMPP) started successfully.
+[FRONTEND] 
+[FRONTEND] > pharmacy-pos-frontend@1.0.0 dev
+[FRONTEND] > vite
+[FRONTEND] 
+[BACKEND] 
+[BACKEND] > pharmacy-pos-backend@1.0.0 dev
+[BACKEND] > tsx watch src/server.ts
+[BACKEND] 
+[FRONTEND] 
+[FRONTEND]   [32m[1mVITE[22m v6.4.3[39m  [2mready in [0m[1m231[22m[2m[0m ms[22m
+[FRONTEND] 
+[FRONTEND]   [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m3000[22m/[39m
+[FRONTEND] [2m  [32m➜[39m  [1mNetwork[22m[2m: use [22m[1m--host[22m[2m to expose[22m
+[BACKEND] ◇ injected env (9) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+[BACKEND] ==================================================
+[BACKEND] 🚀 Pharmacy POS API
+[BACKEND] Server: http://localhost:5000
+[BACKEND] Environment: development
+[BACKEND] Database: connected
+[BACKEND] ==================================================
+[FRONTEND] npm --prefix pharmacy-pos-frontend run dev exited with code 4294967295
+==================================================
+[2026-08-26 09:59:34] Pharmacy POS stopped.
+==================================================
+==================================================
+[2026-08-26 09:59:39] Starting Pharmacy POS via launcher...
+==================================================
+
+> pharmacy-pos@1.0.0 dev
+> npm run db:start && concurrently -n "BACKEND,FRONTEND" -c "blue.bold,green.bold" "npm --prefix pharmacy-pos-backend run dev" "npm --prefix pharmacy-pos-frontend run dev"
+
+
+> pharmacy-pos@1.0.0 db:start
+> powershell -Command "if (-not (Get-Process mysqld -ErrorAction SilentlyContinue)) { Start-Process -FilePath 'C:\xampp\mysql\bin\mysqld.exe' -ArgumentList '--defaults-file=C:\xampp\mysql\bin\my.ini','--standalone' -WorkingDirectory 'C:\xampp' -WindowStyle Hidden; Start-Sleep -Seconds 2; Write-Host '🟢 MySQL (XAMPP) started successfully.' } else { Write-Host '🟢 MySQL is already running.' }"
+
+?? MySQL (XAMPP) started successfully.
+[BACKEND] 
+[BACKEND] > pharmacy-pos-backend@1.0.0 dev
+[BACKEND] > tsx watch src/server.ts
+[BACKEND] 
+[FRONTEND] 
+[FRONTEND] > pharmacy-pos-frontend@1.0.0 dev
+[FRONTEND] > vite
+[FRONTEND] 
+[FRONTEND] 
+[FRONTEND]   [32m[1mVITE[22m v6.4.3[39m  [2mready in [0m[1m236[22m[2m[0m ms[22m
+[FRONTEND] 
+[FRONTEND]   [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m3000[22m/[39m
+[FRONTEND] [2m  [32m➜[39m  [1mNetwork[22m[2m: use [22m[1m--host[22m[2m to expose[22m
+[BACKEND] ◇ injected env (9) from .env // tip: ⌘ override existing { override: true }
+[BACKEND] prisma:error 
+[BACKEND] Invalid `prisma.$queryRaw()` invocation:
+[BACKEND] 
+[BACKEND] 
+[BACKEND] Raw query failed. Code: `45028`. Message: `pool timeout: failed to retrieve a connection from pool after 10009ms
+[BACKEND]     (pool connections: active=0 idle=0 limit=10)`
+[BACKEND] ❌ MySQL Database connectivity check failed: 
+[BACKEND] Invalid `prisma.$queryRaw()` invocation:
+[BACKEND] 
+[BACKEND] 
+[BACKEND] Raw query failed. Code: `45028`. Message: `pool timeout: failed to retrieve a connection from pool after 10009ms
+[BACKEND]     (pool connections: active=0 idle=0 limit=10)`
+[BACKEND] ==================================================
+[BACKEND] 🚀 Pharmacy POS API
+[BACKEND] Server: http://localhost:5000
+[BACKEND] Environment: development
+[BACKEND] Database: disconnected
+[BACKEND] ==================================================
+[BACKEND] prisma:error 
+[BACKEND] Invalid `prisma.user.findUnique()` invocation in
+[BACKEND] D:\pharmacy-pos\pharmacy-pos-backend\src\modules\auth\auth.repository.ts:24:24
+[BACKEND] 
+[BACKEND]   21 }
+[BACKEND]   22 
+[BACKEND]   23 async findById(id: string) {
+[BACKEND] → 24   return prisma.user.findUnique(
+[BACKEND] Database error. Code: `45028`. Message: `pool timeout: failed to retrieve a connection from pool after 10005ms
+[BACKEND]     (pool connections: active=0 idle=0 limit=10)`
+[BACKEND] [Error] 500 - 
+[BACKEND] Invalid `prisma.user.findUnique()` invocation in
+[BACKEND] D:\pharmacy-pos\pharmacy-pos-backend\src\modules\auth\auth.repository.ts:24:24
+[BACKEND] 
+[BACKEND]   21 }
+[BACKEND]   22 
+[BACKEND]   23 async findById(id: string) {
+[BACKEND] → 24   return prisma.user.findUnique(
+[BACKEND] Database error. Code: `45028`. Message: `pool timeout: failed to retrieve a connection from pool after 10005ms
+[BACKEND]     (pool connections: active=0 idle=0 limit=10)`
+[BACKEND] PrismaClientKnownRequestError: 
+[BACKEND] Invalid `prisma.user.findUnique()` invocation in
+[BACKEND] D:\pharmacy-pos\pharmacy-pos-backend\src\modules\auth\auth.repository.ts:24:24
+[BACKEND] 
+[BACKEND]   21 }
+[BACKEND]   22 
+[BACKEND]   23 async findById(id: string) {
+[BACKEND] → 24   return prisma.user.findUnique(
+[BACKEND] Database error. Code: `45028`. Message: `pool timeout: failed to retrieve a connection from pool after 10005ms
+[BACKEND]     (pool connections: active=0 idle=0 limit=10)`
+[BACKEND]     at Jr.handleRequestError (D:\pharmacy-pos\pharmacy-pos-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:237:13)
+[BACKEND]     at Jr.handleAndLogRequestError (D:\pharmacy-pos\pharmacy-pos-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:183:12)
+[BACKEND]     at Jr.request (D:\pharmacy-pos\pharmacy-pos-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:152:12)
+[BACKEND]     at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+[BACKEND]     at async a (D:\pharmacy-pos\pharmacy-pos-backend\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:1014:24)
+[BACKEND]     at async authenticate (D:\pharmacy-pos\pharmacy-pos-backend\src\middlewares\auth.middleware.ts:40:18)
+[BACKEND] prisma:error 
+[BACKEND] Invalid `prisma.user.findUnique()` invocation in
+[BACKEND] D:\pharmacy-pos\pharmacy-pos-backend\src\modules\auth\auth.repository.ts:24:24
+[BACKEND] 
+[BACKEND]   21 }
+[BACKEND]   22 
+[BACKEND]   23 async findById(id: string) {
+[BACKEND] → 24   return prisma.user.findUnique(
+[BACKEND] Database error. Code: `45028`. Message: `pool timeout: failed to retrieve a connection from pool after 10007ms
+[BACKEND]     (pool connections: active=0 idle=0 limit=10)`
+[BACKEND] [Error] 500 - 
+[BACKEND] Invalid `prisma.user.findUnique()` invocation in
+[BACKEND] D:\pharmacy-pos\pharmacy-pos-backend\src\modules\auth\auth.repository.ts:24:24
+[BACKEND] 
+[BACKEND]   21 }
+[BACKEND]   22 
+[BACKEND]   23 async findById(id: string) {
+[BACKEND] → 24   return prisma.user.findUnique(
+[BACKEND] Database error. Code: `45028`. Message: `pool timeout: failed to retrieve a connection from pool after 10007ms
+[BACKEND]     (pool connections: active=0 idle=0 limit=10)`
+[BACKEND] PrismaClientKnownRequestError: 
+[BACKEND] Invalid `prisma.user.findUnique()` invocation in
+[BACKEND] D:\pharmacy-pos\pharmacy-pos-backend\src\modules\auth\auth.repository.ts:24:24
+[BACKEND] 
+[BACKEND]   21 }
+[BACKEND]   22 
+[BACKEND]   23 async findById(id: string) {
+[BACKEND] → 24   return prisma.user.findUnique(
+[BACKEND] Database error. Code: `45028`. Message: `pool timeout: failed to retrieve a connection from pool after 10007ms
+[BACKEND]     (pool connections: active=0 idle=0 limit=10)`
+[BACKEND]     at Jr.handleRequestError (D:\pharmacy-pos\pharmacy-pos-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:237:13)
+[BACKEND]     at Jr.handleAndLogRequestError (D:\pharmacy-pos\pharmacy-pos-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:183:12)
+[BACKEND]     at Jr.request (D:\pharmacy-pos\pharmacy-pos-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:152:12)
+[BACKEND]     at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+[BACKEND]     at async a (D:\pharmacy-pos\pharmacy-pos-backend\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:1014:24)
+[BACKEND]     at async authenticate (D:\pharmacy-pos\pharmacy-pos-backend\src\middlewares\auth.middleware.ts:40:18)
+[BACKEND] prisma:error 
+[BACKEND] Invalid `prisma.user.findUnique()` invocation in
+[BACKEND] D:\pharmacy-pos\pharmacy-pos-backend\src\modules\auth\auth.repository.ts:24:24
+[BACKEND] 
+[BACKEND]   21 }
+[BACKEND]   22 
+[BACKEND]   23 async findById(id: string) {
+[BACKEND] → 24   return prisma.user.findUnique(
+[BACKEND] Database error. Code: `45028`. Message: `pool timeout: failed to retrieve a connection from pool after 10011ms
+[BACKEND]     (pool connections: active=0 idle=0 limit=10)`
+[BACKEND] [Error] 500 - 
+[BACKEND] Invalid `prisma.user.findUnique()` invocation in
+[BACKEND] D:\pharmacy-pos\pharmacy-pos-backend\src\modules\auth\auth.repository.ts:24:24
+[BACKEND] 
+[BACKEND]   21 }
+[BACKEND]   22 
+[BACKEND]   23 async findById(id: string) {
+[BACKEND] → 24   return prisma.user.findUnique(
+[BACKEND] Database error. Code: `45028`. Message: `pool timeout: failed to retrieve a connection from pool after 10011ms
+[BACKEND]     (pool connections: active=0 idle=0 limit=10)`
+[BACKEND] PrismaClientKnownRequestError: 
+[BACKEND] Invalid `prisma.user.findUnique()` invocation in
+[BACKEND] D:\pharmacy-pos\pharmacy-pos-backend\src\modules\auth\auth.repository.ts:24:24
+[BACKEND] 
+[BACKEND]   21 }
+[BACKEND]   22 
+[BACKEND]   23 async findById(id: string) {
+[BACKEND] → 24   return prisma.user.findUnique(
+[BACKEND] Database error. Code: `45028`. Message: `pool timeout: failed to retrieve a connection from pool after 10011ms
+[BACKEND]     (pool connections: active=0 idle=0 limit=10)`
+[BACKEND]     at Jr.handleRequestError (D:\pharmacy-pos\pharmacy-pos-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:237:13)
+[BACKEND]     at Jr.handleAndLogRequestError (D:\pharmacy-pos\pharmacy-pos-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:183:12)
+[BACKEND]     at Jr.request (D:\pharmacy-pos\pharmacy-pos-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:152:12)
+[BACKEND]     at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+[BACKEND]     at async a (D:\pharmacy-pos\pharmacy-pos-backend\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:1014:24)
+[BACKEND]     at async authenticate (D:\pharmacy-pos\pharmacy-pos-backend\src\middlewares\auth.middleware.ts:40:18)
+[BACKEND] prisma:error 
+[BACKEND] Invalid `prisma.user.findUnique()` invocation in
+[BACKEND] D:\pharmacy-pos\pharmacy-pos-backend\src\modules\auth\auth.repository.ts:24:24
+[BACKEND] 
+[BACKEND]   21 }
+[BACKEND]   22 
+[BACKEND]   23 async findById(id: string) {
+[BACKEND] → 24   return prisma.user.findUnique(
+[BACKEND] Database error. Code: `45028`. Message: `pool timeout: failed to retrieve a connection from pool after 10013ms
+[BACKEND]     (pool connections: active=0 idle=0 limit=10)`
+[BACKEND] [Error] 500 - 
+[BACKEND] Invalid `prisma.user.findUnique()` invocation in
+[BACKEND] D:\pharmacy-pos\pharmacy-pos-backend\src\modules\auth\auth.repository.ts:24:24
+[BACKEND] 
+[BACKEND]   21 }
+[BACKEND]   22 
+[BACKEND]   23 async findById(id: string) {
+[BACKEND] → 24   return prisma.user.findUnique(
+[BACKEND] Database error. Code: `45028`. Message: `pool timeout: failed to retrieve a connection from pool after 10013ms
+[BACKEND]     (pool connections: active=0 idle=0 limit=10)`
+[BACKEND] PrismaClientKnownRequestError: 
+[BACKEND] Invalid `prisma.user.findUnique()` invocation in
+[BACKEND] D:\pharmacy-pos\pharmacy-pos-backend\src\modules\auth\auth.repository.ts:24:24
+[BACKEND] 
+[BACKEND]   21 }
+[BACKEND]   22 
+[BACKEND]   23 async findById(id: string) {
+[BACKEND] → 24   return prisma.user.findUnique(
+[BACKEND] Database error. Code: `45028`. Message: `pool timeout: failed to retrieve a connection from pool after 10013ms
+[BACKEND]     (pool connections: active=0 idle=0 limit=10)`
+[BACKEND]     at Jr.handleRequestError (D:\pharmacy-pos\pharmacy-pos-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:237:13)
+[BACKEND]     at Jr.handleAndLogRequestError (D:\pharmacy-pos\pharmacy-pos-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:183:12)
+[BACKEND]     at Jr.request (D:\pharmacy-pos\pharmacy-pos-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:152:12)
+[BACKEND]     at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+[BACKEND]     at async a (D:\pharmacy-pos\pharmacy-pos-backend\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:1014:24)
+[BACKEND]     at async authenticate (D:\pharmacy-pos\pharmacy-pos-backend\src\middlewares\auth.middleware.ts:40:18)
+[BACKEND] prisma:error 
+[BACKEND] Invalid `prisma.user.findUnique()` invocation in
+[BACKEND] D:\pharmacy-pos\pharmacy-pos-backend\src\modules\auth\auth.repository.ts:24:24
+[BACKEND] 
+[BACKEND]   21 }
+[BACKEND]   22 
+[BACKEND]   23 async findById(id: string) {
+[BACKEND] → 24   return prisma.user.findUnique(
+[BACKEND] Database error. Code: `45028`. Message: `pool timeout: failed to retrieve a connection from pool after 10005ms
+[BACKEND]     (pool connections: active=0 idle=0 limit=10)`
+[BACKEND] [Error] 500 - 
+[BACKEND] Invalid `prisma.user.findUnique()` invocation in
+[BACKEND] D:\pharmacy-pos\pharmacy-pos-backend\src\modules\auth\auth.repository.ts:24:24
+[BACKEND] 
+[BACKEND]   21 }
+[BACKEND]   22 
+[BACKEND]   23 async findById(id: string) {
+[BACKEND] → 24   return prisma.user.findUnique(
+[BACKEND] Database error. Code: `45028`. Message: `pool timeout: failed to retrieve a connection from pool after 10005ms
+[BACKEND]     (pool connections: active=0 idle=0 limit=10)`
+[BACKEND] PrismaClientKnownRequestError: 
+[BACKEND] Invalid `prisma.user.findUnique()` invocation in
+[BACKEND] D:\pharmacy-pos\pharmacy-pos-backend\src\modules\auth\auth.repository.ts:24:24
+[BACKEND] 
+[BACKEND]   21 }
+[BACKEND]   22 
+[BACKEND]   23 async findById(id: string) {
+[BACKEND] → 24   return prisma.user.findUnique(
+[BACKEND] Database error. Code: `45028`. Message: `pool timeout: failed to retrieve a connection from pool after 10005ms
+[BACKEND]     (pool connections: active=0 idle=0 limit=10)`
+[BACKEND]     at Jr.handleRequestError (D:\pharmacy-pos\pharmacy-pos-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:237:13)
+[BACKEND]     at Jr.handleAndLogRequestError (D:\pharmacy-pos\pharmacy-pos-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:183:12)
+[BACKEND]     at Jr.request (D:\pharmacy-pos\pharmacy-pos-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:152:12)
+[BACKEND]     at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+[BACKEND]     at async a (D:\pharmacy-pos\pharmacy-pos-backend\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:1014:24)
+[BACKEND]     at async authenticate (D:\pharmacy-pos\pharmacy-pos-backend\src\middlewares\auth.middleware.ts:40:18)
+[BACKEND] prisma:error 
+[BACKEND] Invalid `prisma.user.findUnique()` invocation in
+[BACKEND] D:\pharmacy-pos\pharmacy-pos-backend\src\modules\auth\auth.repository.ts:24:24
+[BACKEND] 
+[BACKEND]   21 }
+[BACKEND]   22 
+[BACKEND]   23 async findById(id: string) {
+[BACKEND] → 24   return prisma.user.findUnique(
+[BACKEND] Database error. Code: `45028`. Message: `pool timeout: failed to retrieve a connection from pool after 10014ms
+[BACKEND]     (pool connections: active=0 idle=0 limit=10)`
+[BACKEND] [Error] 500 - 
+[BACKEND] Invalid `prisma.user.findUnique()` invocation in
+[BACKEND] D:\pharmacy-pos\pharmacy-pos-backend\src\modules\auth\auth.repository.ts:24:24
+[BACKEND] 
+[BACKEND]   21 }
+[BACKEND]   22 
+[BACKEND]   23 async findById(id: string) {
+[BACKEND] → 24   return prisma.user.findUnique(
+[BACKEND] Database error. Code: `45028`. Message: `pool timeout: failed to retrieve a connection from pool after 10014ms
+[BACKEND]     (pool connections: active=0 idle=0 limit=10)`
+[BACKEND] PrismaClientKnownRequestError: 
+[BACKEND] Invalid `prisma.user.findUnique()` invocation in
+[BACKEND] D:\pharmacy-pos\pharmacy-pos-backend\src\modules\auth\auth.repository.ts:24:24
+[BACKEND] 
+[BACKEND]   21 }
+[BACKEND]   22 
+[BACKEND]   23 async findById(id: string) {
+[BACKEND] → 24   return prisma.user.findUnique(
+[BACKEND] Database error. Code: `45028`. Message: `pool timeout: failed to retrieve a connection from pool after 10014ms
+[BACKEND]     (pool connections: active=0 idle=0 limit=10)`
+[BACKEND]     at Jr.handleRequestError (D:\pharmacy-pos\pharmacy-pos-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:237:13)
+[BACKEND]     at Jr.handleAndLogRequestError (D:\pharmacy-pos\pharmacy-pos-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:183:12)
+[BACKEND]     at Jr.request (D:\pharmacy-pos\pharmacy-pos-backend\node_modules\@prisma\client\src\runtime\RequestHandler.ts:152:12)
+[BACKEND]     at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+[BACKEND]     at async a (D:\pharmacy-pos\pharmacy-pos-backend\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:1014:24)
+[BACKEND]     at async authenticate (D:\pharmacy-pos\pharmacy-pos-backend\src\middlewares\auth.middleware.ts:40:18)
+[FRONTEND] npm --prefix pharmacy-pos-frontend run dev exited with code 4294967295
+==================================================
+[2026-08-26 10:03:29] Pharmacy POS stopped.
+==================================================
+==================================================
+[2026-08-26 10:04:43] Starting Pharmacy POS via launcher...
+==================================================
+
+> pharmacy-pos@1.0.0 dev
+> npm run db:start && concurrently -n "BACKEND,FRONTEND" -c "blue.bold,green.bold" "npm --prefix pharmacy-pos-backend run dev" "npm --prefix pharmacy-pos-frontend run dev"
+
+
+> pharmacy-pos@1.0.0 db:start
+> powershell -Command "if (-not (Get-Process mysqld -ErrorAction SilentlyContinue)) { Start-Process -FilePath 'C:\xampp\mysql\bin\mysqld.exe' -ArgumentList '--defaults-file=C:\xampp\mysql\bin\my.ini','--standalone' -WorkingDirectory 'C:\xampp' -WindowStyle Hidden; Start-Sleep -Seconds 2; Write-Host '🟢 MySQL (XAMPP) started successfully.' } else { Write-Host '🟢 MySQL is already running.' }"
+
+?? MySQL (XAMPP) started successfully.
+[BACKEND] 
+[BACKEND] > pharmacy-pos-backend@1.0.0 dev
+[BACKEND] > tsx watch src/server.ts
+[BACKEND] 
+[FRONTEND] 
+[FRONTEND] > pharmacy-pos-frontend@1.0.0 dev
+[FRONTEND] > vite
+[FRONTEND] 
+[FRONTEND] 
+[FRONTEND]   [32m[1mVITE[22m v6.4.3[39m  [2mready in [0m[1m241[22m[2m[0m ms[22m
+[FRONTEND] 
+[FRONTEND]   [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m3000[22m/[39m
+[FRONTEND] [2m  [32m➜[39m  [1mNetwork[22m[2m: use [22m[1m--host[22m[2m to expose[22m
+[BACKEND] ◇ injected env (9) from .env // tip: ⌘ override existing { override: true }
+[BACKEND] ==================================================
+[BACKEND] 🚀 Pharmacy POS API
+[BACKEND] Server: http://localhost:5000
+[BACKEND] Environment: development
+[BACKEND] Database: connected
+[BACKEND] ==================================================
+==================================================
+[2026-08-26 10:06:18] Starting Pharmacy POS via launcher...
+==================================================
+
+> pharmacy-pos@1.0.0 dev
+> npm run db:start && concurrently -n "BACKEND,FRONTEND" -c "blue.bold,green.bold" "npm --prefix pharmacy-pos-backend run dev" "npm --prefix pharmacy-pos-frontend run dev"
+
+
+> pharmacy-pos@1.0.0 db:start
+> powershell -Command "if (-not (Get-Process mysqld -ErrorAction SilentlyContinue)) { Start-Process -FilePath 'C:\xampp\mysql\bin\mysqld.exe' -ArgumentList '--defaults-file=C:\xampp\mysql\bin\my.ini','--standalone' -WorkingDirectory 'C:\xampp' -WindowStyle Hidden; Start-Sleep -Seconds 2; Write-Host '🟢 MySQL (XAMPP) started successfully.' } else { Write-Host '🟢 MySQL is already running.' }"
+
+?? MySQL (XAMPP) started successfully.
+[BACKEND] 
+[BACKEND] > pharmacy-pos-backend@1.0.0 dev
+[BACKEND] > tsx watch src/server.ts
+[BACKEND] 
+[FRONTEND] 
+[FRONTEND] > pharmacy-pos-frontend@1.0.0 dev
+[FRONTEND] > vite
+[FRONTEND] 
+[FRONTEND] 
+[FRONTEND]   [32m[1mVITE[22m v6.4.3[39m  [2mready in [0m[1m222[22m[2m[0m ms[22m
+[FRONTEND] 
+[FRONTEND]   [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m3000[22m/[39m
+[FRONTEND] [2m  [32m➜[39m  [1mNetwork[22m[2m: use [22m[1m--host[22m[2m to expose[22m
+[BACKEND] ◇ injected env (9) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+[BACKEND] ==================================================
+[BACKEND] 🚀 Pharmacy POS API
+[BACKEND] Server: http://localhost:5000
+[BACKEND] Environment: development
+[BACKEND] Database: connected
+[BACKEND] ==================================================
+[FRONTEND] npm --prefix pharmacy-pos-frontend run dev exited with code 4294967295
+==================================================
+[2026-08-26 10:06:38] Pharmacy POS stopped.
+==================================================
+==================================================
+[2026-08-26 10:48:29] Starting Pharmacy POS via launcher...
+==================================================
+
+> pharmacy-pos@1.0.0 dev
+> npm run db:start && concurrently -n "BACKEND,FRONTEND" -c "blue.bold,green.bold" "npm --prefix pharmacy-pos-backend run dev" "npm --prefix pharmacy-pos-frontend run dev"
+
+
+> pharmacy-pos@1.0.0 db:start
+> powershell -Command "if (-not (Get-Process mysqld -ErrorAction SilentlyContinue)) { Start-Process -FilePath 'C:\xampp\mysql\bin\mysqld.exe' -ArgumentList '--defaults-file=C:\xampp\mysql\bin\my.ini','--standalone' -WorkingDirectory 'C:\xampp' -WindowStyle Hidden; Start-Sleep -Seconds 2; Write-Host '🟢 MySQL (XAMPP) started successfully.' } else { Write-Host '🟢 MySQL is already running.' }"
+
+?? MySQL (XAMPP) started successfully.
+[FRONTEND] 
+[FRONTEND] > pharmacy-pos-frontend@1.0.0 dev
+[FRONTEND] > vite
+[FRONTEND] 
+[BACKEND] 
+[BACKEND] > pharmacy-pos-backend@1.0.0 dev
+[BACKEND] > tsx watch src/server.ts
+[BACKEND] 
+[FRONTEND] 
+[FRONTEND]   [32m[1mVITE[22m v6.4.3[39m  [2mready in [0m[1m257[22m[2m[0m ms[22m
+[FRONTEND] 
+[FRONTEND]   [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m3000[22m/[39m
+[FRONTEND] [2m  [32m➜[39m  [1mNetwork[22m[2m: use [22m[1m--host[22m[2m to expose[22m
+[BACKEND] ◇ injected env (9) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+[BACKEND] ==================================================
+[BACKEND] 🚀 Pharmacy POS API
+[BACKEND] Server: http://localhost:5000
+[BACKEND] Environment: development
+[BACKEND] Database: connected
+[BACKEND] ==================================================

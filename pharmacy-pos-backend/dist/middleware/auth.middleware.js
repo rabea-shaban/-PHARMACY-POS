@@ -1,0 +1,105 @@
+import { prisma } from '../lib/prisma.js';
+import { verifyAccessToken } from '../utils/jwt.util.js';
+import { UnauthorizedError } from '../utils/errors.js';
+/**
+ * Authentication Middleware:
+ * Extracts JWT token from HttpOnly Cookie (accessToken) or Authorization Bearer header,
+ * verifies validity, and attaches the active staff user to req.user.
+ */
+export async function authenticate(req, _res, next) {
+    try {
+        let token;
+        // 1. Try to read from HttpOnly Cookie
+        if (req.cookies && req.cookies.accessToken) {
+            token = req.cookies.accessToken;
+        }
+        // 2. Fallback to Authorization Header: Bearer <token>
+        if (!token) {
+            const authHeader = req.headers.authorization;
+            if (authHeader && authHeader.startsWith('Bearer ')) {
+                token = authHeader.substring(7).trim();
+            }
+        }
+        if (!token) {
+            throw new UnauthorizedError('Authentication token is required (via HttpOnly cookie or Bearer header)');
+        }
+        let payload;
+        try {
+            payload = verifyAccessToken(token);
+        }
+        catch {
+            throw new UnauthorizedError('Invalid or expired authentication token');
+        }
+        const user = await prisma.user.findUnique({
+            where: { id: payload.userId },
+            select: {
+                id: true,
+                name: true,
+                phone: true,
+                email: true,
+                role: true,
+                isActive: true,
+                createdAt: true,
+                updatedAt: true,
+            },
+        });
+        if (!user) {
+            throw new UnauthorizedError('User account not found');
+        }
+        if (!user.isActive) {
+            throw new UnauthorizedError('User account has been deactivated');
+        }
+        req.user = user;
+        next();
+    }
+    catch (error) {
+        next(error);
+    }
+}
+/**
+ * Optional Authentication Middleware:
+ * If a token is provided, validates and attaches req.user; otherwise continues without error.
+ */
+export async function optionalAuthenticate(req, _res, next) {
+    try {
+        let token;
+        if (req.cookies && req.cookies.accessToken) {
+            token = req.cookies.accessToken;
+        }
+        if (!token) {
+            const authHeader = req.headers.authorization;
+            if (authHeader && authHeader.startsWith('Bearer ')) {
+                token = authHeader.substring(7).trim();
+            }
+        }
+        if (token) {
+            try {
+                const payload = verifyAccessToken(token);
+                const user = await prisma.user.findUnique({
+                    where: { id: payload.userId },
+                    select: {
+                        id: true,
+                        name: true,
+                        phone: true,
+                        email: true,
+                        role: true,
+                        isActive: true,
+                        createdAt: true,
+                        updatedAt: true,
+                    },
+                });
+                if (user && user.isActive) {
+                    req.user = user;
+                }
+            }
+            catch {
+                // Ignore invalid token for optional auth
+            }
+        }
+        next();
+    }
+    catch {
+        next();
+    }
+}
+//# sourceMappingURL=auth.middleware.js.map

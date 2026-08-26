@@ -1,0 +1,283 @@
+import { productsRepository } from './products.repository.js';
+import { categoriesService } from '../categories/categories.service.js';
+import { auditService } from '../audit/audit.service.js';
+import { getPaginationMeta } from '../../utils/pagination.util.js';
+import { NotFoundError, ConflictError } from '../../utils/errors.js';
+function formatProduct(raw) {
+    const currentStock = (raw.batches || []).reduce((sum, b) => sum + (b.quantity || 0), 0);
+    const minimumStock = raw.minimumStock ?? 5;
+    const isLowStock = currentStock <= minimumStock;
+    return {
+        id: raw.id,
+        name: raw.name,
+        barcode: raw.barcode,
+        scientificName: raw.scientificName,
+        description: raw.description,
+        categoryId: raw.categoryId,
+        category: raw.category
+            ? {
+                id: raw.category.id,
+                name: raw.category.name,
+            }
+            : undefined,
+        purchasePrice: Number(raw.purchasePrice),
+        sellingPrice: Number(raw.sellingPrice),
+        taxRate: Number(raw.taxRate),
+        minimumStock,
+        currentStock,
+        isLowStock,
+        isActive: raw.isActive,
+        batches: raw.batches?.map((b) => ({
+            id: b.id,
+            batchNumber: b.batchNumber,
+            expiryDate: b.expiryDate,
+            quantity: b.quantity,
+            purchasePrice: Number(b.purchasePrice),
+            sellingPrice: Number(b.sellingPrice),
+        })),
+        createdAt: raw.createdAt,
+        updatedAt: raw.updatedAt,
+    };
+}
+export class ProductsService {
+    repo;
+    categories;
+    audit;
+    constructor(repo = productsRepository, categories = categoriesService, audit = auditService) {
+        this.repo = repo;
+        this.categories = categories;
+        this.audit = audit;
+    }
+    async getProducts(filters) {
+        const page = Math.max(1, Number(filters.page) || 1);
+        const limit = Math.max(1, Number(filters.limit) || 20);
+        const { items, total } = await this.repo.findMany(filters);
+        const formatted = items.map(formatProduct);
+        // If lowStock filter is requested in query
+        let filteredItems = formatted;
+        if (typeof filters.lowStock === 'boolean') {
+            filteredItems = formatted.filter((p) => p.isLowStock === filters.lowStock);
+        }
+        const pagination = getPaginationMeta(total, page, limit);
+        return {
+            items: filteredItems,
+            pagination,
+        };
+    }
+    async searchProducts(filters) {
+        const items = await this.repo.searchPOS(filters);
+        return items.map(formatProduct);
+    }
+    async getProductById(id) {
+        const product = await this.repo.findById(id);
+        if (!product) {
+            throw new NotFoundError(`Product with ID '${id}' not found`);
+        }
+        return formatProduct(product);
+    }
+    async getProductByBarcode(barcode) {
+        const product = await this.repo.findByBarcode(barcode.trim());
+        if (!product) {
+            throw new NotFoundError(`Product with barcode '${barcode}' not found`);
+        }
+        return formatProduct(product);
+    }
+    async getProductStockSummary(id, expiringHorizonDays = 30) {
+        const product = await this.repo.findById(id);
+        if (!product) {
+            throw new NotFoundError(`Product with ID '${id}' not found`);
+        }
+        const now = new Date().getTime();
+        const horizonTime = now + expiringHorizonDays * 24 * 60 * 60 * 1000;
+        let totalStock = 0;
+        let expiredQuantity = 0;
+        let expiringSoonQuantity = 0;
+        let activeBatchesCount = 0;
+        const batches = (product.batches || []).map((b) => {
+            const expiryTime = new Date(b.expiryDate).getTime();
+            const isExpired = expiryTime < now;
+            const isExpiringSoon = !isExpired && expiryTime <= horizonTime;
+            const daysToExpiry = Math.ceil((expiryTime - now) / (1000 * 60 * 60 * 24));
+            if (b.quantity > 0) {
+                activeBatchesCount++;
+                totalStock += b.quantity;
+                if (isExpired) {
+                    expiredQuantity += b.quantity;
+                }
+                else if (isExpiringSoon) {
+                    expiringSoonQuantity += b.quantity;
+                }
+            }
+            return {
+                id: b.id,
+                batchNumber: b.batchNumber,
+                expiryDate: b.expiryDate,
+                quantity: b.quantity,
+                purchasePrice: Number(b.purchasePrice),
+                sellingPrice: Number(b.sellingPrice),
+                isExpired,
+                isExpiringSoon,
+                daysToExpiry,
+            };
+        });
+        const isLowStock = totalStock <= product.minimumStock;
+        return {
+            product: {
+                id: product.id,
+                name: product.name,
+                barcode: product.barcode,
+                category: product.category.name,
+                minimumStock: product.minimumStock,
+                purchasePrice: Number(product.purchasePrice),
+                sellingPrice: Number(product.sellingPrice),
+            },
+            totalStock,
+            activeBatchesCount,
+            expiredQuantity,
+            expiringSoonQuantity,
+            isLowStock,
+            batches,
+        };
+    }
+    async createProduct(input, actorId) {
+        const barcode = input.barcode ? input.barcode.trim() : null;
+        // 1. Verify category exists
+        await this.categories.getCategoryById(input.categoryId);
+        // 2. Duplicate barcode check if barcode is provided
+        if (barcode) {
+            const existing = await this.repo.findByBarcode(barcode);
+            if (existing) {
+                throw new ConflictError(`Product with barcode '${barcode}' already exists ('${existing.name}')`);
+            }
+        }
+        const created = await this.repo.create({
+            name: input.name.trim(),
+            barcode,
+            scientificName: input.scientificName ? input.scientificName.trim() : null,
+            description: input.description ? input.description.trim() : null,
+            categoryId: input.categoryId,
+            purchasePrice: input.purchasePrice,
+            sellingPrice: input.sellingPrice,
+            taxRate: input.taxRate,
+            minimumStock: input.minimumStock,
+        });
+        // Record audit log
+        await this.audit.logAction({
+            userId: actorId || null,
+            action: 'CREATE',
+            entity: 'products',
+            entityId: created.id,
+            newData: {
+                name: created.name,
+                barcode: created.barcode,
+                purchasePrice: input.purchasePrice,
+                sellingPrice: input.sellingPrice,
+            },
+        });
+        return formatProduct(created);
+    }
+    async updateProduct(id, input, actorId) {
+        const existing = await this.repo.findById(id);
+        if (!existing) {
+            throw new NotFoundError(`Product with ID '${id}' not found`);
+        }
+        // Verify category exists if updated
+        if (input.categoryId && input.categoryId !== existing.categoryId) {
+            await this.categories.getCategoryById(input.categoryId);
+        }
+        // Duplicate barcode check if updated
+        if (input.barcode !== undefined) {
+            const newBarcode = input.barcode ? input.barcode.trim() : null;
+            if (newBarcode && newBarcode !== existing.barcode) {
+                const duplicate = await this.repo.findByBarcode(newBarcode);
+                if (duplicate && duplicate.id !== id) {
+                    throw new ConflictError(`Product with barcode '${newBarcode}' already exists ('${duplicate.name}')`);
+                }
+            }
+        }
+        const updateData = {};
+        if (input.name)
+            updateData.name = input.name.trim();
+        if (input.barcode !== undefined)
+            updateData.barcode = input.barcode ? input.barcode.trim() : null;
+        if (input.scientificName !== undefined)
+            updateData.scientificName = input.scientificName ? input.scientificName.trim() : null;
+        if (input.description !== undefined)
+            updateData.description = input.description ? input.description.trim() : null;
+        if (input.categoryId)
+            updateData.categoryId = input.categoryId;
+        if (input.purchasePrice !== undefined)
+            updateData.purchasePrice = input.purchasePrice;
+        if (input.sellingPrice !== undefined)
+            updateData.sellingPrice = input.sellingPrice;
+        if (input.taxRate !== undefined)
+            updateData.taxRate = input.taxRate;
+        if (input.minimumStock !== undefined)
+            updateData.minimumStock = input.minimumStock;
+        if (typeof input.isActive === 'boolean')
+            updateData.isActive = input.isActive;
+        const updated = await this.repo.update(id, updateData);
+        // Record audit log
+        await this.audit.logAction({
+            userId: actorId || null,
+            action: 'UPDATE',
+            entity: 'products',
+            entityId: id,
+            oldData: { name: existing.name, barcode: existing.barcode, isActive: existing.isActive },
+            newData: { name: updated.name, barcode: updated.barcode, isActive: updated.isActive },
+        });
+        return formatProduct(updated);
+    }
+    async deleteProduct(id, actorId) {
+        const existing = await this.repo.findById(id);
+        if (!existing) {
+            throw new NotFoundError(`Product with ID '${id}' not found`);
+        }
+        // Soft delete to protect historical sales and batch records
+        const deactivated = await this.repo.softDelete(id);
+        // Record audit log
+        await this.audit.logAction({
+            userId: actorId || null,
+            action: 'DELETE',
+            entity: 'products',
+            entityId: id,
+            metadata: { reason: 'Soft deactivation of product' },
+        });
+        return formatProduct(deactivated);
+    }
+    async getLowStockProducts() {
+        const products = await this.repo.findLowStock();
+        return products.map((p) => {
+            const currentStock = p.batches.reduce((sum, b) => sum + b.quantity, 0);
+            return {
+                id: p.id,
+                name: p.name,
+                barcode: p.barcode,
+                category: p.category.name,
+                minimumStock: p.minimumStock,
+                currentStock,
+                difference: p.minimumStock - currentStock,
+            };
+        });
+    }
+    async getExpiringProducts(daysAhead = 30) {
+        const batches = await this.repo.findExpiring(daysAhead);
+        const now = new Date().getTime();
+        return batches.map((b) => {
+            const expiryTime = new Date(b.expiryDate).getTime();
+            const daysRemaining = Math.ceil((expiryTime - now) / (1000 * 60 * 60 * 24));
+            return {
+                id: b.product.id,
+                name: b.product.name,
+                barcode: b.product.barcode,
+                category: b.product.category.name,
+                batchNumber: b.batchNumber,
+                expiryDate: b.expiryDate,
+                daysRemaining,
+                quantity: b.quantity,
+            };
+        });
+    }
+}
+export const productsService = new ProductsService();
+//# sourceMappingURL=products.service.js.map
