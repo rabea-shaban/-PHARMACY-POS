@@ -86,6 +86,9 @@ import { CommissionsPage } from '../features/commissions/pages/CommissionsPage.j
 import { CommissionRulesPage } from '../features/commissions/pages/CommissionRulesPage.js';
 import { CommissionStatementPage } from '../features/commissions/pages/CommissionStatementPage.js';
 
+// F14: Comprehensive Reports & Analytics Pages
+import { ReportsPage } from '../features/reports/pages/ReportsPage.js';
+
 export const AppRoutes: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -521,7 +524,7 @@ export const AppRoutes: React.FC = () => {
           path="/reports"
           element={
             <RoleGuard allowedRoles={MODULE_PERMISSIONS.reports}>
-              <div className="p-8 text-center text-slate-400">التقارير والتحليلات المالية (المرحلة F13)</div>
+              <ReportsPage />
             </RoleGuard>
           }
         />

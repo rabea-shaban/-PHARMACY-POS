@@ -536,5 +536,18 @@
     "leaderboard": "Staff Commission Leaderboard",
     "noCommissions": "No Commission Records Found",
     "noRules": "No Commission Rules Found"
+  },
+  "reports": {
+    "pageTitle": "Comprehensive Reports & Analytics",
+    "pageSubtitle": "Sales KPIs, inventory valuation, purchases, expenses, customer loyalty, staff performance, and financial P&L",
+    "printReport": "Print Report",
+    "salesTab": "Sales",
+    "productsTab": "Products",
+    "inventoryTab": "Inventory",
+    "purchasesTab": "Purchases",
+    "expensesTab": "Expenses",
+    "customersTab": "Customers",
+    "staffTab": "Staff Performance",
+    "financialTab": "Financial P&L"
   }
 }
