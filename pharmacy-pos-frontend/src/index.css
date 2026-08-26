@@ -96,6 +96,11 @@
     padding: 0 !important;
     height: auto !important;
     overflow: visible !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Arabic", "Cairo", "Tajawal", sans-serif !important;
+    font-feature-settings: normal !important;
+    letter-spacing: normal !important;
+    word-spacing: normal !important;
+    text-rendering: optimizeLegibility !important;
   }
 
   body * {
@@ -106,6 +111,8 @@
   #pos-receipt-print,
   #pos-receipt-print * {
     visibility: visible !important;
+    font-feature-settings: normal !important;
+    letter-spacing: normal !important;
   }
 
   #pos-receipt-print {
@@ -139,6 +146,8 @@
   #salary-slip-print,
   #salary-slip-print * {
     visibility: visible !important;
+    font-feature-settings: normal !important;
+    letter-spacing: normal !important;
   }
 
   #salary-slip-print {
@@ -174,6 +183,8 @@
   #report-print-container,
   #report-print-container * {
     visibility: visible !important;
+    font-feature-settings: normal !important;
+    letter-spacing: normal !important;
   }
 
   #report-print-container {
@@ -184,7 +195,7 @@
     width: 100% !important;
     max-width: 210mm !important;
     margin: 0 auto !important;
-    padding: 20px !important;
+    padding: 24px !important;
     background: #ffffff !important;
     color: #000000 !important;
     border: none !important;
