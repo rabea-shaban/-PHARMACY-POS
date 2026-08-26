@@ -20,6 +20,7 @@ import { StaffReportView } from '../components/StaffReportView.js';
 import { FinancialSummaryReportView } from '../components/FinancialSummaryReportView.js';
 import { ReportExportActions, exportToCsv } from '../components/ReportExportActions.js';
 import { ReportPrintHeader, ReportPrintFooter } from '../components/ReportPrintHeader.js';
+import { PrintReportModal, ReportTypeKey } from '../components/PrintReportModal.js';
 import {
   FileSpreadsheet,
   TrendingUp,
@@ -49,6 +50,7 @@ export const ReportsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<ReportTab>('sales');
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
+  const [isPrintModalOpen, setIsPrintModalOpen] = useState(false);
 
   const filterParams = {
     from: from || undefined,
@@ -88,6 +90,20 @@ export const ReportsPage: React.FC = () => {
     }
   };
 
+  const handleSelectAndPrint = (
+    reportType: ReportTypeKey,
+    selectedFrom: string,
+    selectedTo: string
+  ) => {
+    setActiveTab(reportType);
+    setFrom(selectedFrom);
+    setTo(selectedTo);
+    // Trigger print in next tick after React renders the selected tab
+    setTimeout(() => {
+      window.print();
+    }, 300);
+  };
+
   const isManagerOrAccountant = role && ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT'].includes(role);
 
   return (
@@ -104,7 +120,10 @@ export const ReportsPage: React.FC = () => {
           </p>
         </div>
 
-        <ReportExportActions onExportCsv={handleExportCsv} />
+        <ReportExportActions
+          onPrint={() => setIsPrintModalOpen(true)}
+          onExportCsv={handleExportCsv}
+        />
       </div>
 
       {/* Date Period Filter */}
@@ -286,6 +305,16 @@ export const ReportsPage: React.FC = () => {
         {/* Printable Official Footer */}
         <ReportPrintFooter />
       </div>
+
+      {/* Print Report Selection Modal */}
+      <PrintReportModal
+        isOpen={isPrintModalOpen}
+        onClose={() => setIsPrintModalOpen(false)}
+        initialReportType={activeTab}
+        initialFrom={from}
+        initialTo={to}
+        onSelectAndPrint={handleSelectAndPrint}
+      />
     </div>
   );
 };
