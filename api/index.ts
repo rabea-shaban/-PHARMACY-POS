@@ -1,5 +1,22 @@
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createApp } from '../pharmacy-pos-backend/src/app.js';
 
-const app = createApp();
+let appInstance: any = null;
 
-export default app;
+export default function handler(req: VercelRequest, res: VercelResponse) {
+  try {
+    if (!appInstance) {
+      appInstance = createApp();
+    }
+    return appInstance(req, res);
+  } catch (error: any) {
+    console.error('❌ Serverless invocation error:', error);
+    if (!res.headersSent) {
+      res.status(500).json({
+        success: false,
+        message: 'Serverless function execution error',
+        error: error?.message || String(error),
+      });
+    }
+  }
+}
