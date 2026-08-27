@@ -3,6 +3,10 @@
   "private": true,
   "version": "1.0.0",
   "description": "Pharmacy POS & Management System - Full Stack",
+  "workspaces": [
+    "pharmacy-pos-backend",
+    "pharmacy-pos-frontend"
+  ],
   "scripts": {
     "dev": "npm run db:start && concurrently -n \"BACKEND,FRONTEND\" -c \"blue.bold,green.bold\" \"npm --prefix pharmacy-pos-backend run dev\" \"npm --prefix pharmacy-pos-frontend run dev\"",
     "dev:backend": "npm run db:start && npm --prefix pharmacy-pos-backend run dev",
@@ -10,6 +14,7 @@
     "db:start": "powershell -Command \"if (-not (Get-Process mysqld -ErrorAction SilentlyContinue)) { Start-Process -FilePath 'C:\\xampp\\mysql\\bin\\mysqld.exe' -ArgumentList '--defaults-file=C:\\xampp\\mysql\\bin\\my.ini','--standalone' -WorkingDirectory 'C:\\xampp' -WindowStyle Hidden; Start-Sleep -Seconds 2; Write-Host '🟢 MySQL (XAMPP) started successfully.' } else { Write-Host '🟢 MySQL is already running.' }\"",
     "db:stop": "powershell -Command \"C:\\xampp\\mysql\\bin\\mysqladmin.exe -u root shutdown -ErrorAction SilentlyContinue; Write-Host '🔴 MySQL (XAMPP) stopped.'\"",
     "db:status": "powershell -Command \"C:\\xampp\\mysql\\bin\\mysqladmin.exe -u root ping\"",
+    "postinstall": "npm --prefix pharmacy-pos-backend run prisma:generate",
     "build": "npm --prefix pharmacy-pos-backend run build && npm --prefix pharmacy-pos-frontend run build",
     "build:backend": "npm --prefix pharmacy-pos-backend run build",
     "build:frontend": "npm --prefix pharmacy-pos-frontend run build",
