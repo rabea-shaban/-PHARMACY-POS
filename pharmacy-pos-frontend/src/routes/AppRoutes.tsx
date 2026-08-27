@@ -115,6 +115,7 @@ export const AppRoutes: React.FC = () => {
   // Register session expired handler for Axios 401 interceptor
   useEffect(() => {
     registerSessionExpiredHandler(() => {
+      localStorage.removeItem('accessToken');
       dispatch(setSessionExpired(true));
       queryClient.removeQueries({ queryKey: ['currentUser'] });
       navigate('/login', { replace: true });

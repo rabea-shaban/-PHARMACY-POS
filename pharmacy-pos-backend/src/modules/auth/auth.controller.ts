@@ -11,11 +11,13 @@ export class AuthController {
     try {
       const result = await this.service.login(req.body);
 
+      const isProduction = env.NODE_ENV === 'production' || Boolean(process.env.VERCEL);
+
       // Set secure HttpOnly Cookie (accessible only by server, prevents XSS token theft)
       res.cookie('accessToken', result.accessToken, {
         httpOnly: true,
-        secure: env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        secure: isProduction,
+        sameSite: isProduction ? 'none' : 'lax',
         maxAge: 24 * 60 * 60 * 1000, // 24 hours
         path: '/',
       });
@@ -39,11 +41,13 @@ export class AuthController {
 
   logout = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
+      const isProduction = env.NODE_ENV === 'production' || Boolean(process.env.VERCEL);
+
       // Clear HttpOnly authentication cookie
       res.clearCookie('accessToken', {
         httpOnly: true,
-        secure: env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        secure: isProduction,
+        sameSite: isProduction ? 'none' : 'lax',
         path: '/',
       });
 

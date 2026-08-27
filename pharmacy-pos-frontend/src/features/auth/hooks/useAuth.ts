@@ -26,7 +26,12 @@ export function useAuth() {
     try {
       const result = await authApi.login(credentials);
       
-      // 1. Sync safe user into Redux (Never store accessToken in Redux/localStorage)
+      // Store accessToken for seamless cross-origin Bearer authentication
+      if (result.accessToken) {
+        localStorage.setItem('accessToken', result.accessToken);
+      }
+
+      // 1. Sync safe user into Redux
       dispatch(setUser(result.user));
 
       // 2. Sync into TanStack Query cache
@@ -69,13 +74,16 @@ export function useAuth() {
     } catch {
       // Ignore if session already expired on server
     } finally {
-      // 1. Clear Redux
+      // 1. Clear accessToken
+      localStorage.removeItem('accessToken');
+
+      // 2. Clear Redux
       dispatch(clearUser());
 
-      // 2. Clear TanStack cache
+      // 3. Clear TanStack cache
       queryClient.removeQueries({ queryKey: ['currentUser'] });
 
-      // 3. Navigate to login
+      // 4. Navigate to login
       navigate('/login', { replace: true });
     }
   };
