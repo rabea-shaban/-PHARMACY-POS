@@ -6,8 +6,12 @@ let cachedApp = null;
 app.use(async (req, res, next) => {
   try {
     if (!cachedApp) {
-      const { createApp } = await import('./dist/app.js');
-      cachedApp = createApp();
+      const module = await import('./dist/app.js');
+      const createAppFn = module.createApp || module.default?.createApp || module.default;
+      if (typeof createAppFn !== 'function') {
+        throw new Error('createApp function not found in dist/app.js. Exported keys: ' + Object.keys(module).join(', '));
+      }
+      cachedApp = createAppFn();
     }
     return cachedApp(req, res, next);
   } catch (err) {

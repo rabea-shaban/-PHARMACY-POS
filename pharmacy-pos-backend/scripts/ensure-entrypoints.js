@@ -13,8 +13,12 @@ let cachedApp = null;
 app.use(async (req, res, next) => {
   try {
     if (!cachedApp) {
-      const { createApp } = await import('./dist/app.js');
-      cachedApp = createApp();
+      const module = await import('./dist/app.js');
+      const createAppFn = module.createApp || module.default?.createApp || module.default;
+      if (typeof createAppFn !== 'function') {
+        throw new Error('createApp function not found in dist/app.js. Exported keys: ' + Object.keys(module).join(', '));
+      }
+      cachedApp = createAppFn();
     }
     return cachedApp(req, res, next);
   } catch (err) {
@@ -41,8 +45,12 @@ let cachedApp = null;
 app.use(async (req, res, next) => {
   try {
     if (!cachedApp) {
-      const { createApp } = await import('../../dist/app.js');
-      cachedApp = createApp();
+      const module = await import('../../dist/app.js');
+      const createAppFn = module.createApp || module.default?.createApp || module.default;
+      if (typeof createAppFn !== 'function') {
+        throw new Error('createApp function not found in ../../dist/app.js. Exported keys: ' + Object.keys(module).join(', '));
+      }
+      cachedApp = createAppFn();
     }
     return cachedApp(req, res, next);
   } catch (err) {
@@ -66,17 +74,11 @@ fs.writeFileSync(path.join(backendDir, 'app.js'), entryContent);
 fs.writeFileSync(path.join(backendDir, 'index.js'), entryContent);
 fs.writeFileSync(path.join(backendDir, 'server.js'), entryContent);
 
-// 2. dist of backend
-const distDir = path.join(backendDir, 'dist');
-if (!fs.existsSync(distDir)) fs.mkdirSync(distDir, { recursive: true });
-fs.writeFileSync(path.join(distDir, 'app.js'), entryContent);
-fs.writeFileSync(path.join(distDir, 'index.js'), entryContent);
-
-// 3. nested pharmacy-pos-frontend/dist inside backend
+// 2. nested pharmacy-pos-frontend/dist inside backend (NEVER overwrite dist/app.js which contains the compiled tsc app!)
 const nestedDir = path.join(backendDir, 'pharmacy-pos-frontend', 'dist');
 if (!fs.existsSync(nestedDir)) fs.mkdirSync(nestedDir, { recursive: true });
 fs.writeFileSync(path.join(nestedDir, 'app.js'), nestedEntryContent);
 fs.writeFileSync(path.join(nestedDir, 'index.js'), nestedEntryContent);
 fs.writeFileSync(path.join(nestedDir, 'server.js'), nestedEntryContent);
 
-console.log('✅ Safe lazy entrypoints generated.');
+console.log('✅ Entrypoints successfully generated without modifying compiled dist/app.js');
