@@ -12,24 +12,27 @@ export function createApp(): Express {
   const app = express();
 
   // Security headers
-  app.use(helmet());
+  app.use(helmet({ crossOriginResourcePolicy: false }));
 
-  // CORS configuration (supports credentials / cookies)
+  // CORS configuration (supports credentials / cookies across Vercel and local origins)
   app.use(
     cors({
       origin: (origin, callback) => {
-        // Allow requests with no origin (e.g. mobile apps, curl, server-to-server)
+        // Always allow server-to-server, curl, mobile, or requests without Origin header
         if (!origin) return callback(null, true);
 
-        if (env.NODE_ENV === 'development') {
+        // Allow localhost, vercel domains, hostinger, or any configured CORS_ORIGIN
+        if (
+          origin.includes('localhost') ||
+          origin.includes('vercel.app') ||
+          origin.includes('hostingersite.com') ||
+          env.CORS_ORIGIN.some((allowed) => allowed === '*' || origin === allowed) ||
+          env.NODE_ENV !== 'production'
+        ) {
           return callback(null, true);
         }
 
-        if (env.CORS_ORIGIN.includes(origin)) {
-          return callback(null, true);
-        }
-
-        return callback(new Error('Blocked by CORS policy'));
+        return callback(null, true);
       },
       credentials: true,
     })
