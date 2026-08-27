@@ -31,8 +31,13 @@ async function bootstrap() {
     process.on('SIGTERM', () => shutdown('SIGTERM'));
     process.on('SIGINT', () => shutdown('SIGINT'));
 }
-bootstrap().catch((err) => {
-    console.error('❌ Failed to start server:', err);
-    process.exit(1);
-});
+// Only listen on port in standalone server mode (Local / VPS / Docker).
+// On Vercel Serverless, do NOT call app.listen or process.exit.
+if (!process.env.VERCEL) {
+    bootstrap().catch((err) => {
+        console.error('❌ Failed to start server:', err);
+        process.exit(1);
+    });
+}
+export default createApp();
 //# sourceMappingURL=server.js.map
