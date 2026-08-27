@@ -14,8 +14,8 @@ export default defineConfig({
       babel: {
         plugins: [['babel-plugin-react-compiler', ReactCompilerConfig]],
       },
-    }),
-    tailwindcss(),
+    }) as any,
+    tailwindcss() as any,
   ],
   resolve: {
     alias: {
