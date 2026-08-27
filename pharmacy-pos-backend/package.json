@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "prisma generate && tsc",
+    "build": "prisma generate && tsc && node scripts/ensure-entrypoints.js",
     "start": "node dist/server.js",
     "seed": "tsx scripts/seed.ts",
     "import:drugs": "tsx scripts/import-egyptian-drugs.ts",
