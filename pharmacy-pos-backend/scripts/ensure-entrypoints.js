@@ -6,17 +6,57 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const backendDir = path.resolve(__dirname, '..');
 
 const entryContent = `import express from 'express';
-import { createApp } from './dist/app.js';
 
-const app = createApp();
+const app = express();
+let cachedApp = null;
+
+app.use(async (req, res, next) => {
+  try {
+    if (!cachedApp) {
+      const { createApp } = await import('./dist/app.js');
+      cachedApp = createApp();
+    }
+    return cachedApp(req, res, next);
+  } catch (err) {
+    console.error('❌ Serverless invocation error:', err);
+    if (!res.headersSent) {
+      res.status(500).json({
+        success: false,
+        message: 'Serverless initialization error',
+        error: err?.message || String(err),
+        stack: err?.stack,
+      });
+    }
+  }
+});
 
 export default app;
 `;
 
 const nestedEntryContent = `import express from 'express';
-import { createApp } from '../../dist/app.js';
 
-const app = createApp();
+const app = express();
+let cachedApp = null;
+
+app.use(async (req, res, next) => {
+  try {
+    if (!cachedApp) {
+      const { createApp } = await import('../../dist/app.js');
+      cachedApp = createApp();
+    }
+    return cachedApp(req, res, next);
+  } catch (err) {
+    console.error('❌ Serverless invocation error:', err);
+    if (!res.headersSent) {
+      res.status(500).json({
+        success: false,
+        message: 'Serverless initialization error',
+        error: err?.message || String(err),
+        stack: err?.stack,
+      });
+    }
+  }
+});
 
 export default app;
 `;
@@ -39,4 +79,4 @@ fs.writeFileSync(path.join(nestedDir, 'app.js'), nestedEntryContent);
 fs.writeFileSync(path.join(nestedDir, 'index.js'), nestedEntryContent);
 fs.writeFileSync(path.join(nestedDir, 'server.js'), nestedEntryContent);
 
-console.log('✅ Entrypoints with explicit express imports generated.');
+console.log('✅ Safe lazy entrypoints generated.');
