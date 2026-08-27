@@ -5,13 +5,19 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const backendDir = path.resolve(__dirname, '..');
 
-const entryContent = `import { createApp } from './dist/app.js';
+const entryContent = `import express from 'express';
+import { createApp } from './dist/app.js';
+
 const app = createApp();
+
 export default app;
 `;
 
-const nestedEntryContent = `import { createApp } from '../../dist/app.js';
+const nestedEntryContent = `import express from 'express';
+import { createApp } from '../../dist/app.js';
+
 const app = createApp();
+
 export default app;
 `;
 
@@ -33,4 +39,4 @@ fs.writeFileSync(path.join(nestedDir, 'app.js'), nestedEntryContent);
 fs.writeFileSync(path.join(nestedDir, 'index.js'), nestedEntryContent);
 fs.writeFileSync(path.join(nestedDir, 'server.js'), nestedEntryContent);
 
-console.log('✅ Universal entrypoints generated for all possible Vercel output directories.');
+console.log('✅ Entrypoints with explicit express imports generated.');

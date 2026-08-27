@@ -9,12 +9,15 @@ if (!fs.existsSync(distDir)) {
   fs.mkdirSync(distDir, { recursive: true });
 }
 
-const entryContent = `import { createApp } from '../../pharmacy-pos-backend/dist/app.js';
+const entryContent = `import express from 'express';
+import { createApp } from '../../pharmacy-pos-backend/dist/app.js';
+
 const app = createApp();
+
 export default app;
 `;
 
 fs.writeFileSync(path.join(distDir, 'app.js'), entryContent);
 fs.writeFileSync(path.join(distDir, 'index.js'), entryContent);
 fs.writeFileSync(path.join(distDir, 'server.js'), entryContent);
-console.log('✅ Universal serverless entrypoints generated in pharmacy-pos-frontend/dist');
+console.log('✅ Entrypoints with explicit express imports generated in pharmacy-pos-frontend/dist');

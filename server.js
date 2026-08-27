@@ -1,3 +1,4 @@
+import express from 'express';
 import { createApp } from './pharmacy-pos-backend/dist/app.js';
 
 const app = createApp();
