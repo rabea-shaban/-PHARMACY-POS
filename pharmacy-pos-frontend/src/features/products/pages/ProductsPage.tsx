@@ -4,6 +4,7 @@ import { useProducts, useDeleteProduct } from '../hooks/useProducts.js';
 import { ProductTable } from '../components/ProductTable.js';
 import { ProductFilters } from '../components/ProductFilters.js';
 import { Button } from '../../../components/ui/Button.js';
+import { showConfirmDialog } from '../../../lib/alerts.js';
 import { Plus, Pill } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../../store/hooks.js';
@@ -29,8 +30,14 @@ export const ProductsPage: React.FC = () => {
   const deleteMutation = useDeleteProduct();
 
   const handleDelete = async (product: Product) => {
-    const confirmMsg = t('products.confirmDeletePrompt', { name: product.name });
-    if (window.confirm(confirmMsg)) {
+    const confirmed = await showConfirmDialog({
+      title: t('products.deleteProduct') || 'حذف الصنف',
+      text: t('products.confirmDeletePrompt', { name: product.name }) || `هل أنت متأكد من رغبتك في حذف الصنف (${product.name})؟`,
+      confirmButtonText: 'نعم، حذف',
+      cancelButtonText: 'إلغاء',
+      isDanger: true,
+    });
+    if (confirmed) {
       await deleteMutation.mutateAsync(product.id);
     }
   };

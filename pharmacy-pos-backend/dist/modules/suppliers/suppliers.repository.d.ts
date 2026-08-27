@@ -129,16 +129,16 @@ export declare class SuppliersRepository {
     findPurchases(supplierId: string, page?: number, limit?: number): Promise<{
         items: ({
             items: ({
-                product: {
-                    name: string;
-                    id: string;
-                    barcode: string | null;
-                };
                 batch: {
                     id: string;
                     expiryDate: Date;
                     batchNumber: string;
                 } | null;
+                product: {
+                    name: string;
+                    id: string;
+                    barcode: string | null;
+                };
             } & {
                 id: string;
                 productId: string;

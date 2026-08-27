@@ -2,7 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Sale } from '../types/sale.types.js';
 import { formatCurrency, formatDate } from '../../../lib/utils.js';
-import { HeartPulse } from 'lucide-react';
+import { useAppSelector } from '../../../store/hooks.js';
+import { PharmacyBrandLogo } from '../../../components/common/PharmacyBrandLogo.js';
 
 export interface ReceiptPreviewProps {
   sale: Sale;
@@ -10,6 +11,7 @@ export interface ReceiptPreviewProps {
 
 export const ReceiptPreview: React.FC<ReceiptPreviewProps> = ({ sale }) => {
   const { t } = useTranslation();
+  const { publicSettings } = useAppSelector((state) => state.settings);
 
   return (
     <div
@@ -18,12 +20,31 @@ export const ReceiptPreview: React.FC<ReceiptPreviewProps> = ({ sale }) => {
     >
       {/* Header */}
       <div className="text-center space-y-1 pb-3 border-b border-dashed border-slate-300">
-        <div className="flex justify-center mb-1 text-sky-600">
-          <HeartPulse className="w-8 h-8" />
+        <div className="flex justify-center mb-2">
+          <PharmacyBrandLogo size="lg" showFallbackGradient={false} />
         </div>
-        <h2 className="text-base font-black tracking-tight">{t('common.pharmacyName')}</h2>
-        <p className="text-[11px] text-slate-500">سجل تجاري: 10293847 • بطاقة ضريبية: 928374</p>
-        <p className="text-[11px] text-slate-500">هاتف: 01012345678 • خدمة التوصيل: 19876</p>
+        <h2 className="text-base font-black tracking-tight text-slate-900">
+          {publicSettings.pharmacyName || t('common.pharmacyName')}
+        </h2>
+        {publicSettings.pharmacySlogan && (
+          <p className="text-[11px] font-bold text-sky-700">
+            {publicSettings.pharmacySlogan}
+          </p>
+        )}
+        {(publicSettings.pharmacyLicense || publicSettings.pharmacyTaxNumber) && (
+          <p className="text-[10px] text-slate-500">
+            {publicSettings.pharmacyLicense ? `سجل/ترخيص: ${publicSettings.pharmacyLicense}` : ''}
+            {publicSettings.pharmacyLicense && publicSettings.pharmacyTaxNumber ? ' • ' : ''}
+            {publicSettings.pharmacyTaxNumber ? `بطاقة ضريبية: ${publicSettings.pharmacyTaxNumber}` : ''}
+          </p>
+        )}
+        {(publicSettings.pharmacyPhone || publicSettings.pharmacyAddress) && (
+          <p className="text-[10px] text-slate-500">
+            {publicSettings.pharmacyPhone ? `هاتف: ${publicSettings.pharmacyPhone}` : ''}
+            {publicSettings.pharmacyPhone && publicSettings.pharmacyAddress ? ' • ' : ''}
+            {publicSettings.pharmacyAddress ? publicSettings.pharmacyAddress : ''}
+          </p>
+        )}
       </div>
 
       {/* Invoice Details */}
@@ -115,7 +136,7 @@ export const ReceiptPreview: React.FC<ReceiptPreviewProps> = ({ sale }) => {
       <div className="text-center text-[10px] text-slate-500 space-y-1">
         <p className="font-bold">نتمنى لكم دوام الصحة والعافية!</p>
         <p>المرتجعات مقبولة خلال ١٤ يوماً بوجود أصل الفاتورة.</p>
-        <p className="text-[9px] text-slate-400">Powered by Al-Amal Pharmacy POS</p>
+        <p className="text-[9px] text-slate-400">Powered by {publicSettings.pharmacyName || 'Pharmacy POS'}</p>
       </div>
     </div>
   );

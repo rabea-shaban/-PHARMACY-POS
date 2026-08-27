@@ -6,6 +6,7 @@ import { ExpenseSummaryCards } from '../components/ExpenseSummaryCards.js';
 import { Button } from '../../../components/ui/Button.js';
 import { Card } from '../../../components/ui/Card.js';
 import { EmptyState } from '../../../components/common/EmptyState.js';
+import { showConfirmDialog } from '../../../lib/alerts.js';
 import { Wallet, Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../../store/hooks.js';
@@ -42,7 +43,14 @@ export const ExpensesPage: React.FC = () => {
   };
 
   const handleDeleteExpense = async (id: string) => {
-    if (window.confirm('هل أنت متأكد من رغبتك في حذف سند المصروف هذا نهائياً؟')) {
+    const confirmed = await showConfirmDialog({
+      title: 'حذف سند المصروف',
+      text: 'هل أنت متأكد من رغبتك في حذف سند المصروف هذا نهائياً من السجلات؟',
+      confirmButtonText: 'نعم، حذف السند',
+      cancelButtonText: 'إلغاء',
+      isDanger: true,
+    });
+    if (confirmed) {
       await deleteExpenseMutation.mutateAsync(id);
     }
   };

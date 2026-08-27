@@ -7,6 +7,7 @@ import { Customer } from '../../customers/types/customer.types.js';
 import { Modal } from '../../../components/ui/Modal.js';
 import { Button } from '../../../components/ui/Button.js';
 import { Input } from '../../../components/ui/Input.js';
+import { showErrorAlert } from '../../../lib/alerts.js';
 import {
   User,
   UserPlus,
@@ -57,7 +58,7 @@ export const CustomerSelector: React.FC = () => {
       setNewEmail('');
       setNewAddress('');
     } catch (err: any) {
-      alert(err.response?.data?.message || t('common.unexpectedError'));
+      showErrorAlert('تعذر تسجيل العميل', err.response?.data?.message || t('common.unexpectedError'));
     }
   };
 

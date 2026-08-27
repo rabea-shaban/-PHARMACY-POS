@@ -5,6 +5,7 @@ import { addItem } from '../../../store/slices/cartSlice.js';
 import { productsApi } from '../../products/api/productsApi.js';
 import { Product } from '../../products/types/product.types.js';
 import { formatCurrency } from '../../../lib/utils.js';
+import { showOutOfStockAlert } from '../../../lib/alerts.js';
 import { Search, Pill, Loader2, AlertCircle } from 'lucide-react';
 
 export interface ProductSearchProps {
@@ -60,7 +61,7 @@ export const ProductSearch: React.FC<ProductSearchProps> = ({ inputRef: external
 
   const handleSelectProduct = (product: Product) => {
     if (product.currentStock <= 0) {
-      alert(`${product.name} غير متوفر بالمخزون حالياً! يجب تسجيل فاتورة استلام مشتريات أو تسوية رصيد أولاً.`);
+      showOutOfStockAlert(product.name);
       return;
     }
     dispatch(addItem({ product, quantity: 1 }));

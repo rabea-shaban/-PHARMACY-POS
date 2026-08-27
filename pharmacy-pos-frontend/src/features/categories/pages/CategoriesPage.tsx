@@ -7,6 +7,7 @@ import { Card, CardContent } from '../../../components/ui/Card.js';
 import { Badge } from '../../../components/ui/Badge.js';
 import { Modal } from '../../../components/ui/Modal.js';
 import { EmptyState } from '../../../components/common/EmptyState.js';
+import { showConfirmDialog } from '../../../lib/alerts.js';
 import { Tag, Plus, Edit3, Trash2, Search } from 'lucide-react';
 import { Category, CategoryFormValues } from '../types/category.types.js';
 import { useAppSelector } from '../../../store/hooks.js';
@@ -53,8 +54,14 @@ export const CategoriesPage: React.FC = () => {
   };
 
   const handleDelete = async (category: Category) => {
-    const confirmMsg = t('categories.confirmDeletePrompt', { name: category.name });
-    if (window.confirm(confirmMsg)) {
+    const confirmed = await showConfirmDialog({
+      title: t('categories.deleteCategory') || 'حذف التصنيف الدوائي',
+      text: t('categories.confirmDeletePrompt', { name: category.name }) || `هل أنت متأكد من رغبتك في حذف التصنيف (${category.name})؟`,
+      confirmButtonText: 'نعم، حذف',
+      cancelButtonText: 'إلغاء',
+      isDanger: true,
+    });
+    if (confirmed) {
       await deleteMutation.mutateAsync(category.id);
     }
   };

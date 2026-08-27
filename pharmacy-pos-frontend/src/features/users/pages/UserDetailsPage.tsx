@@ -11,6 +11,7 @@ import { EmployeeCommissionHistory } from '../../commissions/components/Employee
 import { Button } from '../../../components/ui/Button.js';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/Card.js';
 import { EmptyState } from '../../../components/common/EmptyState.js';
+import { showConfirmDialog } from '../../../lib/alerts.js';
 import { formatDate } from '../../../lib/utils.js';
 import {
   Phone,
@@ -70,15 +71,25 @@ export const UserDetailsPage: React.FC = () => {
   const handleToggleStatus = async () => {
     if (!user) return;
     if (user.isActive) {
-      if (
-        window.confirm(
-          `هل أنت متأكد من رغبتك في تعطيل حساب الموظف (${user.name})؟ لن يتمكن من تسجيل الدخول للنظام.`
-        )
-      ) {
+      const confirmed = await showConfirmDialog({
+        title: 'تعطيل حساب موظف',
+        text: `هل أنت متأكد من رغبتك في تعطيل حساب الموظف (${user.name})؟ لن يتمكن من تسجيل الدخول للنظام بعد ذلك.`,
+        confirmButtonText: 'نعم، تعطيل الحساب',
+        cancelButtonText: 'إلغاء',
+        isDanger: true,
+      });
+      if (confirmed) {
         await deactivateMutation.mutateAsync(user.id);
       }
     } else {
-      if (window.confirm(`هل ترغب في إعادة تفعيل حساب الموظف (${user.name})؟`)) {
+      const confirmed = await showConfirmDialog({
+        title: 'تفعيل حساب موظف',
+        text: `هل ترغب في إعادة تفعيل حساب الموظف (${user.name}) وتمكينه من تسجيل الدخول؟`,
+        confirmButtonText: 'نعم، تفعيل',
+        cancelButtonText: 'إلغاء',
+        icon: 'question',
+      });
+      if (confirmed) {
         await updateMutation.mutateAsync({
           id: user.id,
           data: { isActive: true },

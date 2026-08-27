@@ -8,6 +8,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui
 import { Button } from '../../../components/ui/Button.js';
 import { Badge } from '../../../components/ui/Badge.js';
 import { EmptyState } from '../../../components/common/EmptyState.js';
+import { showPromptDialog } from '../../../lib/alerts.js';
 import { ReceiptPreview } from '../components/ReceiptPreview.js';
 import {
   ReceiptText,
@@ -32,7 +33,14 @@ export const SaleDetailsPage: React.FC = () => {
   const canCancel = role && ['PLATFORM_MANAGER', 'PHARMACY_MANAGER'].includes(role);
 
   const handleCancelSale = async () => {
-    const reason = window.prompt('يرجى إدخال سبب إلغاء فاتورة البيع:');
+    const reason = await showPromptDialog({
+      title: 'إلغاء فاتورة البيع',
+      text: 'يرجى إدخال سبب إلغاء فاتورة البيع:',
+      placeholder: 'سبب الإلغاء (3 أحرف على الأقل)...',
+      confirmButtonText: 'تأكيد الإلغاء',
+      cancelButtonText: 'تراجع',
+      inputValidator: (val) => (val.trim().length < 3 ? 'يجب إدخال 3 أحرف على الأقل للسبب' : null),
+    });
     if (reason && reason.trim().length >= 3) {
       await cancelMutation.mutateAsync({ id, reason: reason.trim() });
     }

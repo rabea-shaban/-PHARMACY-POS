@@ -11,6 +11,7 @@ import { PayrollPaymentModal } from '../components/PayrollPaymentModal.js';
 import { Button } from '../../../components/ui/Button.js';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/Card.js';
 import { EmptyState } from '../../../components/common/EmptyState.js';
+import { showConfirmDialog } from '../../../lib/alerts.js';
 import { formatCurrency, formatDate } from '../../../lib/utils.js';
 import {
   Coins,
@@ -57,13 +58,27 @@ export const PayrollDetailsPage: React.FC = () => {
   }
 
   const handleApprove = async () => {
-    if (window.confirm(`هل أنت متأكد من اعتماد مسير راتب (${payroll.employeeName})؟`)) {
+    const confirmed = await showConfirmDialog({
+      title: 'اعتماد مسير الراتب',
+      text: `هل أنت متأكد من اعتماد مسير راتب (${payroll.employeeName})؟`,
+      confirmButtonText: 'نعم، اعتماد',
+      cancelButtonText: 'إلغاء',
+      icon: 'question',
+    });
+    if (confirmed) {
       await approveMutation.mutateAsync(payroll.id);
     }
   };
 
   const handleCancel = async () => {
-    if (window.confirm(`هل أنت متأكد من إلغاء وحذف مسير راتب (${payroll.employeeName})؟`)) {
+    const confirmed = await showConfirmDialog({
+      title: 'إلغاء مسير الراتب',
+      text: `هل أنت متأكد من إلغاء وحذف مسير راتب (${payroll.employeeName}) نهائياً؟`,
+      confirmButtonText: 'نعم، إلغاء المسير',
+      cancelButtonText: 'تراجع',
+      isDanger: true,
+    });
+    if (confirmed) {
       await cancelMutation.mutateAsync(payroll.id);
     }
   };

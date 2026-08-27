@@ -2,7 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { SaleReturn } from '../types/return.types.js';
 import { formatCurrency, formatDate } from '../../../lib/utils.js';
-import { RotateCcw } from 'lucide-react';
+import { useAppSelector } from '../../../store/hooks.js';
+import { PharmacyBrandLogo } from '../../../components/common/PharmacyBrandLogo.js';
 
 export interface ReturnReceiptPreviewProps {
   saleReturn: SaleReturn;
@@ -10,6 +11,7 @@ export interface ReturnReceiptPreviewProps {
 
 export const ReturnReceiptPreview: React.FC<ReturnReceiptPreviewProps> = ({ saleReturn }) => {
   const { t } = useTranslation();
+  const { publicSettings } = useAppSelector((state) => state.settings);
 
   return (
     <div
@@ -18,14 +20,22 @@ export const ReturnReceiptPreview: React.FC<ReturnReceiptPreviewProps> = ({ sale
     >
       {/* Header */}
       <div className="text-center space-y-1 pb-3 border-b border-dashed border-slate-300">
-        <div className="flex justify-center mb-1 text-rose-600">
-          <RotateCcw className="w-8 h-8" />
+        <div className="flex justify-center mb-2">
+          <PharmacyBrandLogo size="lg" showFallbackGradient={false} />
         </div>
-        <h2 className="text-base font-black tracking-tight">{t('common.pharmacyName')}</h2>
+        <h2 className="text-base font-black tracking-tight text-slate-900">
+          {publicSettings.pharmacyName || t('common.pharmacyName')}
+        </h2>
         <p className="text-[11px] font-bold text-rose-700 bg-rose-50 py-0.5 rounded">
           إشعار دائن / إيصال استرجاع بضاعة (Credit Note)
         </p>
-        <p className="text-[10px] text-slate-500">هاتف: 01012345678 • خدمة العملاء: 19876</p>
+        {(publicSettings.pharmacyPhone || publicSettings.pharmacyAddress) && (
+          <p className="text-[10px] text-slate-500 font-mono">
+            {publicSettings.pharmacyPhone ? `هاتف: ${publicSettings.pharmacyPhone}` : ''}
+            {publicSettings.pharmacyPhone && publicSettings.pharmacyAddress ? ' • ' : ''}
+            {publicSettings.pharmacyAddress ? publicSettings.pharmacyAddress : ''}
+          </p>
+        )}
       </div>
 
       {/* Details */}

@@ -12,6 +12,7 @@ import { PayrollPaymentModal } from '../components/PayrollPaymentModal.js';
 import { Button } from '../../../components/ui/Button.js';
 import { Card } from '../../../components/ui/Card.js';
 import { EmptyState } from '../../../components/common/EmptyState.js';
+import { showConfirmDialog } from '../../../lib/alerts.js';
 import { Payroll } from '../types/payroll.types.js';
 import { Coins, Plus, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -47,7 +48,14 @@ export const PayrollPage: React.FC = () => {
   };
 
   const handleApprove = async (payroll: Payroll) => {
-    if (window.confirm(`هل أنت متأكد من رغبتك في اعتماد مسير راتب (${payroll.employeeName})؟`)) {
+    const confirmed = await showConfirmDialog({
+      title: 'اعتماد مسير الراتب',
+      text: `هل أنت متأكد من رغبتك في اعتماد مسير راتب (${payroll.employeeName})؟`,
+      confirmButtonText: 'نعم، اعتماد الراتب',
+      cancelButtonText: 'إلغاء',
+      icon: 'question',
+    });
+    if (confirmed) {
       await approveMutation.mutateAsync(payroll.id);
     }
   };

@@ -10,6 +10,7 @@ import {
   Image as ImageIcon,
 } from 'lucide-react';
 import { Button } from '../../../components/ui/Button.js';
+import { showWarningAlert } from '../../../lib/alerts.js';
 
 export interface LogoSelectorProps {
   value?: string;
@@ -38,7 +39,7 @@ export const LogoSelector: React.FC<LogoSelectorProps> = ({
 
     // Check size limit (max 1.5MB)
     if (file.size > 1.5 * 1024 * 1024) {
-      alert('حجم الصورة كبير جداً، يرجى اختيار صورة أقل من 1.5 ميجابايت');
+      showWarningAlert('حجم الصورة كبير جداً', 'يرجى اختيار صورة أقل من 1.5 ميجابايت.');
       return;
     }
 

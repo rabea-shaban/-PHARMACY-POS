@@ -2,7 +2,9 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Payroll } from '../types/payroll.types.js';
 import { formatCurrency, formatDate } from '../../../lib/utils.js';
-import { HeartPulse, CheckCircle2, Phone, Calendar, User, ShieldCheck } from 'lucide-react';
+import { useAppSelector } from '../../../store/hooks.js';
+import { PharmacyBrandLogo } from '../../../components/common/PharmacyBrandLogo.js';
+import { CheckCircle2, Phone, Calendar, User, ShieldCheck } from 'lucide-react';
 
 export interface SalarySlipViewProps {
   payroll: Payroll;
@@ -10,6 +12,7 @@ export interface SalarySlipViewProps {
 
 export const SalarySlipView: React.FC<SalarySlipViewProps> = ({ payroll }) => {
   const { t } = useTranslation();
+  const { publicSettings } = useAppSelector((state) => state.settings);
 
   return (
     <div
@@ -19,9 +22,11 @@ export const SalarySlipView: React.FC<SalarySlipViewProps> = ({ payroll }) => {
       {/* Slip Header */}
       <div className="flex items-start justify-between border-b-2 border-slate-900 pb-4 mb-6">
         <div>
-          <div className="flex items-center gap-2">
-            <HeartPulse className="w-6 h-6 text-sky-600" />
-            <h2 className="text-xl font-black text-slate-900">{t('common.pharmacyName')}</h2>
+          <div className="flex items-center gap-2.5">
+            <PharmacyBrandLogo size="md" showFallbackGradient={false} />
+            <h2 className="text-xl font-black text-slate-900">
+              {publicSettings.pharmacyName || t('common.pharmacyName')}
+            </h2>
           </div>
           <p className="text-xs text-slate-600 font-bold mt-1">
             قسيمة استلام راتب ومستحقات موظف (Salary Payslip)

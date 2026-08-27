@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useAppSelector, useAppDispatch } from '../../../store/hooks.js';
 import { clearCart } from '../../../store/slices/cartSlice.js';
 import { Button } from '../../../components/ui/Button.js';
+import { showConfirmDialog } from '../../../lib/alerts.js';
+import { PharmacyBrandLogo } from '../../../components/common/PharmacyBrandLogo.js';
 import {
-  HeartPulse,
   Trash2,
   Maximize2,
   Minimize2,
@@ -23,6 +24,7 @@ export const POSHeader: React.FC<POSHeaderProps> = ({ onOpenShortcuts }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
+  const { publicSettings } = useAppSelector((state) => state.settings);
   const itemsCount = useAppSelector((state) => state.cart.items.length);
 
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -43,8 +45,16 @@ export const POSHeader: React.FC<POSHeaderProps> = ({ onOpenShortcuts }) => {
     }
   };
 
-  const handleClear = () => {
-    if (itemsCount > 0 && window.confirm(t('pos.confirmClearPrompt') || 'هل تريد إفراغ السلة الحالية؟')) {
+  const handleClear = async () => {
+    if (itemsCount <= 0) return;
+    const confirmed = await showConfirmDialog({
+      title: 'إفراغ سلة المشتريات',
+      text: t('pos.confirmClearPrompt') || 'هل أنت متأكد من رغبتك في حذف جميع الأصناف من السلة الحالية؟',
+      confirmButtonText: 'نعم، إفراغ السلة',
+      cancelButtonText: 'تراجع',
+      isDanger: true,
+    });
+    if (confirmed) {
       dispatch(clearCart());
     }
   };
@@ -53,20 +63,18 @@ export const POSHeader: React.FC<POSHeaderProps> = ({ onOpenShortcuts }) => {
     <header className="flex items-center justify-between px-4 py-3 bg-white dark:bg-[#131B2A] border-b border-slate-200/80 dark:border-[#1E293B] rounded-3xl shadow-xs">
       {/* Brand & Mode */}
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-sky-600 to-teal-400 flex items-center justify-center text-white shadow-md shadow-sky-500/20">
-          <HeartPulse className="w-5 h-5" />
-        </div>
+        <PharmacyBrandLogo size="md" />
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-sm font-black text-slate-900 dark:text-white tracking-tight">
-              {t('pos.title')}
+              {publicSettings.pharmacyName || t('pos.title')}
             </h1>
             <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-950/80 dark:text-emerald-300">
               {t('pos.cashierOnline') || 'الكاشير متصل'}
             </span>
           </div>
           <p className="text-[11px] text-slate-400">
-            {t('common.pharmacyName')}
+            {publicSettings.pharmacySlogan || t('common.pharmacyName')}
           </p>
         </div>
       </div>

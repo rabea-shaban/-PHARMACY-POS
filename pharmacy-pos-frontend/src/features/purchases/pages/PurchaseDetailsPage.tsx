@@ -8,6 +8,7 @@ import { formatDate, formatCurrency } from '../../../lib/utils.js';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/Card.js';
 import { Button } from '../../../components/ui/Button.js';
 import { EmptyState } from '../../../components/common/EmptyState.js';
+import { showPromptDialog } from '../../../lib/alerts.js';
 import { ShoppingBag, PackageCheck, XCircle, ArrowRight, ArrowLeft } from 'lucide-react';
 import { useAppSelector } from '../../../store/hooks.js';
 
@@ -26,7 +27,14 @@ export const PurchaseDetailsPage: React.FC = () => {
   const canCancel = role && ['PLATFORM_MANAGER', 'PHARMACY_MANAGER'].includes(role);
 
   const handleCancel = async () => {
-    const reason = window.prompt(t('purchases.cancelPromptReason'));
+    const reason = await showPromptDialog({
+      title: 'إلغاء فاتورة المشتريات',
+      text: t('purchases.cancelPromptReason') || 'يرجى إدخال سبب إلغاء فاتورة المشتريات:',
+      placeholder: 'سبب الإلغاء (3 أحرف على الأقل)...',
+      confirmButtonText: 'تأكيد الإلغاء',
+      cancelButtonText: 'تراجع',
+      inputValidator: (val) => (val.trim().length < 3 ? 'يجب إدخال 3 أحرف على الأقل للسبب' : null),
+    });
     if (reason && reason.trim().length >= 3) {
       await cancelMutation.mutateAsync({ id, reason: reason.trim() });
     }

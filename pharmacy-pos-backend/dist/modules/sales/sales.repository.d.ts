@@ -71,16 +71,16 @@ export declare class SalesRepository {
                 } | null;
             } | null;
             items: ({
-                product: {
-                    name: string;
-                    id: string;
-                    barcode: string | null;
-                };
                 batch: {
                     id: string;
                     expiryDate: Date;
                     batchNumber: string;
                 } | null;
+                product: {
+                    name: string;
+                    id: string;
+                    barcode: string | null;
+                };
             } & {
                 id: string;
                 saleId: string;
@@ -174,16 +174,16 @@ export declare class SalesRepository {
             } | null;
         } | null;
         items: ({
-            product: {
-                name: string;
-                id: string;
-                barcode: string | null;
-            };
             batch: {
                 id: string;
                 expiryDate: Date;
                 batchNumber: string;
             } | null;
+            product: {
+                name: string;
+                id: string;
+                barcode: string | null;
+            };
         } & {
             id: string;
             saleId: string;
@@ -275,16 +275,16 @@ export declare class SalesRepository {
             } | null;
         } | null;
         items: ({
-            product: {
-                name: string;
-                id: string;
-                barcode: string | null;
-            };
             batch: {
                 id: string;
                 expiryDate: Date;
                 batchNumber: string;
             } | null;
+            product: {
+                name: string;
+                id: string;
+                barcode: string | null;
+            };
         } & {
             id: string;
             saleId: string;
@@ -376,16 +376,16 @@ export declare class SalesRepository {
             } | null;
         } | null;
         items: ({
-            product: {
-                name: string;
-                id: string;
-                barcode: string | null;
-            };
             batch: {
                 id: string;
                 expiryDate: Date;
                 batchNumber: string;
             } | null;
+            product: {
+                name: string;
+                id: string;
+                barcode: string | null;
+            };
         } & {
             id: string;
             saleId: string;
@@ -477,16 +477,16 @@ export declare class SalesRepository {
             } | null;
         } | null;
         items: ({
-            product: {
-                name: string;
-                id: string;
-                barcode: string | null;
-            };
             batch: {
                 id: string;
                 expiryDate: Date;
                 batchNumber: string;
             } | null;
+            product: {
+                name: string;
+                id: string;
+                barcode: string | null;
+            };
         } & {
             id: string;
             saleId: string;

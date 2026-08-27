@@ -10,6 +10,7 @@ import { CommissionRule } from '../types/commission.types.js';
 import { Button } from '../../../components/ui/Button.js';
 import { Card } from '../../../components/ui/Card.js';
 import { EmptyState } from '../../../components/common/EmptyState.js';
+import { showConfirmDialog } from '../../../lib/alerts.js';
 import { Sparkles, Plus, ArrowRight, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../../store/hooks.js';
@@ -27,7 +28,15 @@ export const CommissionRulesPage: React.FC = () => {
 
   const handleToggleStatus = async (rule: CommissionRule) => {
     const action = rule.isActive ? 'تعطيل' : 'تفعيل';
-    if (window.confirm(`هل أنت متأكد من ${action} قاعدة العمولة (${rule.name})؟`)) {
+    const confirmed = await showConfirmDialog({
+      title: `${action} قاعدة العمولة`,
+      text: `هل أنت متأكد من ${action} قاعدة العمولة (${rule.name})؟`,
+      confirmButtonText: `نعم، ${action}`,
+      cancelButtonText: 'إلغاء',
+      isDanger: rule.isActive,
+      icon: rule.isActive ? 'warning' : 'question',
+    });
+    if (confirmed) {
       await updateMutation.mutateAsync({
         id: rule.id,
         data: { isActive: !rule.isActive },

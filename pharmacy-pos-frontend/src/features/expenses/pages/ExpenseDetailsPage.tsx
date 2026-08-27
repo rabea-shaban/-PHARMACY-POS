@@ -6,6 +6,7 @@ import { ExpenseCategoryBadge } from '../components/ExpenseCategoryBadge.js';
 import { Button } from '../../../components/ui/Button.js';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/Card.js';
 import { EmptyState } from '../../../components/common/EmptyState.js';
+import { showConfirmDialog } from '../../../lib/alerts.js';
 import { formatDate, formatCurrency } from '../../../lib/utils.js';
 import {
   Wallet,
@@ -35,7 +36,14 @@ export const ExpenseDetailsPage: React.FC = () => {
   const canEdit = role && ['PLATFORM_MANAGER', 'PHARMACY_MANAGER'].includes(role);
 
   const handleDelete = async () => {
-    if (window.confirm('هل أنت متأكد من رغبتك في حذف هذا المصروف نهائياً؟')) {
+    const confirmed = await showConfirmDialog({
+      title: 'حذف المصروف نهائياً',
+      text: 'هل أنت متأكد من رغبتك في حذف هذا المصروف نهائياً؟',
+      confirmButtonText: 'نعم، حذف',
+      cancelButtonText: 'إلغاء',
+      isDanger: true,
+    });
+    if (confirmed) {
       await deleteExpenseMutation.mutateAsync(id);
       navigate('/expenses');
     }

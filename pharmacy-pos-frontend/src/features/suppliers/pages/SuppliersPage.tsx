@@ -4,6 +4,7 @@ import { useSuppliers, useDeleteSupplier } from '../hooks/useSuppliers.js';
 import { SupplierTable } from '../components/SupplierTable.js';
 import { SupplierFilters } from '../components/SupplierFilters.js';
 import { Button } from '../../../components/ui/Button.js';
+import { showConfirmDialog } from '../../../lib/alerts.js';
 import { Plus, Truck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../../store/hooks.js';
@@ -27,8 +28,14 @@ export const SuppliersPage: React.FC = () => {
   const deleteMutation = useDeleteSupplier();
 
   const handleDelete = async (supplier: Supplier) => {
-    const confirmMsg = t('suppliers.confirmDeletePrompt', { name: supplier.name });
-    if (window.confirm(confirmMsg)) {
+    const confirmed = await showConfirmDialog({
+      title: t('suppliers.deleteSupplier') || 'حذف المورد',
+      text: t('suppliers.confirmDeletePrompt', { name: supplier.name }) || `هل أنت متأكد من رغبتك في حذف بيانات المورد (${supplier.name})؟`,
+      confirmButtonText: 'نعم، حذف',
+      cancelButtonText: 'إلغاء',
+      isDanger: true,
+    });
+    if (confirmed) {
       await deleteMutation.mutateAsync(supplier.id);
     }
   };
