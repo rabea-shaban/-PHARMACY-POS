@@ -7,9 +7,21 @@ export function registerSessionExpiredHandler(handler: SessionExpiredHandler) {
   onSessionExpiredCallback = handler;
 }
 
+const getBaseUrl = (): string => {
+  if (import.meta.env.VITE_API_BASE_URL) {
+    return import.meta.env.VITE_API_BASE_URL as string;
+  }
+  // If running locally, use relative /api/v1 (routed via Vite proxy)
+  if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+    return '/api/v1';
+  }
+  // Default to live Vercel production backend URL
+  return 'https://pharmacy-pos-pharmacy-pos-backend.vercel.app/api/v1';
+};
+
 // Base Axios instance matching Backend API
 export const api = axios.create({
-  baseURL: (import.meta.env.VITE_API_BASE_URL as string) || '/api/v1',
+  baseURL: getBaseUrl(),
   withCredentials: true, // Enables sending/receiving HttpOnly cookies
   headers: {
     'Content-Type': 'application/json',
