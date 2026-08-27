@@ -28,17 +28,23 @@ function parseDatabaseUrl(urlStr) {
     }
 }
 function createPrismaClient() {
-    const dbConfig = parseDatabaseUrl(env.DATABASE_URL);
-    const adapter = new PrismaMariaDb(dbConfig);
-    return new PrismaClient({
-        adapter,
-        log: env.NODE_ENV === 'development' ? ['warn', 'error'] : ['error'],
-    });
+    try {
+        const dbConfig = parseDatabaseUrl(env.DATABASE_URL);
+        const adapter = new PrismaMariaDb(dbConfig);
+        return new PrismaClient({
+            adapter,
+            log: env.NODE_ENV === 'development' ? ['warn', 'error'] : ['error'],
+        });
+    }
+    catch (error) {
+        console.error('⚠️ Falling back to standard PrismaClient:', error);
+        return new PrismaClient({
+            log: ['error'],
+        });
+    }
 }
 export const prisma = globalThis.prismaGlobal ?? createPrismaClient();
-if (env.NODE_ENV !== 'production') {
-    globalThis.prismaGlobal = prisma;
-}
+globalThis.prismaGlobal = prisma;
 /**
  * Executes a connectivity test to verify MySQL database connectivity.
  */
