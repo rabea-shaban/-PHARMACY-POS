@@ -40,6 +40,7 @@ export const CustomerDetailsPage: React.FC = () => {
   const { data: loyaltySummary } = useCustomerLoyalty(id);
   const { data: transactionsData, isLoading: isLoadingTransactions } = useLoyaltyTransactions(id);
   const { data: purchasesData, isLoading: isLoadingPurchases } = useCustomerPurchases(id);
+  const { data: policies = [], isLoading: isLoadingPolicies, refetch: refetchPolicies } = useCustomerInsurances(id);
 
   const canEdit = role && ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'].includes(role);
 
@@ -64,8 +65,6 @@ export const CustomerDetailsPage: React.FC = () => {
       />
     );
   }
-
-  const { data: policies = [], isLoading: isLoadingPolicies, refetch: refetchPolicies } = useCustomerInsurances(id);
 
   const transactions = transactionsData?.items || loyaltySummary?.recentTransactions || [];
   const purchases = purchasesData?.items || [];
