@@ -132,20 +132,6 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
         </div>
       )}
 
-      {/* Logo Selection Component */}
-      <LogoSelector
-        value={selectedLogo}
-        disabled={isReadOnly}
-        onChange={(newLogo) => {
-          setSelectedLogo(newLogo);
-          setValue('pharmacy_logo', newLogo, {
-            shouldDirty: true,
-            shouldTouch: true,
-            shouldValidate: true,
-          });
-        }}
-      />
-
       <Card className="rounded-3xl shadow-xs overflow-hidden border-slate-200/80 dark:border-[#1E293B]">
         <CardHeader className="pb-4 border-b border-slate-100 dark:border-[#1E293B]">
           <div className="flex items-center gap-2.5">
@@ -164,7 +150,21 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
         </CardHeader>
 
         <CardContent className="p-6 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Logo & Visual Identity Section */}
+          <LogoSelector
+            value={selectedLogo}
+            disabled={isReadOnly}
+            onChange={(newLogo) => {
+              setSelectedLogo(newLogo);
+              setValue('pharmacy_logo', newLogo, {
+                shouldDirty: true,
+                shouldTouch: true,
+                shouldValidate: true,
+              });
+            }}
+          />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-slate-100 dark:border-[#1E293B]">
             <Input
               label="اسم الصيدلية الرسمي"
               placeholder="مثال: صيدلية الأمل الحديثة"
