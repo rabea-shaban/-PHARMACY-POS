@@ -39,8 +39,10 @@ export const InvoiceSettingsForm: React.FC<InvoiceSettingsFormProps> = ({
     },
   });
 
+  const isInitializedRef = React.useRef(false);
+
   useEffect(() => {
-    if (settingsMap && Object.keys(settingsMap).length > 0) {
+    if (!isInitializedRef.current && settingsMap && Object.keys(settingsMap).length > 0) {
       reset({
         invoice_prefix: settingsMap['invoice_prefix'] || 'INV',
         receipt_width: (settingsMap['receipt_width'] as '80mm' | '58mm') || '80mm',
@@ -49,8 +51,9 @@ export const InvoiceSettingsForm: React.FC<InvoiceSettingsFormProps> = ({
         receipt_show_tax: settingsMap['receipt_show_tax'] === 'false' ? 'false' : 'true',
         receipt_show_logo: settingsMap['receipt_show_logo'] === 'false' ? 'false' : 'true',
       });
+      isInitializedRef.current = true;
     }
-  }, [JSON.stringify(settingsMap), reset]);
+  }, [settingsMap, reset]);
 
   const onSubmit = (data: InvoiceReceiptSettingsFormData) => {
     setSuccessMessage(null);

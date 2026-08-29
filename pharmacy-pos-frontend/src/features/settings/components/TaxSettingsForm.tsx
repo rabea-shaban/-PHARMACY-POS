@@ -39,17 +39,19 @@ export const TaxSettingsForm: React.FC<TaxSettingsFormProps> = ({
   });
 
   const currentTaxRate = watch('tax_rate');
+  const isInitializedRef = React.useRef(false);
 
   useEffect(() => {
-    if (settingsMap && Object.keys(settingsMap).length > 0) {
+    if (!isInitializedRef.current && settingsMap && Object.keys(settingsMap).length > 0) {
       reset({
         tax_rate: settingsMap['tax_rate'] || '0.00',
         tax_enabled: settingsMap['tax_enabled'] === 'false' ? 'false' : 'true',
         tax_number: settingsMap['tax_number'] || '',
         tax_inclusive: settingsMap['tax_inclusive'] === 'false' ? 'false' : 'true',
       });
+      isInitializedRef.current = true;
     }
-  }, [JSON.stringify(settingsMap), reset]);
+  }, [settingsMap, reset]);
 
   const onSubmit = (data: TaxSettingsFormData) => {
     setSuccessMessage(null);

@@ -1,14 +1,14 @@
 import { z } from 'zod';
 
 export const pharmacyProfileSchema = z.object({
-  pharmacy_name: z.string().min(2, 'اسم الصيدلية يجب أن يكون حرفين على الأقل').max(100),
-  pharmacy_phone: z.string().min(6, 'رقم هاتف الصيدلية مطلوب').max(30),
-  pharmacy_address: z.string().min(3, 'عنوان الصيدلية مطلوب').max(200),
-  pharmacy_license: z.string().max(100).optional(),
-  pharmacy_tax_number: z.string().max(100).optional(),
-  pharmacy_email: z.string().email('بريد إلكتروني غير صالح').or(z.literal('')).optional(),
-  pharmacy_slogan: z.string().max(150).optional(),
-  pharmacy_logo: z.string().optional(),
+  pharmacy_name: z.string().min(1, 'اسم الصيدلية مطلوب').max(100),
+  pharmacy_phone: z.string().max(30).optional().nullable(),
+  pharmacy_address: z.string().max(200).optional().nullable(),
+  pharmacy_license: z.string().max(100).optional().nullable(),
+  pharmacy_tax_number: z.string().max(100).optional().nullable(),
+  pharmacy_email: z.string().email('بريد إلكتروني غير صالح').or(z.literal('')).optional().nullable(),
+  pharmacy_slogan: z.string().max(150).optional().nullable(),
+  pharmacy_logo: z.string().optional().nullable(),
 });
 
 export const taxSettingsSchema = z.object({

@@ -39,8 +39,10 @@ export const GeneralSettingsForm: React.FC<GeneralSettingsFormProps> = ({
     },
   });
 
+  const isInitializedRef = React.useRef(false);
+
   useEffect(() => {
-    if (settingsMap && Object.keys(settingsMap).length > 0) {
+    if (!isInitializedRef.current && settingsMap && Object.keys(settingsMap).length > 0) {
       reset({
         currency: settingsMap['currency'] || 'EGP',
         low_stock_threshold: settingsMap['low_stock_threshold'] || '10',
@@ -49,8 +51,9 @@ export const GeneralSettingsForm: React.FC<GeneralSettingsFormProps> = ({
         loyalty_points_per_egp: settingsMap['loyalty_points_per_egp'] || '0.1',
         loyalty_point_value: settingsMap['loyalty_point_value'] || '0.1',
       });
+      isInitializedRef.current = true;
     }
-  }, [JSON.stringify(settingsMap), reset]);
+  }, [settingsMap, reset]);
 
   const onSubmit = (data: GeneralOperationsFormData) => {
     setSuccessMessage(null);

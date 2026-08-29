@@ -56,9 +56,10 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
   });
 
   const currentLogo = watch('pharmacy_logo');
+  const isInitializedRef = React.useRef(false);
 
   useEffect(() => {
-    if (settingsMap && Object.keys(settingsMap).length > 0) {
+    if (!isInitializedRef.current && settingsMap && Object.keys(settingsMap).length > 0) {
       reset({
         pharmacy_name: settingsMap['pharmacy_name'] || '',
         pharmacy_phone: settingsMap['pharmacy_phone'] || '',
@@ -67,10 +68,11 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
         pharmacy_tax_number: settingsMap['pharmacy_tax_number'] || '',
         pharmacy_email: settingsMap['pharmacy_email'] || '',
         pharmacy_slogan: settingsMap['pharmacy_slogan'] || '',
-        pharmacy_logo: settingsMap['pharmacy_logo'] || '',
+        pharmacy_logo: settingsMap['pharmacy_logo'] || 'pulse',
       });
+      isInitializedRef.current = true;
     }
-  }, [JSON.stringify(settingsMap), reset]);
+  }, [settingsMap, reset]);
 
   const onSubmit = (data: PharmacyProfileFormData) => {
     setSuccessMessage(null);
@@ -78,13 +80,13 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
 
     const entries = [
       { key: 'pharmacy_name', value: data.pharmacy_name, isPublic: true, description: 'Official Pharmacy Name' },
-      { key: 'pharmacy_phone', value: data.pharmacy_phone, isPublic: true, description: 'Official Hotline / WhatsApp Contact' },
-      { key: 'pharmacy_address', value: data.pharmacy_address, isPublic: true, description: 'Physical Pharmacy Address' },
+      { key: 'pharmacy_phone', value: data.pharmacy_phone || '', isPublic: true, description: 'Official Hotline / WhatsApp Contact' },
+      { key: 'pharmacy_address', value: data.pharmacy_address || '', isPublic: true, description: 'Physical Pharmacy Address' },
       { key: 'pharmacy_license', value: data.pharmacy_license || '', isPublic: true, description: 'Official Pharmacy License' },
       { key: 'pharmacy_tax_number', value: data.pharmacy_tax_number || '', isPublic: true, description: 'Tax Registration ID' },
       { key: 'pharmacy_email', value: data.pharmacy_email || '', isPublic: true, description: 'Official Email' },
       { key: 'pharmacy_slogan', value: data.pharmacy_slogan || '', isPublic: true, description: 'Branding Slogan' },
-      { key: 'pharmacy_logo', value: data.pharmacy_logo || '', isPublic: true, description: 'Pharmacy Logo & Visual Identity' },
+      { key: 'pharmacy_logo', value: data.pharmacy_logo || 'pulse', isPublic: true, description: 'Pharmacy Logo & Visual Identity' },
     ];
 
     updateSettingsMutation.mutate(
@@ -128,7 +130,7 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
 
       {/* Logo Selection Component */}
       <LogoSelector
-        value={currentLogo}
+        value={currentLogo || ''}
         disabled={isReadOnly}
         onChange={(newLogo) =>
           setValue('pharmacy_logo', newLogo, {
