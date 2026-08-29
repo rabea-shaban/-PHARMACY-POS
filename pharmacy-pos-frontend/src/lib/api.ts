@@ -7,12 +7,18 @@ export function registerSessionExpiredHandler(handler: SessionExpiredHandler) {
   onSessionExpiredCallback = handler;
 }
 
-const getBaseUrl = (): string => {
-  if (import.meta.env.VITE_API_BASE_URL) {
-    return import.meta.env.VITE_API_BASE_URL as string;
+// Resolve API Base URL dynamically across Desktop (Electron), Local Dev, and Live Cloud
+const getApiBaseUrl = (): string => {
+  const customUrl = import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL;
+  if (customUrl) {
+    return customUrl as string;
   }
-  // If running locally, use relative /api/v1 (routed via Vite proxy)
-  if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
+  // When running inside Electron packaged mode (file:// protocol)
+  if (typeof window !== 'undefined' && window.location.protocol === 'file:') {
+    return 'http://localhost:5000/api/v1';
+  }
+  // If running locally in browser (routed via Vite dev proxy)
+  if (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
     return '/api/v1';
   }
   // Default to live Vercel production backend URL
@@ -21,7 +27,7 @@ const getBaseUrl = (): string => {
 
 // Base Axios instance matching Backend API
 export const api = axios.create({
-  baseURL: getBaseUrl(),
+  baseURL: getApiBaseUrl(),
   withCredentials: true, // Enables sending/receiving HttpOnly cookies
   headers: {
     'Content-Type': 'application/json',
