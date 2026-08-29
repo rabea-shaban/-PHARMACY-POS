@@ -28,16 +28,9 @@ export const useAllSettings = () => {
 
 // Hook: Fetch Public Settings
 export const usePublicSettings = () => {
-  const dispatch = useAppDispatch();
-
   return useQuery({
     queryKey: SETTINGS_QUERY_KEYS.public(),
-    queryFn: async () => {
-      const data = await settingsApi.getPublicSettings();
-      // Sync into Redux store so POS and Receipt headers get instant updates
-      dispatch(setPublicSettings(data));
-      return data;
-    },
+    queryFn: () => settingsApi.getPublicSettings(),
     staleTime: 10 * 60 * 1000,
   });
 };
