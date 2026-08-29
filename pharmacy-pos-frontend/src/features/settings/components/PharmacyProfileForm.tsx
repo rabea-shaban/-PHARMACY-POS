@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { pharmacyProfileSchema, PharmacyProfileFormData } from '../schemas/settingsSchemas.js';
 import { SystemSettingsMap } from '../types/settings.types.js';
 import { useUpdateSettings } from '../hooks/useSettings.js';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/Card.js';
@@ -34,66 +31,61 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const updateSettingsMutation = useUpdateSettings();
 
-  const [selectedLogo, setSelectedLogo] = useState<string>(settingsMap['pharmacy_logo'] || 'pulse');
+  const [formData, setFormData] = useState({
+    pharmacy_name: settingsMap['pharmacy_name'] || '',
+    pharmacy_slogan: settingsMap['pharmacy_slogan'] || '',
+    pharmacy_phone: settingsMap['pharmacy_phone'] || '',
+    pharmacy_email: settingsMap['pharmacy_email'] || '',
+    pharmacy_address: settingsMap['pharmacy_address'] || '',
+    pharmacy_license: settingsMap['pharmacy_license'] || '',
+    pharmacy_tax_number: settingsMap['pharmacy_tax_number'] || '',
+    pharmacy_logo: settingsMap['pharmacy_logo'] || 'pulse',
+  });
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    setValue,
-    formState: { errors, isDirty },
-  } = useForm<PharmacyProfileFormData>({
-    resolver: zodResolver(pharmacyProfileSchema),
-    defaultValues: {
+  const [initialData, setInitialData] = useState(formData);
+
+  useEffect(() => {
+    const fresh = {
       pharmacy_name: settingsMap['pharmacy_name'] || '',
+      pharmacy_slogan: settingsMap['pharmacy_slogan'] || '',
       pharmacy_phone: settingsMap['pharmacy_phone'] || '',
+      pharmacy_email: settingsMap['pharmacy_email'] || '',
       pharmacy_address: settingsMap['pharmacy_address'] || '',
       pharmacy_license: settingsMap['pharmacy_license'] || '',
       pharmacy_tax_number: settingsMap['pharmacy_tax_number'] || '',
-      pharmacy_email: settingsMap['pharmacy_email'] || '',
-      pharmacy_slogan: settingsMap['pharmacy_slogan'] || '',
       pharmacy_logo: settingsMap['pharmacy_logo'] || 'pulse',
-    },
-  });
+    };
+    setFormData(fresh);
+    setInitialData(fresh);
+  }, [JSON.stringify(settingsMap)]);
 
-  // Explicitly register custom pharmacy_logo field in hook form
-  useEffect(() => {
-    register('pharmacy_logo');
-  }, [register]);
+  const handleChange = (field: string, value: string) => {
+    setSuccessMessage(null);
+    setErrorMessage(null);
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
 
-  useEffect(() => {
-    const currentLogoInSettings = settingsMap['pharmacy_logo'] || 'pulse';
-    setSelectedLogo(currentLogoInSettings);
+  const isDirty = JSON.stringify(formData) !== JSON.stringify(initialData);
 
-    if (settingsMap && Object.keys(settingsMap).length > 0) {
-      reset({
-        pharmacy_name: settingsMap['pharmacy_name'] || '',
-        pharmacy_phone: settingsMap['pharmacy_phone'] || '',
-        pharmacy_address: settingsMap['pharmacy_address'] || '',
-        pharmacy_license: settingsMap['pharmacy_license'] || '',
-        pharmacy_tax_number: settingsMap['pharmacy_tax_number'] || '',
-        pharmacy_email: settingsMap['pharmacy_email'] || '',
-        pharmacy_slogan: settingsMap['pharmacy_slogan'] || '',
-        pharmacy_logo: currentLogoInSettings,
-      });
-    }
-  }, [JSON.stringify(settingsMap), reset]);
-
-  const onSubmit = (data: PharmacyProfileFormData) => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
     setSuccessMessage(null);
     setErrorMessage(null);
 
-    const finalLogo = selectedLogo || data.pharmacy_logo || 'pulse';
+    if (!formData.pharmacy_name.trim()) {
+      setErrorMessage('اسم الصيدلية الرسمي مطلوب');
+      return;
+    }
 
     const entries = [
-      { key: 'pharmacy_name', value: data.pharmacy_name, isPublic: true, description: 'Official Pharmacy Name' },
-      { key: 'pharmacy_phone', value: data.pharmacy_phone || '', isPublic: true, description: 'Official Hotline / WhatsApp Contact' },
-      { key: 'pharmacy_address', value: data.pharmacy_address || '', isPublic: true, description: 'Physical Pharmacy Address' },
-      { key: 'pharmacy_license', value: data.pharmacy_license || '', isPublic: true, description: 'Official Pharmacy License' },
-      { key: 'pharmacy_tax_number', value: data.pharmacy_tax_number || '', isPublic: true, description: 'Tax Registration ID' },
-      { key: 'pharmacy_email', value: data.pharmacy_email || '', isPublic: true, description: 'Official Email' },
-      { key: 'pharmacy_slogan', value: data.pharmacy_slogan || '', isPublic: true, description: 'Branding Slogan' },
-      { key: 'pharmacy_logo', value: finalLogo, isPublic: true, description: 'Pharmacy Logo & Visual Identity' },
+      { key: 'pharmacy_name', value: formData.pharmacy_name.trim(), isPublic: true, description: 'Official Pharmacy Name' },
+      { key: 'pharmacy_phone', value: formData.pharmacy_phone.trim(), isPublic: true, description: 'Official Hotline / WhatsApp Contact' },
+      { key: 'pharmacy_address', value: formData.pharmacy_address.trim(), isPublic: true, description: 'Physical Pharmacy Address' },
+      { key: 'pharmacy_license', value: formData.pharmacy_license.trim(), isPublic: true, description: 'Official Pharmacy License' },
+      { key: 'pharmacy_tax_number', value: formData.pharmacy_tax_number.trim(), isPublic: true, description: 'Tax Registration ID' },
+      { key: 'pharmacy_email', value: formData.pharmacy_email.trim(), isPublic: true, description: 'Official Email' },
+      { key: 'pharmacy_slogan', value: formData.pharmacy_slogan.trim(), isPublic: true, description: 'Branding Slogan' },
+      { key: 'pharmacy_logo', value: formData.pharmacy_logo || 'pulse', isPublic: true, description: 'Pharmacy Logo & Visual Identity' },
     ];
 
     updateSettingsMutation.mutate(
@@ -101,7 +93,7 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
       {
         onSuccess: () => {
           setSuccessMessage('تم حفظ وتحديث بيانات وهوية وشعار الصيدلية بنجاح');
-          reset({ ...data, pharmacy_logo: finalLogo });
+          setInitialData({ ...formData });
         },
         onError: (err: any) => {
           setErrorMessage(err?.response?.data?.message || 'فشل حفظ الإعدادات');
@@ -110,16 +102,8 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
     );
   };
 
-  const onInvalid = (validationErrors: any) => {
-    console.warn('Form validation errors:', validationErrors);
-    const firstErr = Object.values(validationErrors)[0] as any;
-    if (firstErr?.message) {
-      setErrorMessage(firstErr.message);
-    }
-  };
-
   return (
-    <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6">
       {successMessage && (
         <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 dark:bg-emerald-950/40 dark:border-emerald-800 dark:text-emerald-300 text-xs font-bold flex items-center gap-2.5 animate-in fade-in">
           <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
@@ -154,16 +138,9 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
         <CardContent className="p-6 space-y-6">
           {/* Logo & Visual Identity Section */}
           <LogoSelector
-            value={selectedLogo}
+            value={formData.pharmacy_logo}
             disabled={isReadOnly}
-            onChange={(newLogo) => {
-              setSelectedLogo(newLogo);
-              setValue('pharmacy_logo', newLogo, {
-                shouldDirty: true,
-                shouldTouch: true,
-                shouldValidate: true,
-              });
-            }}
+            onChange={(newLogo) => handleChange('pharmacy_logo', newLogo)}
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-slate-100 dark:border-[#1E293B]">
@@ -171,18 +148,18 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
               label="اسم الصيدلية الرسمي"
               placeholder="مثال: صيدلية الأمل الحديثة"
               disabled={isReadOnly}
-              error={errors.pharmacy_name?.message}
               leftIcon={<Building2 className="w-4 h-4 text-slate-400" />}
-              {...register('pharmacy_name')}
+              value={formData.pharmacy_name}
+              onChange={(e) => handleChange('pharmacy_name', e.target.value)}
             />
 
             <Input
               label="شعار أو وصف الصيدلية (Slogan)"
               placeholder="مثال: رعاية صحية متكاملة لأسرتك"
               disabled={isReadOnly}
-              error={errors.pharmacy_slogan?.message}
               leftIcon={<Sparkles className="w-4 h-4 text-amber-500" />}
-              {...register('pharmacy_slogan')}
+              value={formData.pharmacy_slogan}
+              onChange={(e) => handleChange('pharmacy_slogan', e.target.value)}
             />
           </div>
 
@@ -191,9 +168,9 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
               label="رقم الهاتف / الخط الساخن / الواتساب"
               placeholder="+201000000000"
               disabled={isReadOnly}
-              error={errors.pharmacy_phone?.message}
               leftIcon={<Phone className="w-4 h-4 text-slate-400" />}
-              {...register('pharmacy_phone')}
+              value={formData.pharmacy_phone}
+              onChange={(e) => handleChange('pharmacy_phone', e.target.value)}
             />
 
             <Input
@@ -201,9 +178,9 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
               placeholder="contact@pharmacy.com"
               type="email"
               disabled={isReadOnly}
-              error={errors.pharmacy_email?.message}
               leftIcon={<Mail className="w-4 h-4 text-slate-400" />}
-              {...register('pharmacy_email')}
+              value={formData.pharmacy_email}
+              onChange={(e) => handleChange('pharmacy_email', e.target.value)}
             />
           </div>
 
@@ -211,9 +188,9 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
             label="العنوان الجغرافي التفصيلي"
             placeholder="مثال: القاهرة، مصر - شارع التحرير، مبنى 14"
             disabled={isReadOnly}
-            error={errors.pharmacy_address?.message}
             leftIcon={<MapPin className="w-4 h-4 text-slate-400" />}
-            {...register('pharmacy_address')}
+            value={formData.pharmacy_address}
+            onChange={(e) => handleChange('pharmacy_address', e.target.value)}
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-slate-100 dark:border-[#1E293B]">
@@ -221,18 +198,18 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
               label="رقم الترخيص الصيدلي"
               placeholder="مثال: 10482 / 2026"
               disabled={isReadOnly}
-              error={errors.pharmacy_license?.message}
               leftIcon={<ShieldCheck className="w-4 h-4 text-emerald-600" />}
-              {...register('pharmacy_license')}
+              value={formData.pharmacy_license}
+              onChange={(e) => handleChange('pharmacy_license', e.target.value)}
             />
 
             <Input
               label="رقم السجل التجاري / البطاقة الضريبية"
               placeholder="مثال: 987-654-321"
               disabled={isReadOnly}
-              error={errors.pharmacy_tax_number?.message}
               leftIcon={<ShieldCheck className="w-4 h-4 text-sky-600" />}
-              {...register('pharmacy_tax_number')}
+              value={formData.pharmacy_tax_number}
+              onChange={(e) => handleChange('pharmacy_tax_number', e.target.value)}
             />
           </div>
 
@@ -244,7 +221,7 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
                 variant="outline"
                 size="md"
                 disabled={!isDirty || updateSettingsMutation.isPending}
-                onClick={() => reset()}
+                onClick={() => setFormData(initialData)}
                 leftIcon={<RotateCcw className="w-4 h-4" />}
               >
                 تراجع عن التعديلات
