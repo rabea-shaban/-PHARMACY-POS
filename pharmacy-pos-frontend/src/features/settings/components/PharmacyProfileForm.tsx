@@ -35,7 +35,6 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
   const updateSettingsMutation = useUpdateSettings();
 
   const [selectedLogo, setSelectedLogo] = useState<string>(settingsMap['pharmacy_logo'] || 'pulse');
-  const isInitializedRef = React.useRef(false);
 
   const {
     register,
@@ -57,11 +56,16 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
     },
   });
 
+  // Explicitly register custom pharmacy_logo field in hook form
+  useEffect(() => {
+    register('pharmacy_logo');
+  }, [register]);
+
   useEffect(() => {
     const currentLogoInSettings = settingsMap['pharmacy_logo'] || 'pulse';
     setSelectedLogo(currentLogoInSettings);
 
-    if (!isInitializedRef.current && settingsMap && Object.keys(settingsMap).length > 0) {
+    if (settingsMap && Object.keys(settingsMap).length > 0) {
       reset({
         pharmacy_name: settingsMap['pharmacy_name'] || '',
         pharmacy_phone: settingsMap['pharmacy_phone'] || '',
@@ -72,9 +76,8 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
         pharmacy_slogan: settingsMap['pharmacy_slogan'] || '',
         pharmacy_logo: currentLogoInSettings,
       });
-      isInitializedRef.current = true;
     }
-  }, [settingsMap, reset]);
+  }, [JSON.stringify(settingsMap), reset]);
 
   const onSubmit = (data: PharmacyProfileFormData) => {
     setSuccessMessage(null);
@@ -117,7 +120,6 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="space-y-6">
-      <input type="hidden" {...register('pharmacy_logo')} value={selectedLogo} />
       {successMessage && (
         <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 dark:bg-emerald-950/40 dark:border-emerald-800 dark:text-emerald-300 text-xs font-bold flex items-center gap-2.5 animate-in fade-in">
           <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
