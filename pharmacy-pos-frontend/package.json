@@ -49,6 +49,10 @@
       {
         "from": "../pharmacy-pos-backend/package.json",
         "to": "backend/package.json"
+      },
+      {
+        "from": "../pharmacy-pos-backend/.env",
+        "to": "backend/.env"
       }
     ],
     "publish": [

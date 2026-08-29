@@ -17,11 +17,11 @@ function parseDatabaseUrl(urlStr) {
     }
     catch {
         return {
-            host: 'srv1874.hstgr.io',
+            host: '127.0.0.1',
             port: 3306,
-            user: 'u534453428_rabeashaban',
-            password: '302060@Aa',
-            database: 'u534453428_pharmacy_Db',
+            user: 'root',
+            password: '',
+            database: 'pharmacy_pos',
             connectionLimit: 5,
             connectTimeout: 10000,
         };

@@ -141,6 +141,8 @@ async function startBackendService() {
       ELECTRON_RUN_AS_NODE: '1',
       NODE_ENV: app.isPackaged ? 'production' : 'development',
       PORT: String(BACKEND_PORT),
+      DATABASE_URL: process.env.DATABASE_URL || 'mysql://root:@127.0.0.1:3306/pharmacy_pos',
+      JWT_SECRET: process.env.JWT_SECRET || 'pharmacy_pos_production_secure_jwt_secret_key_2026_x89',
     };
 
     backendProcess = spawn(process.execPath, [scriptPath], {

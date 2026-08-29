@@ -37,7 +37,7 @@ function validateAndLoadEnv(): EnvironmentConfig {
 
   const databaseUrl =
     process.env.DATABASE_URL?.trim() ||
-    'mysql://u534453428_rabeashaban:302060%40Aa@srv1874.hstgr.io:3306/u534453428_pharmacy_Db';
+    'mysql://root:@127.0.0.1:3306/pharmacy_pos';
 
   const jwtSecret =
     process.env.JWT_SECRET?.trim() ||

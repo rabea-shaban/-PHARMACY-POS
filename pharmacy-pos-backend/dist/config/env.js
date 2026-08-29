@@ -18,7 +18,7 @@ function validateAndLoadEnv() {
         .map((origin) => origin.trim())
         .filter((origin) => origin.length > 0);
     const databaseUrl = process.env.DATABASE_URL?.trim() ||
-        'mysql://u534453428_rabeashaban:302060%40Aa@srv1874.hstgr.io:3306/u534453428_pharmacy_Db';
+        'mysql://root:@127.0.0.1:3306/pharmacy_pos';
     const jwtSecret = process.env.JWT_SECRET?.trim() ||
         'pharmacy_pos_production_secure_jwt_secret_key_2026_x89';
     const jwtExpiresIn = process.env.JWT_EXPIRES_IN?.trim() || '1d';
