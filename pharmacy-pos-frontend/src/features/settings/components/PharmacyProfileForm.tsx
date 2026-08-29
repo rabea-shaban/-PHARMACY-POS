@@ -101,8 +101,17 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
     );
   };
 
+  const onInvalid = (validationErrors: any) => {
+    console.warn('Form validation errors:', validationErrors);
+    const firstErr = Object.values(validationErrors)[0] as any;
+    if (firstErr?.message) {
+      setErrorMessage(firstErr.message);
+    }
+  };
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="space-y-6">
+      <input type="hidden" {...register('pharmacy_logo')} />
       {successMessage && (
         <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 dark:bg-emerald-950/40 dark:border-emerald-800 dark:text-emerald-300 text-xs font-bold flex items-center gap-2.5 animate-in fade-in">
           <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
@@ -121,7 +130,13 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
       <LogoSelector
         value={currentLogo}
         disabled={isReadOnly}
-        onChange={(newLogo) => setValue('pharmacy_logo', newLogo, { shouldDirty: true })}
+        onChange={(newLogo) =>
+          setValue('pharmacy_logo', newLogo, {
+            shouldDirty: true,
+            shouldTouch: true,
+            shouldValidate: true,
+          })
+        }
       />
 
       <Card className="rounded-3xl shadow-xs overflow-hidden border-slate-200/80 dark:border-[#1E293B]">
