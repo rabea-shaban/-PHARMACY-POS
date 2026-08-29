@@ -41,13 +41,15 @@ export const TaxSettingsForm: React.FC<TaxSettingsFormProps> = ({
   const currentTaxRate = watch('tax_rate');
 
   useEffect(() => {
-    reset({
-      tax_rate: settingsMap['tax_rate'] || '0.00',
-      tax_enabled: settingsMap['tax_enabled'] === 'false' ? 'false' : 'true',
-      tax_number: settingsMap['tax_number'] || '',
-      tax_inclusive: settingsMap['tax_inclusive'] === 'false' ? 'false' : 'true',
-    });
-  }, [settingsMap, reset]);
+    if (settingsMap && Object.keys(settingsMap).length > 0) {
+      reset({
+        tax_rate: settingsMap['tax_rate'] || '0.00',
+        tax_enabled: settingsMap['tax_enabled'] === 'false' ? 'false' : 'true',
+        tax_number: settingsMap['tax_number'] || '',
+        tax_inclusive: settingsMap['tax_inclusive'] === 'false' ? 'false' : 'true',
+      });
+    }
+  }, [JSON.stringify(settingsMap), reset]);
 
   const onSubmit = (data: TaxSettingsFormData) => {
     setSuccessMessage(null);

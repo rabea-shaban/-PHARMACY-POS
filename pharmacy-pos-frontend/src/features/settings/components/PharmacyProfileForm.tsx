@@ -58,17 +58,19 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
   const currentLogo = watch('pharmacy_logo');
 
   useEffect(() => {
-    reset({
-      pharmacy_name: settingsMap['pharmacy_name'] || '',
-      pharmacy_phone: settingsMap['pharmacy_phone'] || '',
-      pharmacy_address: settingsMap['pharmacy_address'] || '',
-      pharmacy_license: settingsMap['pharmacy_license'] || '',
-      pharmacy_tax_number: settingsMap['pharmacy_tax_number'] || '',
-      pharmacy_email: settingsMap['pharmacy_email'] || '',
-      pharmacy_slogan: settingsMap['pharmacy_slogan'] || '',
-      pharmacy_logo: settingsMap['pharmacy_logo'] || '',
-    });
-  }, [settingsMap, reset]);
+    if (settingsMap && Object.keys(settingsMap).length > 0) {
+      reset({
+        pharmacy_name: settingsMap['pharmacy_name'] || '',
+        pharmacy_phone: settingsMap['pharmacy_phone'] || '',
+        pharmacy_address: settingsMap['pharmacy_address'] || '',
+        pharmacy_license: settingsMap['pharmacy_license'] || '',
+        pharmacy_tax_number: settingsMap['pharmacy_tax_number'] || '',
+        pharmacy_email: settingsMap['pharmacy_email'] || '',
+        pharmacy_slogan: settingsMap['pharmacy_slogan'] || '',
+        pharmacy_logo: settingsMap['pharmacy_logo'] || '',
+      });
+    }
+  }, [JSON.stringify(settingsMap), reset]);
 
   const onSubmit = (data: PharmacyProfileFormData) => {
     setSuccessMessage(null);

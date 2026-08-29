@@ -40,15 +40,17 @@ export const InvoiceSettingsForm: React.FC<InvoiceSettingsFormProps> = ({
   });
 
   useEffect(() => {
-    reset({
-      invoice_prefix: settingsMap['invoice_prefix'] || 'INV',
-      receipt_width: (settingsMap['receipt_width'] as '80mm' | '58mm') || '80mm',
-      receipt_footer_text: settingsMap['receipt_footer_text'] || 'شكراً لتعاملكم معنا، مع تمنياتنا لكم بالشفاء العاجل',
-      receipt_return_policy: settingsMap['receipt_return_policy'] || 'المرتجع خلال 14 يوماً مع إحضار أصل الفاتورة بحالة سليمة',
-      receipt_show_tax: settingsMap['receipt_show_tax'] === 'false' ? 'false' : 'true',
-      receipt_show_logo: settingsMap['receipt_show_logo'] === 'false' ? 'false' : 'true',
-    });
-  }, [settingsMap, reset]);
+    if (settingsMap && Object.keys(settingsMap).length > 0) {
+      reset({
+        invoice_prefix: settingsMap['invoice_prefix'] || 'INV',
+        receipt_width: (settingsMap['receipt_width'] as '80mm' | '58mm') || '80mm',
+        receipt_footer_text: settingsMap['receipt_footer_text'] || 'شكراً لتعاملكم معنا، مع تمنياتنا لكم بالشفاء العاجل',
+        receipt_return_policy: settingsMap['receipt_return_policy'] || 'المرتجع خلال 14 يوماً مع إحضار أصل الفاتورة بحالة سليمة',
+        receipt_show_tax: settingsMap['receipt_show_tax'] === 'false' ? 'false' : 'true',
+        receipt_show_logo: settingsMap['receipt_show_logo'] === 'false' ? 'false' : 'true',
+      });
+    }
+  }, [JSON.stringify(settingsMap), reset]);
 
   const onSubmit = (data: InvoiceReceiptSettingsFormData) => {
     setSuccessMessage(null);

@@ -40,7 +40,7 @@ export const SettingsPage: React.FC = () => {
     );
   }
 
-  const settingsMap = data?.map || {};
+  const settingsMap = React.useMemo(() => data?.map || {}, [data?.map]);
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">

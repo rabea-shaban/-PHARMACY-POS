@@ -40,15 +40,17 @@ export const GeneralSettingsForm: React.FC<GeneralSettingsFormProps> = ({
   });
 
   useEffect(() => {
-    reset({
-      currency: settingsMap['currency'] || 'EGP',
-      low_stock_threshold: settingsMap['low_stock_threshold'] || '10',
-      expiry_alert_days: settingsMap['expiry_alert_days'] || '90',
-      commission_default_rate: settingsMap['commission_default_rate'] || '5.0',
-      loyalty_points_per_egp: settingsMap['loyalty_points_per_egp'] || '0.1',
-      loyalty_point_value: settingsMap['loyalty_point_value'] || '0.1',
-    });
-  }, [settingsMap, reset]);
+    if (settingsMap && Object.keys(settingsMap).length > 0) {
+      reset({
+        currency: settingsMap['currency'] || 'EGP',
+        low_stock_threshold: settingsMap['low_stock_threshold'] || '10',
+        expiry_alert_days: settingsMap['expiry_alert_days'] || '90',
+        commission_default_rate: settingsMap['commission_default_rate'] || '5.0',
+        loyalty_points_per_egp: settingsMap['loyalty_points_per_egp'] || '0.1',
+        loyalty_point_value: settingsMap['loyalty_point_value'] || '0.1',
+      });
+    }
+  }, [JSON.stringify(settingsMap), reset]);
 
   const onSubmit = (data: GeneralOperationsFormData) => {
     setSuccessMessage(null);
