@@ -159,7 +159,7 @@ export const LogoSelector: React.FC<LogoSelectorProps> = ({
 
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
           {PRESET_LOGOS.map((preset) => {
-            const isSelected = value === preset.id || (!value && preset.id === 'pulse');
+            const isSelected = (value || 'pulse') === preset.id;
             return (
               <button
                 key={preset.id}

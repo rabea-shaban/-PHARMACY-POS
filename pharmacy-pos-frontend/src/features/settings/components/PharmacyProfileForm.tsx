@@ -34,12 +34,14 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const updateSettingsMutation = useUpdateSettings();
 
+  const [selectedLogo, setSelectedLogo] = useState<string>(settingsMap['pharmacy_logo'] || 'pulse');
+  const isInitializedRef = React.useRef(false);
+
   const {
     register,
     handleSubmit,
     reset,
     setValue,
-    watch,
     formState: { errors, isDirty },
   } = useForm<PharmacyProfileFormData>({
     resolver: zodResolver(pharmacyProfileSchema),
@@ -51,14 +53,14 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
       pharmacy_tax_number: settingsMap['pharmacy_tax_number'] || '',
       pharmacy_email: settingsMap['pharmacy_email'] || '',
       pharmacy_slogan: settingsMap['pharmacy_slogan'] || '',
-      pharmacy_logo: settingsMap['pharmacy_logo'] || '',
+      pharmacy_logo: settingsMap['pharmacy_logo'] || 'pulse',
     },
   });
 
-  const currentLogo = watch('pharmacy_logo');
-  const isInitializedRef = React.useRef(false);
-
   useEffect(() => {
+    const currentLogoInSettings = settingsMap['pharmacy_logo'] || 'pulse';
+    setSelectedLogo(currentLogoInSettings);
+
     if (!isInitializedRef.current && settingsMap && Object.keys(settingsMap).length > 0) {
       reset({
         pharmacy_name: settingsMap['pharmacy_name'] || '',
@@ -68,7 +70,7 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
         pharmacy_tax_number: settingsMap['pharmacy_tax_number'] || '',
         pharmacy_email: settingsMap['pharmacy_email'] || '',
         pharmacy_slogan: settingsMap['pharmacy_slogan'] || '',
-        pharmacy_logo: settingsMap['pharmacy_logo'] || 'pulse',
+        pharmacy_logo: currentLogoInSettings,
       });
       isInitializedRef.current = true;
     }
@@ -78,6 +80,8 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
     setSuccessMessage(null);
     setErrorMessage(null);
 
+    const finalLogo = selectedLogo || data.pharmacy_logo || 'pulse';
+
     const entries = [
       { key: 'pharmacy_name', value: data.pharmacy_name, isPublic: true, description: 'Official Pharmacy Name' },
       { key: 'pharmacy_phone', value: data.pharmacy_phone || '', isPublic: true, description: 'Official Hotline / WhatsApp Contact' },
@@ -86,7 +90,7 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
       { key: 'pharmacy_tax_number', value: data.pharmacy_tax_number || '', isPublic: true, description: 'Tax Registration ID' },
       { key: 'pharmacy_email', value: data.pharmacy_email || '', isPublic: true, description: 'Official Email' },
       { key: 'pharmacy_slogan', value: data.pharmacy_slogan || '', isPublic: true, description: 'Branding Slogan' },
-      { key: 'pharmacy_logo', value: data.pharmacy_logo || 'pulse', isPublic: true, description: 'Pharmacy Logo & Visual Identity' },
+      { key: 'pharmacy_logo', value: finalLogo, isPublic: true, description: 'Pharmacy Logo & Visual Identity' },
     ];
 
     updateSettingsMutation.mutate(
@@ -94,7 +98,7 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
       {
         onSuccess: () => {
           setSuccessMessage('تم حفظ وتحديث بيانات وهوية وشعار الصيدلية بنجاح');
-          reset(data);
+          reset({ ...data, pharmacy_logo: finalLogo });
         },
         onError: (err: any) => {
           setErrorMessage(err?.response?.data?.message || 'فشل حفظ الإعدادات');
@@ -113,7 +117,7 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="space-y-6">
-      <input type="hidden" {...register('pharmacy_logo')} />
+      <input type="hidden" {...register('pharmacy_logo')} value={selectedLogo} />
       {successMessage && (
         <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 dark:bg-emerald-950/40 dark:border-emerald-800 dark:text-emerald-300 text-xs font-bold flex items-center gap-2.5 animate-in fade-in">
           <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
@@ -130,15 +134,16 @@ export const PharmacyProfileForm: React.FC<PharmacyProfileFormProps> = ({
 
       {/* Logo Selection Component */}
       <LogoSelector
-        value={currentLogo || ''}
+        value={selectedLogo}
         disabled={isReadOnly}
-        onChange={(newLogo) =>
+        onChange={(newLogo) => {
+          setSelectedLogo(newLogo);
           setValue('pharmacy_logo', newLogo, {
             shouldDirty: true,
             shouldTouch: true,
             shouldValidate: true,
-          })
-        }
+          });
+        }}
       />
 
       <Card className="rounded-3xl shadow-xs overflow-hidden border-slate-200/80 dark:border-[#1E293B]">
