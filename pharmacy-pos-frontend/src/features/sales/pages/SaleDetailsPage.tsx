@@ -10,6 +10,7 @@ import { Badge } from '../../../components/ui/Badge.js';
 import { EmptyState } from '../../../components/common/EmptyState.js';
 import { showPromptDialog } from '../../../lib/alerts.js';
 import { ReceiptPreview } from '../components/ReceiptPreview.js';
+import { printSaleReceipt } from '../../../lib/printer.js';
 import {
   ReceiptText,
   Printer,
@@ -18,6 +19,7 @@ import {
   ArrowLeft,
   User,
   CreditCard,
+  Check,
 } from 'lucide-react';
 import { useAppSelector } from '../../../store/hooks.js';
 
@@ -26,8 +28,30 @@ export const SaleDetailsPage: React.FC = () => {
   const { id = '' } = useParams<{ id: string }>();
   const { direction } = useAppSelector((state) => state.ui);
   const { role } = useAppSelector((state) => state.auth);
+  const { publicSettings } = useAppSelector((state) => state.settings);
+  const [isPrinting, setIsPrinting] = React.useState(false);
+  const [printSuccess, setPrintSuccess] = React.useState(false);
 
   const { data: sale, isLoading, isError } = useSale(id);
+
+  const handleReprint = async () => {
+    if (!sale) return;
+    setIsPrinting(true);
+    try {
+      await printSaleReceipt(sale, {
+        pharmacyName: publicSettings.pharmacyName,
+        pharmacySlogan: publicSettings.pharmacySlogan,
+        pharmacyPhone: publicSettings.pharmacyPhone,
+        pharmacyAddress: publicSettings.pharmacyAddress,
+        receiptFooterText: publicSettings.receiptFooterText,
+        receiptReturnPolicy: publicSettings.receiptReturnPolicy,
+      });
+      setPrintSuccess(true);
+      setTimeout(() => setPrintSuccess(false), 2500);
+    } finally {
+      setIsPrinting(false);
+    }
+  };
   const cancelMutation = useCancelSale();
 
   const canCancel = role && ['PLATFORM_MANAGER', 'PHARMACY_MANAGER'].includes(role);
@@ -110,10 +134,19 @@ export const SaleDetailsPage: React.FC = () => {
           <Button
             variant="outline"
             size="md"
-            leftIcon={<Printer className="w-4 h-4" />}
-            onClick={() => window.print()}
+            leftIcon={
+              printSuccess ? (
+                <Check className="w-4 h-4 text-emerald-600" />
+              ) : (
+                <Printer className="w-4 h-4" />
+              )
+            }
+            onClick={handleReprint}
+            isLoading={isPrinting}
           >
-            {t('pos.printReceipt') || 'طباعة الإيصال'}
+            {printSuccess
+              ? (t('pos.printed') || 'تمت الطباعة')
+              : (t('pos.printReceipt') || 'طباعة الإيصال')}
           </Button>
 
           {sale.status === 'COMPLETED' && canCancel && (

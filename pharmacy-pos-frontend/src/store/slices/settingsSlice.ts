@@ -11,6 +11,9 @@ export interface PublicSettings {
   currency: string;
   taxRate: number;
   invoicePrefix: string;
+  receiptFooterText?: string;
+  receiptReturnPolicy?: string;
+  receiptWidth?: string;
 }
 
 interface SettingsSliceState {

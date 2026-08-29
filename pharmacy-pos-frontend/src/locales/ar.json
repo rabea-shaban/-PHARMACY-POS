@@ -393,6 +393,8 @@
     "noCustomerPolicies": "لا توجد بوالص تأمين مسجلة لهذا العميل.",
     "invoiceCompletedTitle": "تم إصدار الفاتورة بنجاح!",
     "printReceipt": "طباعة الإيصال (F9)",
+    "printed": "تمت الطباعة بنجاح",
+    "printing": "جاري إرسال أمر الطباعة...",
     "startNewSale": "فاتورة بيع جديدة (Esc)",
     "redeemPoints": "استبدال بالخصم",
     "confirmClearPrompt": "هل تريد إفراغ سلة المبيعات الحالية؟",

@@ -6,11 +6,13 @@ import { InvoiceSettingsForm } from '../components/InvoiceSettingsForm.js';
 import { GeneralSettingsForm } from '../components/GeneralSettingsForm.js';
 import { BrandingPreview } from '../components/BrandingPreview.js';
 import { WhatsAppSettingsTab } from '../components/WhatsAppSettingsTab.js';
+import { PrinterSettingsTab } from '../components/PrinterSettingsTab.js';
 import {
   Settings as SettingsIcon,
   Building2,
   Percent,
   Printer,
+  FileText,
   Sliders,
   Sparkles,
   Smartphone,
@@ -18,7 +20,7 @@ import {
 } from 'lucide-react';
 import { useAppSelector } from '../../../store/hooks.js';
 
-type SettingsTabKey = 'pharmacy' | 'tax' | 'invoices' | 'general' | 'branding' | 'whatsapp';
+type SettingsTabKey = 'pharmacy' | 'tax' | 'invoices' | 'printers' | 'general' | 'branding' | 'whatsapp';
 
 export const SettingsPage: React.FC = () => {
   const { role } = useAppSelector((state) => state.auth);
@@ -99,8 +101,21 @@ export const SettingsPage: React.FC = () => {
               : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
           }`}
         >
+          <FileText className="w-4 h-4" />
+          <span>ترقيم الفواتير والنمط</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab('printers')}
+          className={`pb-3 px-3 text-xs font-bold transition-all flex items-center gap-1.5 border-b-2 shrink-0 cursor-pointer ${
+            activeTab === 'printers'
+              ? 'border-sky-600 text-sky-600 dark:border-sky-400 dark:text-sky-400'
+              : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+          }`}
+        >
           <Printer className="w-4 h-4" />
-          <span>ترقيم الفواتير والطباعة</span>
+          <span>طابعات نقاط البيع (POS Printers)</span>
         </button>
 
         <button
@@ -154,6 +169,7 @@ export const SettingsPage: React.FC = () => {
         {activeTab === 'invoices' && (
           <InvoiceSettingsForm settingsMap={settingsMap} isReadOnly={isReadOnly} />
         )}
+        {activeTab === 'printers' && <PrinterSettingsTab />}
         {activeTab === 'general' && (
           <GeneralSettingsForm settingsMap={settingsMap} isReadOnly={isReadOnly} />
         )}

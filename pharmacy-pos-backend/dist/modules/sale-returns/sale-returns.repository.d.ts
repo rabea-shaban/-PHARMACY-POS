@@ -39,16 +39,16 @@ export declare class SaleReturnsRepository {
                 phone: string;
             } | null;
             items: ({
-                batch: {
-                    id: string;
-                    expiryDate: Date;
-                    batchNumber: string;
-                } | null;
                 product: {
                     name: string;
                     id: string;
                     barcode: string | null;
                 };
+                batch: {
+                    id: string;
+                    expiryDate: Date;
+                    batchNumber: string;
+                } | null;
                 saleItem: {
                     id: string;
                     saleId: string;
@@ -101,16 +101,16 @@ export declare class SaleReturnsRepository {
             phone: string;
         } | null;
         items: ({
-            batch: {
-                id: string;
-                expiryDate: Date;
-                batchNumber: string;
-            } | null;
             product: {
                 name: string;
                 id: string;
                 barcode: string | null;
             };
+            batch: {
+                id: string;
+                expiryDate: Date;
+                batchNumber: string;
+            } | null;
             saleItem: {
                 id: string;
                 saleId: string;
@@ -161,16 +161,16 @@ export declare class SaleReturnsRepository {
             phone: string;
         } | null;
         items: ({
-            batch: {
-                id: string;
-                expiryDate: Date;
-                batchNumber: string;
-            } | null;
             product: {
                 name: string;
                 id: string;
                 barcode: string | null;
             };
+            batch: {
+                id: string;
+                expiryDate: Date;
+                batchNumber: string;
+            } | null;
             saleItem: {
                 id: string;
                 saleId: string;
@@ -246,17 +246,6 @@ export declare class SaleReturnsRepository {
             tierId: string | null;
         } | null;
         items: ({
-            batch: {
-                id: string;
-                createdAt: Date;
-                updatedAt: Date;
-                productId: string;
-                quantity: number;
-                expiryDate: Date;
-                purchasePrice: Prisma.Decimal;
-                sellingPrice: Prisma.Decimal;
-                batchNumber: string;
-            } | null;
             product: {
                 name: string;
                 id: string;
@@ -272,6 +261,17 @@ export declare class SaleReturnsRepository {
                 taxRate: Prisma.Decimal;
                 minimumStock: number;
             };
+            batch: {
+                id: string;
+                createdAt: Date;
+                updatedAt: Date;
+                productId: string;
+                quantity: number;
+                expiryDate: Date;
+                purchasePrice: Prisma.Decimal;
+                sellingPrice: Prisma.Decimal;
+                batchNumber: string;
+            } | null;
             returnItems: {
                 id: string;
                 productId: string;
@@ -333,16 +333,16 @@ export declare class SaleReturnsRepository {
             phone: string;
         } | null;
         items: ({
-            batch: {
-                id: string;
-                expiryDate: Date;
-                batchNumber: string;
-            } | null;
             product: {
                 name: string;
                 id: string;
                 barcode: string | null;
             };
+            batch: {
+                id: string;
+                expiryDate: Date;
+                batchNumber: string;
+            } | null;
             saleItem: {
                 id: string;
                 saleId: string;

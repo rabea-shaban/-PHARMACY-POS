@@ -4,8 +4,10 @@ import { Sale } from '../types/sale.types.js';
 import { Modal } from '../../../components/ui/Modal.js';
 import { Button } from '../../../components/ui/Button.js';
 import { ReceiptPreview } from './ReceiptPreview.js';
-import { CheckCircle2, Printer, PlusCircle, ExternalLink } from 'lucide-react';
+import { CheckCircle2, Printer, PlusCircle, ExternalLink, Check, AlertCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { printSaleReceipt, isDirectPrintSupported } from '../../../lib/printer.js';
+import { useAppSelector } from '../../../store/hooks.js';
 
 export interface InvoiceSuccessModalProps {
   isOpen: boolean;
@@ -20,11 +22,43 @@ export const InvoiceSuccessModal: React.FC<InvoiceSuccessModalProps> = ({
   sale,
   onNewSale,
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isArabic = i18n.language.startsWith('ar');
+  const { publicSettings } = useAppSelector((state) => state.settings);
+  const [printStatus, setPrintStatus] = React.useState<'idle' | 'printing' | 'success' | 'error'>('idle');
+  const [printMessage, setPrintMessage] = React.useState<string>('');
 
-  const handlePrint = () => {
-    window.print();
+  const handlePrint = async () => {
+    setPrintStatus('printing');
+    try {
+      const result = await printSaleReceipt(sale, {
+        pharmacyName: publicSettings.pharmacyName,
+        pharmacySlogan: publicSettings.pharmacySlogan,
+        pharmacyPhone: publicSettings.pharmacyPhone,
+        pharmacyAddress: publicSettings.pharmacyAddress,
+        receiptFooterText: publicSettings.receiptFooterText,
+        receiptReturnPolicy: publicSettings.receiptReturnPolicy,
+      });
+
+      if (result.success) {
+        setPrintStatus('success');
+        setPrintMessage(isArabic ? 'تمت طباعة الإيصال بنجاح' : 'Receipt printed successfully');
+      } else {
+        setPrintStatus('error');
+        setPrintMessage(result.error || (isArabic ? 'تعذر الطباعة المباشرة' : 'Direct print failed'));
+      }
+    } catch (err: any) {
+      setPrintStatus('error');
+      setPrintMessage(err.message || 'Print error');
+    }
   };
+
+  // Auto-print receipt on invoice creation if direct print is enabled
+  React.useEffect(() => {
+    if (isOpen && sale && isDirectPrintSupported() && localStorage.getItem('pos_direct_print') !== 'false') {
+      handlePrint();
+    }
+  }, [isOpen, sale?.id]);
 
   return (
     <Modal
@@ -55,6 +89,13 @@ export const InvoiceSuccessModal: React.FC<InvoiceSuccessModalProps> = ({
           <ReceiptPreview sale={sale} />
         </div>
 
+        {printStatus === 'error' && (
+          <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/40 text-amber-800 dark:text-amber-300 text-xs font-bold flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
+            <span>{printMessage}</span>
+          </div>
+        )}
+
         {/* Action buttons */}
         <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 dark:border-[#1E293B]">
           <Link to={`/sales/${sale.id}`}>
@@ -72,9 +113,22 @@ export const InvoiceSuccessModal: React.FC<InvoiceSuccessModalProps> = ({
               variant="secondary"
               size="sm"
               onClick={handlePrint}
-              leftIcon={<Printer className="w-3.5 h-3.5" />}
+              isLoading={printStatus === 'printing'}
+              leftIcon={
+                printStatus === 'success' ? (
+                  <Check className="w-3.5 h-3.5 text-emerald-600" />
+                ) : printStatus === 'error' ? (
+                  <AlertCircle className="w-3.5 h-3.5 text-rose-600" />
+                ) : (
+                  <Printer className="w-3.5 h-3.5" />
+                )
+              }
             >
-              {t('pos.printReceipt') || 'طباعة الإيصال (F9)'}
+              {printStatus === 'printing'
+                ? (isArabic ? 'جاري الطباعة...' : 'Printing...')
+                : printStatus === 'success'
+                ? (isArabic ? 'إعادة الطباعة (F9)' : 'Reprint (F9)')
+                : (t('pos.printReceipt') || 'طباعة الإيصال (F9)')}
             </Button>
 
             <Button

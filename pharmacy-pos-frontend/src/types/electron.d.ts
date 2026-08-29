@@ -32,7 +32,7 @@ export interface UpdateProgressPayload {
   bytesPerSecond: number;
 }
 
-export interface ElectronPrinterInfo {
+export interface PrinterInfo {
   name: string;
   displayName: string;
   description: string;
@@ -40,13 +40,35 @@ export interface ElectronPrinterInfo {
   isDefault: boolean;
 }
 
-export interface ElectronPrintOptions {
+export interface PrinterPrintOptions {
+  printerName?: string;
+  paperSize?: '80mm' | '58mm';
   silent?: boolean;
-  printBackground?: boolean;
-  deviceName?: string;
-  color?: boolean;
   copies?: number;
-  pageSize?: { width: number; height: number };
+}
+
+export interface ReceiptBranding {
+  pharmacyName?: string;
+  pharmacySlogan?: string;
+  pharmacyPhone?: string;
+  pharmacyAddress?: string;
+  receiptFooterText?: string;
+  receiptReturnPolicy?: string;
+  receiptShowTax?: boolean | string;
+  receiptShowLogo?: boolean | string;
+}
+
+export interface PrintReceiptResult {
+  success: boolean;
+  error?: string;
+  printerName?: string;
+  paperSize?: string;
+}
+
+export interface PrinterStatusResult {
+  found: boolean;
+  printer?: PrinterInfo;
+  error?: string;
 }
 
 export interface ElectronAPI {
@@ -71,8 +93,14 @@ export interface ElectronAPI {
   };
 
   printer: {
-    getPrinters: () => Promise<ElectronPrinterInfo[]>;
-    printReceipt: (options?: ElectronPrintOptions) => Promise<{ success: boolean; failureReason?: string }>;
+    list: () => Promise<PrinterInfo[]>;
+    getDefault: () => Promise<PrinterInfo | null>;
+    printSale: (payload: { sale: any; branding?: ReceiptBranding; options?: PrinterPrintOptions }) => Promise<PrintReceiptResult>;
+    printReturn: (payload: { saleReturn: any; branding?: ReceiptBranding; options?: PrinterPrintOptions }) => Promise<PrintReceiptResult>;
+    printTest: (payload: { printerName?: string; paperSize?: '80mm' | '58mm'; branding?: ReceiptBranding }) => Promise<PrintReceiptResult>;
+    getStatus: (payload?: { printerName?: string }) => Promise<PrinterStatusResult>;
+    printReceipt: (payload: any) => Promise<PrintReceiptResult>;
+    getPrinters: () => Promise<PrinterInfo[]>;
   };
 
   showNotification: (payload: { title: string; body: string }) => Promise<boolean>;

@@ -474,31 +474,54 @@ ipcMain.handle('updater:quitAndInstall', () => {
   }
 });
 
-// 5. Printer & Notifications
-ipcMain.handle('printer:getPrinters', async () => {
-  if (!mainWindow) return [];
-  return await mainWindow.webContents.getPrintersAsync();
+// 5. Thermal Printer Hardware Integration (POS)
+const { PrinterService } = require('./printer/printer-service.cjs');
+const printerService = new PrinterService(() => (mainWindow && !mainWindow.isDestroyed() ? mainWindow.webContents : null));
+
+ipcMain.handle('printer:list', async () => {
+  return await printerService.getPrinters();
 });
 
-ipcMain.handle('printer:printReceipt', async (_event, options = {}) => {
-  if (!mainWindow) return { success: false, error: 'Window not found' };
-  try {
-    const defaultOptions = {
-      silent: true,
-      printBackground: true,
-      color: false,
-      margins: { marginType: 'none' },
-      pageSize: { width: 80000, height: 297000 },
-      ...options,
-    };
-    return new Promise((resolve) => {
-      mainWindow.webContents.print(defaultOptions, (success, failureReason) => {
-        resolve({ success, failureReason });
-      });
-    });
-  } catch (error) {
-    return { success: false, error: error.message };
+ipcMain.handle('printer:getDefault', async () => {
+  return await printerService.getDefaultPrinter();
+});
+
+ipcMain.handle('printer:printSale', async (_event, { sale, branding, options } = {}) => {
+  writeLog('info', `Direct thermal print requested for sale: ${sale?.invoiceNumber}`);
+  return await printerService.printSale(sale, branding, options);
+});
+
+ipcMain.handle('printer:printReturn', async (_event, { saleReturn, branding, options } = {}) => {
+  writeLog('info', `Direct thermal print requested for return: ${saleReturn?.returnNumber}`);
+  return await printerService.printReturn(saleReturn, branding, options);
+});
+
+ipcMain.handle('printer:printTest', async (_event, { printerName, paperSize, branding } = {}) => {
+  writeLog('info', `Test print requested on printer '${printerName}' (${paperSize})`);
+  return await printerService.printTest(printerName, paperSize, branding);
+});
+
+ipcMain.handle('printer:getStatus', async (_event, { printerName } = {}) => {
+  return await printerService.getStatus(printerName);
+});
+
+// Backward compatibility adapter
+ipcMain.handle('printer:getPrinters', async () => {
+  return await printerService.getPrinters();
+});
+
+ipcMain.handle('printer:printReceipt', async (_event, payload = {}) => {
+  if (payload.sale) {
+    return await printerService.printSale(payload.sale, payload.branding, payload.options);
   }
+  if (payload.saleReturn) {
+    return await printerService.printReturn(payload.saleReturn, payload.branding, payload.options);
+  }
+  if (payload.rawHtml) {
+    const { printHtmlContent } = require('./printer/printer-service.cjs');
+    return await printHtmlContent(payload.rawHtml, payload.options);
+  }
+  return { success: false, error: 'Invalid print payload' };
 });
 
 ipcMain.handle('notification:show', (_event, { title, body } = {}) => {

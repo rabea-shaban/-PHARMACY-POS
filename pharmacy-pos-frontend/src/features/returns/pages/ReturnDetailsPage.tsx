@@ -14,14 +14,35 @@ import {
   ArrowLeft,
   User,
   Receipt,
+  Check,
 } from 'lucide-react';
 import { useAppSelector } from '../../../store/hooks.js';
+import { printReturnReceipt } from '../../../lib/printer.js';
 
 export const ReturnDetailsPage: React.FC = () => {
   const { id = '' } = useParams<{ id: string }>();
   const { direction } = useAppSelector((state) => state.ui);
+  const { publicSettings } = useAppSelector((state) => state.settings);
+  const [isPrinting, setIsPrinting] = React.useState(false);
+  const [printSuccess, setPrintSuccess] = React.useState(false);
 
   const { data: saleReturn, isLoading, isError } = useSaleReturn(id);
+
+  const handlePrintReturn = async () => {
+    if (!saleReturn) return;
+    setIsPrinting(true);
+    try {
+      await printReturnReceipt(saleReturn, {
+        pharmacyName: publicSettings.pharmacyName,
+        pharmacySlogan: publicSettings.pharmacySlogan,
+        receiptFooterText: publicSettings.receiptFooterText,
+      });
+      setPrintSuccess(true);
+      setTimeout(() => setPrintSuccess(false), 2500);
+    } finally {
+      setIsPrinting(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -69,10 +90,17 @@ export const ReturnDetailsPage: React.FC = () => {
         <Button
           variant="outline"
           size="md"
-          leftIcon={<Printer className="w-4 h-4" />}
-          onClick={() => window.print()}
+          leftIcon={
+            printSuccess ? (
+              <Check className="w-4 h-4 text-emerald-600" />
+            ) : (
+              <Printer className="w-4 h-4" />
+            )
+          }
+          onClick={handlePrintReturn}
+          isLoading={isPrinting}
         >
-          طباعة إشعار الإرجاع
+          {printSuccess ? 'تمت الطباعة' : 'طباعة إشعار الإرجاع'}
         </Button>
       </div>
 

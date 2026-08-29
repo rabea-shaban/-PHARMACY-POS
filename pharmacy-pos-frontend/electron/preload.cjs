@@ -45,10 +45,16 @@ contextBridge.exposeInMainWorld('electronAPI', {
     },
   },
 
-  // Hardware & POS Integration
+  // Hardware & POS Printer Integration
   printer: {
-    getPrinters: () => ipcRenderer.invoke('printer:getPrinters'),
-    printReceipt: (options) => ipcRenderer.invoke('printer:printReceipt', options),
+    list: () => ipcRenderer.invoke('printer:list'),
+    getDefault: () => ipcRenderer.invoke('printer:getDefault'),
+    printSale: (payload) => ipcRenderer.invoke('printer:printSale', payload),
+    printReturn: (payload) => ipcRenderer.invoke('printer:printReturn', payload),
+    printTest: (payload) => ipcRenderer.invoke('printer:printTest', payload),
+    getStatus: (payload) => ipcRenderer.invoke('printer:getStatus', payload),
+    printReceipt: (payload) => ipcRenderer.invoke('printer:printReceipt', payload),
+    getPrinters: () => ipcRenderer.invoke('printer:list'),
   },
 
   // Notifications

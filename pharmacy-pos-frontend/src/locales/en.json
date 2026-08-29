@@ -393,6 +393,8 @@
     "noCustomerPolicies": "No insurance policies registered for this customer.",
     "invoiceCompletedTitle": "Invoice Created Successfully!",
     "printReceipt": "Print Receipt (F9)",
+    "printed": "Printed Successfully",
+    "printing": "Sending print job...",
     "startNewSale": "New Sale (Esc)",
     "redeemPoints": "Redeem Points",
     "confirmClearPrompt": "Are you sure you want to clear current cart?",
