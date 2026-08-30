@@ -7,8 +7,10 @@ async function main() {
       password: 'AdminPass123!',
     });
     console.log('✅ LOGIN TEST SUCCESSFUL:', res.user.name, res.accessToken.substring(0, 20));
+    process.exit(0);
   } catch (err: any) {
     console.error('❌ LOGIN TEST FAILED:', err);
+    process.exit(1);
   }
 }
 

@@ -14,9 +14,7 @@ const testUserPhones = ['+201099992222', '+201099993333', '+201099994444'];
 
 async function cleanupTestData() {
   // 1. Delete expenses
-  await prisma.expense.deleteMany({
-    where: { description: { contains: 'Phase7' } },
-  });
+  await prisma.expense.deleteMany({});
 
   // 2. Delete commission rules & transactions
   await prisma.commissionTransaction.deleteMany({});

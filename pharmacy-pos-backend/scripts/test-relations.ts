@@ -7,13 +7,21 @@ async function runRelationshipIntegrationTest() {
   console.log('================================================================\n');
 
   try {
+    const timestamp = Date.now();
+    const testPhone = `+201099${String(timestamp).slice(-6)}`;
+    const testBarcode = `BAR-REL-${timestamp}`;
+    const testCategoryName = `RelCategory-${timestamp}`;
+    const testTierName = `TIER-${timestamp}`;
+    const testCustPhone = `+201122${String(timestamp).slice(-6)}`;
+    const testInvoice = `INV-REL-${timestamp}`;
+
     // 1. Create Staff User
     console.log('1️⃣  Creating Staff User (PHARMACIST)...');
     const user = await prisma.user.create({
       data: {
         name: 'Dr. Sarah Al-Sayed',
-        phone: '+201099887766',
-        email: 'sarah.pharmacist@pharmacy.local',
+        phone: testPhone,
+        email: `sarah.${timestamp}@pharmacy.local`,
         passwordHash: '$2b$10$hashed_password_sample_for_testing_purposes',
         role: 'PHARMACIST',
         isActive: true,
@@ -25,7 +33,7 @@ async function runRelationshipIntegrationTest() {
     console.log('\n2️⃣  Creating Category...');
     const category = await prisma.category.create({
       data: {
-        name: 'Antibiotics & Antimicrobials',
+        name: testCategoryName,
         description: 'Prescription antibiotics for bacterial infections',
         isActive: true,
       },
@@ -37,7 +45,7 @@ async function runRelationshipIntegrationTest() {
     const product = await prisma.product.create({
       data: {
         name: 'Augmentin 1g (14 Film-Coated Tablets)',
-        barcode: '6221000999888',
+        barcode: testBarcode,
         scientificName: 'Amoxicillin + Clavulanic Acid',
         description: 'Broad-spectrum antibiotic',
         categoryId: category.id,
@@ -55,7 +63,7 @@ async function runRelationshipIntegrationTest() {
     const batch = await prisma.batch.create({
       data: {
         productId: product.id,
-        batchNumber: 'AUG-2026-B1',
+        batchNumber: `BATCH-${timestamp}`,
         expiryDate: new Date('2028-06-30'),
         quantity: 120,
         purchasePrice: new Prisma.Decimal('85.50'),
@@ -68,7 +76,7 @@ async function runRelationshipIntegrationTest() {
     console.log('\n5️⃣  Creating Customer Tier...');
     const tier = await prisma.customerTier.create({
       data: {
-        name: 'GOLD_VIP',
+        name: testTierName,
         discountPercentage: new Prisma.Decimal('10.00'),
         minimumPoints: 500,
         description: 'Gold VIP Customers with 10% discount on non-price-controlled items',
@@ -81,8 +89,8 @@ async function runRelationshipIntegrationTest() {
     const customer = await prisma.customer.create({
       data: {
         name: 'Tarek Mahmoud',
-        phone: '+201122334455',
-        email: 'tarek@example.com',
+        phone: testCustPhone,
+        email: `tarek.${timestamp}@example.com`,
         address: '15 Tahrir Square, Cairo',
         tierId: tier.id,
         gender: 'MALE',
@@ -116,7 +124,7 @@ async function runRelationshipIntegrationTest() {
     console.log('\n8️⃣  Creating POS Sale Invoice...');
     const sale = await prisma.sale.create({
       data: {
-        invoiceNumber: 'INV-2026-TEST-001',
+        invoiceNumber: testInvoice,
         customerId: customer.id,
         userId: user.id,
         subtotal: new Prisma.Decimal('230.00'),

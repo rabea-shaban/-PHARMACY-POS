@@ -9,25 +9,36 @@ import { notFoundMiddleware } from './middlewares/not-found.middleware.js';
 import { errorMiddleware } from './middlewares/error.middleware.js';
 export function createApp() {
     const app = express();
-    // Security headers
-    app.use(helmet({ crossOriginResourcePolicy: false }));
-    // CORS configuration (supports credentials / cookies across Vercel and local origins)
+    // Hardened security headers
+    app.use(helmet({
+        crossOriginResourcePolicy: { policy: 'cross-origin' },
+        hidePoweredBy: true,
+        xssFilter: true,
+        noSniff: true,
+        frameguard: { action: 'deny' },
+    }));
+    // CORS configuration with strict whitelist enforcement
     app.use(cors({
         origin: (origin, callback) => {
-            // Always allow server-to-server, curl, mobile, or requests without Origin header
+            // Allow requests without origin (desktop Electron app, local CLI, server-to-server)
             if (!origin)
                 return callback(null, true);
-            // Allow localhost, vercel domains, hostinger, or any configured CORS_ORIGIN
-            if (origin.includes('localhost') ||
-                origin.includes('vercel.app') ||
-                origin.includes('hostingersite.com') ||
-                env.CORS_ORIGIN.some((allowed) => allowed === '*' || origin === allowed) ||
-                env.NODE_ENV !== 'production') {
+            // Match against configured allowed origins
+            const isAllowedConfigured = env.CORS_ORIGIN.some((allowed) => allowed === '*' || allowed === origin);
+            // Allow localhost and local dev tools in non-production
+            const isLocalDev = env.NODE_ENV !== 'production' &&
+                (origin.startsWith('http://localhost:') ||
+                    origin.startsWith('http://127.0.0.1:') ||
+                    origin.startsWith('app://') ||
+                    origin.startsWith('file://'));
+            if (isAllowedConfigured || isLocalDev) {
                 return callback(null, true);
             }
-            return callback(null, true);
+            return callback(new Error(`Origin '${origin}' not allowed by CORS policy`), false);
         },
         credentials: true,
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Cookie'],
     }));
     // Cookie parser for HttpOnly authentication cookies
     app.use(cookieParser());

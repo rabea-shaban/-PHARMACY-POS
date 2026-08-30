@@ -32,7 +32,11 @@ async function cleanupTestData() {
     where: { code: { in: ['SUMMER20', 'PHARMA10'] } },
   });
 
-  // 5. Delete sale items & sales
+  // 5. Delete sale returns & items
+  await prisma.saleReturnItem.deleteMany({});
+  await prisma.saleReturn.deleteMany({});
+
+  // 6. Delete sale items & sales
   await prisma.saleItem.deleteMany({});
   await prisma.sale.deleteMany({});
 
