@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain, shell, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const http = require('http');
+const net = require('net');
 const { spawn } = require('child_process');
 const { autoUpdater } = require('electron-updater');
 
@@ -45,6 +46,116 @@ function writeLog(level, message, error = null) {
   if (isDev) {
     console.log(`[BackendService] [${level}] ${message}`);
   }
+}
+
+// ----------------------------------------------------
+// Automatic Database (MySQL) Detection & Auto-Start
+// ----------------------------------------------------
+function checkPortOpen(port = 3306, host = '127.0.0.1', timeoutMs = 1500) {
+  return new Promise((resolve) => {
+    const socket = new net.Socket();
+    socket.setTimeout(timeoutMs);
+
+    socket.on('connect', () => {
+      socket.destroy();
+      resolve(true);
+    });
+
+    socket.on('timeout', () => {
+      socket.destroy();
+      resolve(false);
+    });
+
+    socket.on('error', () => {
+      socket.destroy();
+      resolve(false);
+    });
+
+    socket.connect(port, host);
+  });
+}
+
+async function ensureDatabaseRunning() {
+  writeLog('info', 'Checking MySQL database service on 127.0.0.1:3306...');
+  const isOpen = await checkPortOpen(3306);
+  if (isOpen) {
+    writeLog('info', 'MySQL database service is already running on port 3306.');
+    return true;
+  }
+
+  writeLog('info', 'MySQL is not running on port 3306. Attempting to start MySQL automatically...');
+
+  // Search candidate paths for XAMPP / MariaDB / MySQL
+  const candidatePaths = [
+    {
+      bin: 'C:\\xampp\\mysql\\bin\\mysqld.exe',
+      ini: 'C:\\xampp\\mysql\\bin\\my.ini',
+    },
+    {
+      bin: 'D:\\xampp\\mysql\\bin\\mysqld.exe',
+      ini: 'D:\\xampp\\mysql\\bin\\my.ini',
+    },
+    {
+      bin: 'E:\\xampp\\mysql\\bin\\mysqld.exe',
+      ini: 'E:\\xampp\\mysql\\bin\\my.ini',
+    },
+    {
+      bin: 'C:\\Program Files\\MySQL\\MySQL Server 8.0\\bin\\mysqld.exe',
+      ini: 'C:\\Program Files\\MySQL\\MySQL Server 8.0\\my.ini',
+    },
+    {
+      bin: 'C:\\Program Files\\MariaDB\\bin\\mysqld.exe',
+      ini: 'C:\\Program Files\\MariaDB\\data\\my.ini',
+    },
+  ];
+
+  let started = false;
+
+  for (const candidate of candidatePaths) {
+    if (fs.existsSync(candidate.bin)) {
+      writeLog('info', `Found MySQL binary at: ${candidate.bin}. Spawning background process...`);
+      try {
+        const args = fs.existsSync(candidate.ini)
+          ? [`--defaults-file=${candidate.ini}`, '--standalone']
+          : ['--standalone'];
+
+        const mysqlProc = spawn(candidate.bin, args, {
+          detached: true,
+          stdio: 'ignore',
+          windowsHide: true,
+        });
+
+        mysqlProc.unref();
+        started = true;
+        break;
+      } catch (err) {
+        writeLog('warn', `Failed to spawn MySQL from ${candidate.bin}: ${err.message}`);
+      }
+    }
+  }
+
+  if (!started) {
+    writeLog('warn', 'No MySQL standalone binary found in standard paths. Trying Windows service start...');
+    try {
+      spawn('net', ['start', 'mysql'], { stdio: 'ignore', windowsHide: true });
+    } catch (e) {
+      // Ignore
+    }
+  }
+
+  // Poll for MySQL port to become open (up to 15 seconds)
+  const startTime = Date.now();
+  while (Date.now() - startTime < 15000) {
+    await new Promise((r) => setTimeout(r, 1000));
+    const openNow = await checkPortOpen(3306);
+    if (openNow) {
+      writeLog('info', `MySQL database successfully started and listening on port 3306 after ${Date.now() - startTime}ms.`);
+      return true;
+    }
+  }
+
+  writeLog('warn', 'Could not automatically confirm MySQL startup on port 3306. Proceeding anyway.');
+  return false;
 }
 
 // ----------------------------------------------------
@@ -560,6 +671,9 @@ if (!gotSingleInstanceLock) {
     writeLog('info', `Pharmacy POS Desktop Shell Starting (v${app.getVersion()})`);
     writeLog('info', `Runtime: Electron ${process.versions.electron}, Node ${process.versions.node}`);
     writeLog('info', '==================================================');
+
+    // 0. Ensure Database (MySQL) is running in the background
+    await ensureDatabaseRunning();
 
     // 1. Start or verify Backend Service
     const backendResult = await startBackendService();
