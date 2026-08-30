@@ -4,9 +4,11 @@ import { Sale } from '../types/sale.types.js';
 import { Modal } from '../../../components/ui/Modal.js';
 import { Button } from '../../../components/ui/Button.js';
 import { ReceiptPreview } from './ReceiptPreview.js';
-import { CheckCircle2, Printer, PlusCircle, ExternalLink, Check, AlertCircle } from 'lucide-react';
+import { CheckCircle2, Printer, PlusCircle, ExternalLink, Check, AlertCircle, MessageCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { printSaleReceipt, isDirectPrintSupported } from '../../../lib/printer.js';
+import { openWhatsAppInvoice } from '../../../lib/whatsapp.js';
+import { showPromptDialog } from '../../../lib/alerts.js';
 import { useAppSelector } from '../../../store/hooks.js';
 
 export interface InvoiceSuccessModalProps {
@@ -51,6 +53,35 @@ export const InvoiceSuccessModal: React.FC<InvoiceSuccessModalProps> = ({
       setPrintStatus('error');
       setPrintMessage(err.message || 'Print error');
     }
+  };
+
+  const handleWhatsApp = async () => {
+    let phone = sale.customerPhone?.trim();
+    if (!phone) {
+      const inputPhone = await showPromptDialog({
+        title: isArabic ? 'إرسال الفاتورة عبر واتساب' : 'Send Invoice via WhatsApp',
+        text: isArabic
+          ? 'العميل لا يملك رقماً مسجلاً. أدخل رقم هاتف العميل (أو اتركه فارغاً لاختيار المحادثة مباشرة):'
+          : 'Customer has no recorded phone. Enter phone number (or leave blank to select in WhatsApp):',
+        placeholder: '010XXXXXXXX',
+        confirmButtonText: isArabic ? 'فتح واتساب' : 'Open WhatsApp',
+        cancelButtonText: isArabic ? 'إلغاء' : 'Cancel',
+        inputValidator: () => null,
+      });
+      if (inputPhone === null) return;
+      phone = inputPhone.trim();
+    }
+
+    openWhatsAppInvoice(
+      sale,
+      {
+        pharmacyName: publicSettings.pharmacyName,
+        pharmacySlogan: publicSettings.pharmacySlogan,
+        pharmacyPhone: publicSettings.pharmacyPhone,
+        pharmacyAddress: publicSettings.pharmacyAddress,
+      },
+      phone || undefined
+    );
   };
 
   // Auto-print receipt on invoice creation if direct print is enabled
@@ -108,7 +139,17 @@ export const InvoiceSuccessModal: React.FC<InvoiceSuccessModalProps> = ({
             </Button>
           </Link>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleWhatsApp}
+              className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border-emerald-300 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/50 dark:text-emerald-300 dark:border-emerald-800"
+              leftIcon={<MessageCircle className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />}
+            >
+              {isArabic ? 'واتساب' : 'WhatsApp'}
+            </Button>
+
             <Button
               variant="secondary"
               size="sm"

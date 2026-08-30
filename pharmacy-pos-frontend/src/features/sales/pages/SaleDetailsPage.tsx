@@ -11,6 +11,7 @@ import { EmptyState } from '../../../components/common/EmptyState.js';
 import { showPromptDialog } from '../../../lib/alerts.js';
 import { ReceiptPreview } from '../components/ReceiptPreview.js';
 import { printSaleReceipt } from '../../../lib/printer.js';
+import { openWhatsAppInvoice } from '../../../lib/whatsapp.js';
 import {
   ReceiptText,
   Printer,
@@ -20,6 +21,7 @@ import {
   User,
   CreditCard,
   Check,
+  MessageCircle,
 } from 'lucide-react';
 import { useAppSelector } from '../../../store/hooks.js';
 
@@ -52,6 +54,35 @@ export const SaleDetailsPage: React.FC = () => {
       setIsPrinting(false);
     }
   };
+
+  const handleWhatsApp = async () => {
+    if (!sale) return;
+    let phone = sale.customerPhone?.trim();
+    if (!phone) {
+      const inputPhone = await showPromptDialog({
+        title: 'إرسال الفاتورة عبر واتساب',
+        text: 'العميل لا يملك رقماً مسجلاً. أدخل رقم هاتف العميل (أو اتركه فارغاً لاختيار المحادثة مباشرة):',
+        placeholder: '010XXXXXXXX',
+        confirmButtonText: 'فتح واتساب',
+        cancelButtonText: 'إلغاء',
+        inputValidator: () => null,
+      });
+      if (inputPhone === null) return;
+      phone = inputPhone.trim();
+    }
+
+    openWhatsAppInvoice(
+      sale,
+      {
+        pharmacyName: publicSettings.pharmacyName,
+        pharmacySlogan: publicSettings.pharmacySlogan,
+        pharmacyPhone: publicSettings.pharmacyPhone,
+        pharmacyAddress: publicSettings.pharmacyAddress,
+      },
+      phone || undefined
+    );
+  };
+
   const cancelMutation = useCancelSale();
 
   const canCancel = role && ['PLATFORM_MANAGER', 'PHARMACY_MANAGER'].includes(role);
@@ -130,7 +161,17 @@ export const SaleDetailsPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2.5">
+          <Button
+            variant="outline"
+            size="md"
+            className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border-emerald-300 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/50 dark:text-emerald-300 dark:border-emerald-800"
+            leftIcon={<MessageCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />}
+            onClick={handleWhatsApp}
+          >
+            إرسال واتساب
+          </Button>
+
           <Button
             variant="outline"
             size="md"
