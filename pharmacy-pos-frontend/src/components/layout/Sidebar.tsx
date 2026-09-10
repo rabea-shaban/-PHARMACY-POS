@@ -93,7 +93,7 @@ const navItemDefs: NavItemDef[] = [
     key: 'branches',
     href: '/branches',
     icon: <Store className="w-5 h-5" />,
-    roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER'],
+    roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'],
   },
   {
     key: 'suppliers',

@@ -27,7 +27,7 @@ export const MODULE_PERMISSIONS = {
   audit: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER'] as Role[],
   settings: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT'] as Role[],
   users: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER'] as Role[],
-  branches: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER'] as Role[],
+  branches: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'] as Role[],
   transfers: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'] as Role[],
 } as const;
 
