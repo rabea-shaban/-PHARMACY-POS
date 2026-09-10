@@ -21,14 +21,14 @@ export declare const branchQuerySchema: z.ZodObject<{
     page: z.ZodDefault<z.ZodCoercedNumber<unknown>>;
     limit: z.ZodDefault<z.ZodCoercedNumber<unknown>>;
     search: z.ZodOptional<z.ZodString>;
-    isActive: z.ZodOptional<z.ZodPipe<z.ZodEnum<{
+    isActive: z.ZodOptional<z.ZodPipe<z.ZodUnion<readonly [z.ZodBoolean, z.ZodEnum<{
         true: "true";
         false: "false";
-    }>, z.ZodTransform<boolean, "true" | "false">>>;
-    isMain: z.ZodOptional<z.ZodPipe<z.ZodEnum<{
+    }>]>, z.ZodTransform<boolean, boolean | "true" | "false">>>;
+    isMain: z.ZodOptional<z.ZodPipe<z.ZodUnion<readonly [z.ZodBoolean, z.ZodEnum<{
         true: "true";
         false: "false";
-    }>, z.ZodTransform<boolean, "true" | "false">>>;
+    }>]>, z.ZodTransform<boolean, boolean | "true" | "false">>>;
     sortBy: z.ZodDefault<z.ZodEnum<{
         name: "name";
         createdAt: "createdAt";

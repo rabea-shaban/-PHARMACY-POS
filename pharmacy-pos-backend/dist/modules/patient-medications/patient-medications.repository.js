@@ -39,8 +39,20 @@ export const patientMedicationIncludes = {
 };
 export class PatientMedicationsRepository {
     async findAll(query = {}) {
-        const { page = 1, limit = 20, customerId, productId, type, isActive, search, sortBy = 'createdAt', sortOrder = 'desc', } = query || {};
+        const page = Math.max(1, Number(query?.page) || 1);
+        const limit = Math.max(1, Number(query?.limit) || 20);
         const skip = Math.max(0, (page - 1) * limit);
+        const customerId = query?.customerId;
+        const productId = query?.productId;
+        const type = query?.type;
+        const search = query?.search;
+        const sortBy = query?.sortBy || 'createdAt';
+        const sortOrder = query?.sortOrder || 'desc';
+        const isActive = query?.isActive !== undefined
+            ? typeof query.isActive === 'boolean'
+                ? query.isActive
+                : String(query.isActive) === 'true'
+            : undefined;
         const where = {
             ...(customerId && { customerId }),
             ...(productId && { productId }),

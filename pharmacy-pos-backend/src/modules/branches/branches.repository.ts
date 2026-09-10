@@ -12,16 +12,26 @@ export interface BranchWithStats extends Branch {
 
 export class BranchesRepository {
   async findAll(query: BranchQueryDTO = {} as any): Promise<{ branches: BranchWithStats[]; total: number }> {
-    const {
-      page = 1,
-      limit = 20,
-      search,
-      isActive,
-      isMain,
-      sortBy = 'createdAt',
-      sortOrder = 'desc',
-    } = query || {};
+    const page = Math.max(1, Number(query?.page) || 1);
+    const limit = Math.max(1, Number(query?.limit) || 20);
     const skip = Math.max(0, (page - 1) * limit);
+    const search = query?.search;
+    const sortBy = query?.sortBy || 'createdAt';
+    const sortOrder = query?.sortOrder || 'desc';
+
+    const isActive =
+      query?.isActive !== undefined
+        ? typeof query.isActive === 'boolean'
+          ? query.isActive
+          : String(query.isActive) === 'true'
+        : undefined;
+
+    const isMain =
+      query?.isMain !== undefined
+        ? typeof query.isMain === 'boolean'
+          ? query.isMain
+          : String(query.isMain) === 'true'
+        : undefined;
 
     const where: Prisma.BranchWhereInput = {
       ...(isActive !== undefined && { isActive }),

@@ -81,18 +81,16 @@ export class TransfersRepository {
   }
 
   async findAll(query: TransferQueryDTO = {} as any): Promise<{ transfers: any[]; total: number }> {
-    const {
-      page = 1,
-      limit = 20,
-      fromBranchId,
-      toBranchId,
-      branchId,
-      status,
-      search,
-      sortBy = 'createdAt',
-      sortOrder = 'desc',
-    } = query || {};
+    const page = Math.max(1, Number(query?.page) || 1);
+    const limit = Math.max(1, Number(query?.limit) || 20);
     const skip = Math.max(0, (page - 1) * limit);
+    const fromBranchId = query?.fromBranchId;
+    const toBranchId = query?.toBranchId;
+    const branchId = query?.branchId;
+    const status = query?.status;
+    const search = query?.search;
+    const sortBy = query?.sortBy || 'createdAt';
+    const sortOrder = query?.sortOrder || 'desc';
 
     const where: Prisma.TransferRequestWhereInput = {
       ...(fromBranchId && { fromBranchId }),

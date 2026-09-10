@@ -1,8 +1,22 @@
 import { prisma } from '../../lib/prisma.js';
 export class BranchesRepository {
     async findAll(query = {}) {
-        const { page = 1, limit = 20, search, isActive, isMain, sortBy = 'createdAt', sortOrder = 'desc', } = query || {};
+        const page = Math.max(1, Number(query?.page) || 1);
+        const limit = Math.max(1, Number(query?.limit) || 20);
         const skip = Math.max(0, (page - 1) * limit);
+        const search = query?.search;
+        const sortBy = query?.sortBy || 'createdAt';
+        const sortOrder = query?.sortOrder || 'desc';
+        const isActive = query?.isActive !== undefined
+            ? typeof query.isActive === 'boolean'
+                ? query.isActive
+                : String(query.isActive) === 'true'
+            : undefined;
+        const isMain = query?.isMain !== undefined
+            ? typeof query.isMain === 'boolean'
+                ? query.isMain
+                : String(query.isMain) === 'true'
+            : undefined;
         const where = {
             ...(isActive !== undefined && { isActive }),
             ...(isMain !== undefined && { isMain }),

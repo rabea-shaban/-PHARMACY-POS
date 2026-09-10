@@ -31,12 +31,12 @@ export const branchQuerySchema = z.object({
     limit: z.coerce.number().int().positive().max(100).default(20),
     search: z.string().trim().optional(),
     isActive: z
-        .enum(['true', 'false'])
-        .transform((val) => val === 'true')
+        .union([z.boolean(), z.enum(['true', 'false'])])
+        .transform((val) => (typeof val === 'boolean' ? val : val === 'true'))
         .optional(),
     isMain: z
-        .enum(['true', 'false'])
-        .transform((val) => val === 'true')
+        .union([z.boolean(), z.enum(['true', 'false'])])
+        .transform((val) => (typeof val === 'boolean' ? val : val === 'true'))
         .optional(),
     sortBy: z.enum(['name', 'code', 'createdAt', 'updatedAt']).default('createdAt'),
     sortOrder: z.enum(['asc', 'desc']).default('desc'),
