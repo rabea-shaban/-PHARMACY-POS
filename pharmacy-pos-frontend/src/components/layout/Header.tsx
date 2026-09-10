@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { GlobalSearch } from '../common/GlobalSearch.js';
 import { UserMenu } from './UserMenu.js';
+import { BranchSwitcher } from '../../features/branches/components/BranchSwitcher.js';
 
 export const Header: React.FC = () => {
   const { t } = useTranslation();
@@ -41,8 +42,13 @@ export const Header: React.FC = () => {
         <GlobalSearch />
       </div>
 
-      {/* Right side: Language, Theme, Notifications, User Menu */}
+      {/* Right side: Active Branch, Language, Theme, Notifications, User Menu */}
       <div className="flex items-center gap-2 sm:gap-2.5">
+        {/* Active Branch Switcher Indicator */}
+        <BranchSwitcher variant="header" />
+
+        {/* Divider */}
+        <div className="h-6 w-px bg-slate-200 dark:bg-[#1E293B] mx-0.5 hidden sm:block" />
         {/* Language Switcher Button */}
         <button
           type="button"

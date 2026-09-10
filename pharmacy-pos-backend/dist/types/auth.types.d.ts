@@ -10,6 +10,14 @@ export interface AuthenticatedUser {
     email: string | null;
     role: Role;
     isActive: boolean;
+    branchId?: string | null;
+    branch?: {
+        id: string;
+        name: string;
+        code: string;
+        isMain: boolean;
+        isActive: boolean;
+    } | null;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -20,6 +28,14 @@ export interface SafeUser {
     email: string | null;
     role: Role;
     isActive: boolean;
+    branchId?: string | null;
+    branch?: {
+        id: string;
+        name: string;
+        code: string;
+        isMain: boolean;
+        isActive: boolean;
+    } | null;
     createdAt: Date;
     updatedAt: Date;
 }

@@ -7,6 +7,16 @@ export class AuthRepository {
         email: true,
         role: true,
         isActive: true,
+        branchId: true,
+        branch: {
+            select: {
+                id: true,
+                name: true,
+                code: true,
+                isMain: true,
+                isActive: true,
+            },
+        },
         createdAt: true,
         updatedAt: true,
     };

@@ -15,6 +15,7 @@ import {
   ReceiptText,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { BranchSwitcher } from '../../branches/components/BranchSwitcher.js';
 
 export interface POSHeaderProps {
   onOpenShortcuts: () => void;
@@ -79,9 +80,11 @@ export const POSHeader: React.FC<POSHeaderProps> = ({ onOpenShortcuts }) => {
         </div>
       </div>
 
-      {/* Center: Live Clock & Cashier Profile */}
-      <div className="hidden md:flex items-center gap-6 text-xs text-slate-600 dark:text-slate-300">
-        <div className="flex items-center gap-1.5 font-mono">
+      {/* Center: Active Branch Switcher, Live Clock & Cashier Profile */}
+      <div className="hidden sm:flex items-center gap-4 md:gap-6 text-xs text-slate-600 dark:text-slate-300">
+        <BranchSwitcher variant="pos" />
+
+        <div className="hidden lg:flex items-center gap-1.5 font-mono">
           <Clock className="w-4 h-4 text-sky-600 dark:text-sky-400" />
           <span>{currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</span>
         </div>

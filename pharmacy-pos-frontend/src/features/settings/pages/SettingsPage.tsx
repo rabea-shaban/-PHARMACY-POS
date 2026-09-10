@@ -7,6 +7,7 @@ import { GeneralSettingsForm } from '../components/GeneralSettingsForm.js';
 import { BrandingPreview } from '../components/BrandingPreview.js';
 import { WhatsAppSettingsTab } from '../components/WhatsAppSettingsTab.js';
 import { PrinterSettingsTab } from '../components/PrinterSettingsTab.js';
+import { BranchSettingsTab } from '../components/BranchSettingsTab.js';
 import {
   Settings as SettingsIcon,
   Building2,
@@ -17,10 +18,11 @@ import {
   Sparkles,
   Smartphone,
   ShieldAlert,
+  Store,
 } from 'lucide-react';
 import { useAppSelector } from '../../../store/hooks.js';
 
-type SettingsTabKey = 'pharmacy' | 'tax' | 'invoices' | 'printers' | 'general' | 'branding' | 'whatsapp';
+type SettingsTabKey = 'branches' | 'pharmacy' | 'tax' | 'invoices' | 'printers' | 'general' | 'branding' | 'whatsapp';
 
 export const SettingsPage: React.FC = () => {
   const { role } = useAppSelector((state) => state.auth);
@@ -66,6 +68,19 @@ export const SettingsPage: React.FC = () => {
 
       {/* Navigation Tabs */}
       <div className="border-b border-slate-200 dark:border-[#1E293B] flex items-center gap-2 overflow-x-auto pb-1">
+        <button
+          type="button"
+          onClick={() => setActiveTab('branches')}
+          className={`pb-3 px-3 text-xs font-bold transition-all flex items-center gap-1.5 border-b-2 shrink-0 cursor-pointer ${
+            activeTab === 'branches'
+              ? 'border-sky-600 text-sky-600 dark:border-sky-400 dark:text-sky-400'
+              : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+          }`}
+        >
+          <Store className="w-4 h-4" />
+          <span>الفروع والتشغيل (Active Branch)</span>
+        </button>
+
         <button
           type="button"
           onClick={() => setActiveTab('pharmacy')}
@@ -160,6 +175,7 @@ export const SettingsPage: React.FC = () => {
 
       {/* Active Tab Content */}
       <div>
+        {activeTab === 'branches' && <BranchSettingsTab />}
         {activeTab === 'pharmacy' && (
           <PharmacyProfileForm settingsMap={settingsMap} isReadOnly={isReadOnly} />
         )}

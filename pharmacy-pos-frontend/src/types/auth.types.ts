@@ -7,6 +7,14 @@ export interface User {
   email: string | null;
   role: Role;
   isActive: boolean;
+  branchId?: string | null;
+  branch?: {
+    id: string;
+    name: string;
+    code: string;
+    isMain: boolean;
+    isActive: boolean;
+  } | null;
   createdAt: string;
   updatedAt: string;
 }
