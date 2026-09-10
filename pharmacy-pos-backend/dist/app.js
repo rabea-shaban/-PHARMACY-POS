@@ -17,28 +17,49 @@ export function createApp() {
         noSniff: true,
         frameguard: { action: 'deny' },
     }));
-    // CORS configuration with strict whitelist enforcement
+    // CORS configuration
     app.use(cors({
         origin: (origin, callback) => {
-            // Allow requests without origin (desktop Electron app, local CLI, server-to-server)
+            // 1. Allow requests with no origin (Electron, Curl, Mobile apps, Postman)
             if (!origin)
                 return callback(null, true);
-            // Match against configured allowed origins
-            const isAllowedConfigured = env.CORS_ORIGIN.some((allowed) => allowed === '*' || allowed === origin);
-            // Allow localhost and local dev tools in non-production
-            const isLocalDev = env.NODE_ENV !== 'production' &&
-                (origin.startsWith('http://localhost:') ||
-                    origin.startsWith('http://127.0.0.1:') ||
-                    origin.startsWith('app://') ||
-                    origin.startsWith('file://'));
-            if (isAllowedConfigured || isLocalDev) {
+            // 2. Allow all Vercel domains (*.vercel.app) and Hostinger domains
+            if (origin.endsWith('.vercel.app') ||
+                origin.includes('vercel.app') ||
+                origin.includes('hostingersite.com')) {
                 return callback(null, true);
             }
-            return callback(new Error(`Origin '${origin}' not allowed by CORS policy`), false);
+            // 3. Allow localhost / 127.0.0.1 on any port
+            if (origin.startsWith('http://localhost') ||
+                origin.startsWith('https://localhost') ||
+                origin.startsWith('http://127.0.0.1') ||
+                origin.startsWith('https://127.0.0.1')) {
+                return callback(null, true);
+            }
+            // 4. Allow Chrome / Firefox extensions, Electron apps, Capacitor, Ionic, local file
+            if (origin.startsWith('chrome-extension://') ||
+                origin.startsWith('moz-extension://') ||
+                origin.startsWith('app://') ||
+                origin.startsWith('file://') ||
+                origin.startsWith('capacitor://') ||
+                origin.startsWith('ionic://')) {
+                return callback(null, true);
+            }
+            // 5. Match against explicitly configured allowed origins
+            if (env.CORS_ORIGIN.some((allowed) => allowed === '*' || allowed === origin || origin.includes(allowed))) {
+                return callback(null, true);
+            }
+            // 6. In non-production, allow all origins
+            if (env.NODE_ENV !== 'production') {
+                return callback(null, true);
+            }
+            return callback(null, false);
         },
         credentials: true,
         methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-        allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Cookie'],
+        allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin', 'Cookie', 'DNT', 'sec-ch-ua', 'sec-ch-ua-mobile', 'sec-ch-ua-platform'],
+        exposedHeaders: ['Set-Cookie'],
+        maxAge: 86400,
     }));
     // Cookie parser for HttpOnly authentication cookies
     app.use(cookieParser());

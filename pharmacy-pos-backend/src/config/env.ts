@@ -29,7 +29,9 @@ function validateAndLoadEnv(): EnvironmentConfig {
     errors.push('NODE_ENV must be one of: development, production, test');
   }
 
-  const corsOriginRaw = process.env.CORS_ORIGIN || 'http://localhost:3000,http://localhost:5173';
+  const corsOriginRaw =
+    process.env.CORS_ORIGIN ||
+    'http://localhost:3000,http://localhost:5173,https://pharmacy-pos-pharmacy-pos-frontend-ten.vercel.app';
   const corsOrigins = corsOriginRaw
     .split(',')
     .map((origin) => origin.trim())

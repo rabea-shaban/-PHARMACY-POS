@@ -4,17 +4,17 @@ export declare class InventoryRepository {
     private readonly defaultInclude;
     findMany(filters: InventoryTransactionQueryFilters): Promise<{
         items: ({
-            product: {
-                name: string;
-                id: string;
-                barcode: string | null;
-            };
             batch: {
                 id: string;
                 quantity: number;
                 expiryDate: Date;
                 batchNumber: string;
             } | null;
+            product: {
+                name: string;
+                id: string;
+                barcode: string | null;
+            };
             createdBy: {
                 name: string;
                 id: string;
@@ -36,17 +36,17 @@ export declare class InventoryRepository {
     }>;
     findByProductId(productId: string, page?: number, limit?: number): Promise<{
         items: ({
-            product: {
-                name: string;
-                id: string;
-                barcode: string | null;
-            };
             batch: {
                 id: string;
                 quantity: number;
                 expiryDate: Date;
                 batchNumber: string;
             } | null;
+            product: {
+                name: string;
+                id: string;
+                barcode: string | null;
+            };
             createdBy: {
                 name: string;
                 id: string;
@@ -68,17 +68,17 @@ export declare class InventoryRepository {
     }>;
     findByBatchId(batchId: string, page?: number, limit?: number): Promise<{
         items: ({
-            product: {
-                name: string;
-                id: string;
-                barcode: string | null;
-            };
             batch: {
                 id: string;
                 quantity: number;
                 expiryDate: Date;
                 batchNumber: string;
             } | null;
+            product: {
+                name: string;
+                id: string;
+                barcode: string | null;
+            };
             createdBy: {
                 name: string;
                 id: string;
@@ -120,17 +120,17 @@ export declare class InventoryRepository {
             batchNumber: string;
         };
         transaction: {
-            product: {
-                name: string;
-                id: string;
-                barcode: string | null;
-            };
             batch: {
                 id: string;
                 quantity: number;
                 expiryDate: Date;
                 batchNumber: string;
             } | null;
+            product: {
+                name: string;
+                id: string;
+                barcode: string | null;
+            };
             createdBy: {
                 name: string;
                 id: string;
