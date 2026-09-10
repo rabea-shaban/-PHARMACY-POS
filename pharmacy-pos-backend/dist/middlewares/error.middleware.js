@@ -1,5 +1,4 @@
 import { ZodError } from 'zod';
-import { env } from '../config/env.js';
 import { AppError } from '../utils/errors.js';
 function sanitizeErrorMessage(msg) {
     return msg.replace(/(mysql|mariadb|postgres|postgresql):\/\/([^:]+):([^@]+)@/gi, '$1://$2:***@');
@@ -32,13 +31,14 @@ export const errorMiddleware = (err, _req, res, _next) => {
     const rawMessage = err.message || 'Internal server error';
     const sanitizedMessage = sanitizeErrorMessage(rawMessage);
     console.error(`[Error] ${statusCode} - ${sanitizedMessage}`);
-    if (env.NODE_ENV === 'development' && err.stack) {
+    if (err.stack) {
         console.error(sanitizeErrorMessage(err.stack));
     }
     res.status(statusCode).json({
         success: false,
-        message: statusCode === 500 && env.NODE_ENV === 'production' ? 'Internal server error' : sanitizedMessage,
-        ...(env.NODE_ENV === 'development' && err.stack ? { stack: sanitizeErrorMessage(err.stack) } : {}),
+        message: sanitizedMessage,
+        error: rawMessage,
+        stack: err.stack ? sanitizeErrorMessage(err.stack) : undefined,
     });
 };
 //# sourceMappingURL=error.middleware.js.map

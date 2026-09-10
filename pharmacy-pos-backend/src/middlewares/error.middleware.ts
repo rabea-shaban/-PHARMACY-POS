@@ -39,13 +39,14 @@ export const errorMiddleware: ErrorRequestHandler = (err, _req, res, _next) => {
   const sanitizedMessage = sanitizeErrorMessage(rawMessage);
 
   console.error(`[Error] ${statusCode} - ${sanitizedMessage}`);
-  if (env.NODE_ENV === 'development' && err.stack) {
+  if (err.stack) {
     console.error(sanitizeErrorMessage(err.stack));
   }
 
   res.status(statusCode).json({
     success: false,
-    message: statusCode === 500 && env.NODE_ENV === 'production' ? 'Internal server error' : sanitizedMessage,
-    ...(env.NODE_ENV === 'development' && err.stack ? { stack: sanitizeErrorMessage(err.stack) } : {}),
+    message: sanitizedMessage,
+    error: rawMessage,
+    stack: err.stack ? sanitizeErrorMessage(err.stack) : undefined,
   });
 };
