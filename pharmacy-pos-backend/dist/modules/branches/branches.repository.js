@@ -1,8 +1,8 @@
 import { prisma } from '../../lib/prisma.js';
 export class BranchesRepository {
-    async findAll(query) {
-        const { page, limit, search, isActive, isMain, sortBy, sortOrder } = query;
-        const skip = (page - 1) * limit;
+    async findAll(query = {}) {
+        const { page = 1, limit = 20, search, isActive, isMain, sortBy = 'createdAt', sortOrder = 'desc', } = query || {};
+        const skip = Math.max(0, (page - 1) * limit);
         const where = {
             ...(isActive !== undefined && { isActive }),
             ...(isMain !== undefined && { isMain }),

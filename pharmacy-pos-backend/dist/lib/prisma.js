@@ -13,6 +13,9 @@ function parseDatabaseUrl(urlStr) {
             database: parsed.pathname ? parsed.pathname.replace(/^\//, '') : 'pharmacy_pos',
             connectionLimit: 5,
             connectTimeout: 10000,
+            charset: 'utf8mb4',
+            collation: 'utf8mb4_unicode_ci',
+            initSql: ["SET NAMES 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'"],
         };
     }
     catch {
@@ -24,6 +27,9 @@ function parseDatabaseUrl(urlStr) {
             database: 'u534453428_pharmacy_Db',
             connectionLimit: 5,
             connectTimeout: 10000,
+            charset: 'utf8mb4',
+            collation: 'utf8mb4_unicode_ci',
+            initSql: ["SET NAMES 'utf8mb4' COLLATE 'utf8mb4_unicode_ci'"],
         };
     }
 }

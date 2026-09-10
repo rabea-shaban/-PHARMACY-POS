@@ -54,9 +54,8 @@ export const transferIncludes = {
         select: {
           id: true,
           name: true,
-          arabicName: true,
+          scientificName: true,
           barcode: true,
-          unit: true,
         },
       },
       batch: {
@@ -77,20 +76,23 @@ export class TransfersRepository {
   async generateTransferNumber(): Promise<string> {
     const today = new Date();
     const dateStr = today.toISOString().slice(0, 10).replace(/-/g, '');
-    const countToday = await prisma.transferRequest.count({
-      where: {
-        transferNumber: {
-          startsWith: `TRF-${dateStr}`,
-        },
-      },
-    });
-    const seq = String(countToday + 1).padStart(4, '0');
-    return `TRF-${dateStr}-${seq}`;
+    const rand = Math.floor(1000 + Math.random() * 9000);
+    return `TRF-${dateStr}-${Date.now().toString().slice(-4)}${rand}`;
   }
 
-  async findAll(query: TransferQueryDTO): Promise<{ transfers: any[]; total: number }> {
-    const { page, limit, fromBranchId, toBranchId, branchId, status, search, sortBy, sortOrder } = query;
-    const skip = (page - 1) * limit;
+  async findAll(query: TransferQueryDTO = {} as any): Promise<{ transfers: any[]; total: number }> {
+    const {
+      page = 1,
+      limit = 20,
+      fromBranchId,
+      toBranchId,
+      branchId,
+      status,
+      search,
+      sortBy = 'createdAt',
+      sortOrder = 'desc',
+    } = query || {};
+    const skip = Math.max(0, (page - 1) * limit);
 
     const where: Prisma.TransferRequestWhereInput = {
       ...(fromBranchId && { fromBranchId }),
@@ -141,9 +143,10 @@ export class TransfersRepository {
   async create(data: CreateTransferDTO, requestedById: string): Promise<any> {
     const transferNumber = await this.generateTransferNumber();
 
-    return prisma.$transaction(async (tx) => {
-      // Create transfer record
-      const transfer = await tx.transferRequest.create({
+    return prisma.$transaction(
+      async (tx) => {
+        // Create transfer record
+        const transfer = await tx.transferRequest.create({
         data: {
           transferNumber,
           fromBranchId: data.fromBranchId,
@@ -165,7 +168,7 @@ export class TransfersRepository {
       });
 
       return transfer;
-    });
+    }, { maxWait: 15000, timeout: 20000 });
   }
 
   async approve(id: string, approvedById: string): Promise<any> {
@@ -273,7 +276,7 @@ export class TransfersRepository {
       });
 
       return updatedTransfer;
-    });
+    }, { maxWait: 15000, timeout: 20000 });
   }
 
   async receiveAtomic(id: string, receivedById: string): Promise<any> {
@@ -388,7 +391,7 @@ export class TransfersRepository {
       });
 
       return completedTransfer;
-    });
+    }, { maxWait: 15000, timeout: 20000 });
   }
 
   async reject(id: string, reason: string): Promise<any> {

@@ -8,7 +8,7 @@ export interface BranchWithStats extends Branch {
     };
 }
 export declare class BranchesRepository {
-    findAll(query: BranchQueryDTO): Promise<{
+    findAll(query?: BranchQueryDTO): Promise<{
         branches: BranchWithStats[];
         total: number;
     }>;

@@ -321,7 +321,7 @@ export class SalesRepository {
                 where: { id: sale.id },
                 include: this.defaultInclude,
             });
-        });
+        }, { maxWait: 15000, timeout: 20000 });
     }
     async cancelSaleAtomic(saleId, actorId, reason) {
         return prisma.$transaction(async (tx) => {

@@ -50,9 +50,8 @@ export declare const transferIncludes: {
                 select: {
                     id: boolean;
                     name: boolean;
-                    arabicName: boolean;
+                    scientificName: boolean;
                     barcode: boolean;
-                    unit: boolean;
                 };
             };
             batch: {
@@ -70,7 +69,7 @@ export declare const transferIncludes: {
 };
 export declare class TransfersRepository {
     generateTransferNumber(): Promise<string>;
-    findAll(query: TransferQueryDTO): Promise<{
+    findAll(query?: TransferQueryDTO): Promise<{
         transfers: any[];
         total: number;
     }>;

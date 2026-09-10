@@ -6,8 +6,6 @@ export const patientMedicationIncludes = {
             name: true,
             phone: true,
             email: true,
-            chronicDiseases: true,
-            allergies: true,
         },
     },
     product: {
@@ -40,9 +38,9 @@ export const patientMedicationIncludes = {
     },
 };
 export class PatientMedicationsRepository {
-    async findAll(query) {
-        const { page, limit, customerId, productId, type, isActive, search, sortBy, sortOrder } = query;
-        const skip = (page - 1) * limit;
+    async findAll(query = {}) {
+        const { page = 1, limit = 20, customerId, productId, type, isActive, search, sortBy = 'createdAt', sortOrder = 'desc', } = query || {};
+        const skip = Math.max(0, (page - 1) * limit);
         const where = {
             ...(customerId && { customerId }),
             ...(productId && { productId }),
@@ -96,6 +94,9 @@ export class PatientMedicationsRepository {
         });
     }
     async create(data, prescribedById) {
+        const dosageTimesStr = Array.isArray(data.dosageTimes)
+            ? JSON.stringify(data.dosageTimes)
+            : data.dosageTimes || null;
         return prisma.patientMedication.create({
             data: {
                 customerId: data.customerId,
@@ -106,7 +107,7 @@ export class PatientMedicationsRepository {
                 dosage: data.dosage,
                 dosageUnit: data.dosageUnit,
                 frequency: data.frequency,
-                dosageTimes: data.dosageTimes,
+                dosageTimes: dosageTimesStr,
                 duration: data.duration,
                 isContinuous: data.isContinuous ?? false,
                 doctorNotes: data.doctorNotes,
@@ -119,6 +120,11 @@ export class PatientMedicationsRepository {
         });
     }
     async update(id, data) {
+        const dosageTimesStr = data.dosageTimes !== undefined
+            ? Array.isArray(data.dosageTimes)
+                ? JSON.stringify(data.dosageTimes)
+                : data.dosageTimes
+            : undefined;
         return prisma.patientMedication.update({
             where: { id },
             data: {
@@ -126,7 +132,7 @@ export class PatientMedicationsRepository {
                 ...(data.dosage !== undefined && { dosage: data.dosage }),
                 ...(data.dosageUnit !== undefined && { dosageUnit: data.dosageUnit }),
                 ...(data.frequency !== undefined && { frequency: data.frequency }),
-                ...(data.dosageTimes !== undefined && { dosageTimes: data.dosageTimes }),
+                ...(dosageTimesStr !== undefined && { dosageTimes: dosageTimesStr }),
                 ...(data.duration !== undefined && { duration: data.duration }),
                 ...(data.isContinuous !== undefined && { isContinuous: data.isContinuous }),
                 ...(data.doctorNotes !== undefined && { doctorNotes: data.doctorNotes }),

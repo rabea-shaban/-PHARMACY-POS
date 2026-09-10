@@ -51,9 +51,8 @@ export const transferIncludes = {
                 select: {
                     id: true,
                     name: true,
-                    arabicName: true,
+                    scientificName: true,
                     barcode: true,
-                    unit: true,
                 },
             },
             batch: {
@@ -73,19 +72,12 @@ export class TransfersRepository {
     async generateTransferNumber() {
         const today = new Date();
         const dateStr = today.toISOString().slice(0, 10).replace(/-/g, '');
-        const countToday = await prisma.transferRequest.count({
-            where: {
-                transferNumber: {
-                    startsWith: `TRF-${dateStr}`,
-                },
-            },
-        });
-        const seq = String(countToday + 1).padStart(4, '0');
-        return `TRF-${dateStr}-${seq}`;
+        const rand = Math.floor(1000 + Math.random() * 9000);
+        return `TRF-${dateStr}-${Date.now().toString().slice(-4)}${rand}`;
     }
-    async findAll(query) {
-        const { page, limit, fromBranchId, toBranchId, branchId, status, search, sortBy, sortOrder } = query;
-        const skip = (page - 1) * limit;
+    async findAll(query = {}) {
+        const { page = 1, limit = 20, fromBranchId, toBranchId, branchId, status, search, sortBy = 'createdAt', sortOrder = 'desc', } = query || {};
+        const skip = Math.max(0, (page - 1) * limit);
         const where = {
             ...(fromBranchId && { fromBranchId }),
             ...(toBranchId && { toBranchId }),
@@ -152,7 +144,7 @@ export class TransfersRepository {
                 include: transferIncludes,
             });
             return transfer;
-        });
+        }, { maxWait: 15000, timeout: 20000 });
     }
     async approve(id, approvedById) {
         return prisma.transferRequest.update({
@@ -245,7 +237,7 @@ export class TransfersRepository {
                 include: transferIncludes,
             });
             return updatedTransfer;
-        });
+        }, { maxWait: 15000, timeout: 20000 });
     }
     async receiveAtomic(id, receivedById) {
         return prisma.$transaction(async (tx) => {
@@ -352,7 +344,7 @@ export class TransfersRepository {
                 include: transferIncludes,
             });
             return completedTransfer;
-        });
+        }, { maxWait: 15000, timeout: 20000 });
     }
     async reject(id, reason) {
         return prisma.transferRequest.update({

@@ -7,8 +7,6 @@ export declare const patientMedicationIncludes: {
             name: boolean;
             phone: boolean;
             email: boolean;
-            chronicDiseases: boolean;
-            allergies: boolean;
         };
     };
     product: {
@@ -41,7 +39,7 @@ export declare const patientMedicationIncludes: {
     };
 };
 export declare class PatientMedicationsRepository {
-    findAll(query: PatientMedicationQueryDTO): Promise<{
+    findAll(query?: PatientMedicationQueryDTO): Promise<{
         medications: any[];
         total: number;
     }>;
