@@ -15,14 +15,15 @@ export declare class BatchesRepository {
             };
         } & {
             id: string;
+            branchId: string | null;
             createdAt: Date;
             updatedAt: Date;
             productId: string;
             quantity: number;
+            batchNumber: string;
             expiryDate: Date;
             purchasePrice: Prisma.Decimal;
             sellingPrice: Prisma.Decimal;
-            batchNumber: string;
         })[];
         total: number;
     }>;
@@ -38,14 +39,15 @@ export declare class BatchesRepository {
         };
     } & {
         id: string;
+        branchId: string | null;
         createdAt: Date;
         updatedAt: Date;
         productId: string;
         quantity: number;
+        batchNumber: string;
         expiryDate: Date;
         purchasePrice: Prisma.Decimal;
         sellingPrice: Prisma.Decimal;
-        batchNumber: string;
     }) | null>;
     findByProductAndBatchNumber(productId: string, batchNumber: string): Promise<({
         product: {
@@ -59,14 +61,15 @@ export declare class BatchesRepository {
         };
     } & {
         id: string;
+        branchId: string | null;
         createdAt: Date;
         updatedAt: Date;
         productId: string;
         quantity: number;
+        batchNumber: string;
         expiryDate: Date;
         purchasePrice: Prisma.Decimal;
         sellingPrice: Prisma.Decimal;
-        batchNumber: string;
     }) | null>;
     findByProductId(productId: string): Promise<({
         product: {
@@ -80,14 +83,15 @@ export declare class BatchesRepository {
         };
     } & {
         id: string;
+        branchId: string | null;
         createdAt: Date;
         updatedAt: Date;
         productId: string;
         quantity: number;
+        batchNumber: string;
         expiryDate: Date;
         purchasePrice: Prisma.Decimal;
         sellingPrice: Prisma.Decimal;
-        batchNumber: string;
     })[]>;
     create(data: {
         productId: string;
@@ -99,14 +103,15 @@ export declare class BatchesRepository {
         actorId?: string | null;
     }): Promise<{
         id: string;
+        branchId: string | null;
         createdAt: Date;
         updatedAt: Date;
         productId: string;
         quantity: number;
+        batchNumber: string;
         expiryDate: Date;
         purchasePrice: Prisma.Decimal;
         sellingPrice: Prisma.Decimal;
-        batchNumber: string;
     }>;
     update(id: string, data: {
         expiryDate?: Date;
@@ -124,14 +129,15 @@ export declare class BatchesRepository {
         };
     } & {
         id: string;
+        branchId: string | null;
         createdAt: Date;
         updatedAt: Date;
         productId: string;
         quantity: number;
+        batchNumber: string;
         expiryDate: Date;
         purchasePrice: Prisma.Decimal;
         sellingPrice: Prisma.Decimal;
-        batchNumber: string;
     }>;
     findExpiring(daysAhead?: number): Promise<({
         product: {
@@ -145,14 +151,15 @@ export declare class BatchesRepository {
         };
     } & {
         id: string;
+        branchId: string | null;
         createdAt: Date;
         updatedAt: Date;
         productId: string;
         quantity: number;
+        batchNumber: string;
         expiryDate: Date;
         purchasePrice: Prisma.Decimal;
         sellingPrice: Prisma.Decimal;
-        batchNumber: string;
     })[]>;
     findExpired(): Promise<({
         product: {
@@ -166,14 +173,15 @@ export declare class BatchesRepository {
         };
     } & {
         id: string;
+        branchId: string | null;
         createdAt: Date;
         updatedAt: Date;
         productId: string;
         quantity: number;
+        batchNumber: string;
         expiryDate: Date;
         purchasePrice: Prisma.Decimal;
         sellingPrice: Prisma.Decimal;
-        batchNumber: string;
     })[]>;
     findFEFOCandidates(productId: string, requiredQuantity: number): Promise<{
         allocatedBatches: {
@@ -189,14 +197,15 @@ export declare class BatchesRepository {
                 };
             } & {
                 id: string;
+                branchId: string | null;
                 createdAt: Date;
                 updatedAt: Date;
                 productId: string;
                 quantity: number;
+                batchNumber: string;
                 expiryDate: Date;
                 purchasePrice: Prisma.Decimal;
                 sellingPrice: Prisma.Decimal;
-                batchNumber: string;
             };
             allocatedQuantity: number;
         }[];

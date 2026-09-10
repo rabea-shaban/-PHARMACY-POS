@@ -10,11 +10,17 @@ export declare class ProductsRepository {
             };
             batches: {
                 id: string;
+                branchId: string | null;
                 quantity: number;
+                branch: {
+                    name: string;
+                    id: string;
+                    code: string;
+                } | null;
+                batchNumber: string;
                 expiryDate: Date;
                 purchasePrice: Prisma.Decimal;
                 sellingPrice: Prisma.Decimal;
-                batchNumber: string;
             }[];
         } & {
             name: string;
@@ -23,11 +29,11 @@ export declare class ProductsRepository {
             createdAt: Date;
             updatedAt: Date;
             description: string | null;
+            purchasePrice: Prisma.Decimal;
+            sellingPrice: Prisma.Decimal;
             barcode: string | null;
             scientificName: string | null;
             categoryId: string;
-            purchasePrice: Prisma.Decimal;
-            sellingPrice: Prisma.Decimal;
             taxRate: Prisma.Decimal;
             minimumStock: number;
         })[];
@@ -40,11 +46,17 @@ export declare class ProductsRepository {
         };
         batches: {
             id: string;
+            branchId: string | null;
             quantity: number;
+            branch: {
+                name: string;
+                id: string;
+                code: string;
+            } | null;
+            batchNumber: string;
             expiryDate: Date;
             purchasePrice: Prisma.Decimal;
             sellingPrice: Prisma.Decimal;
-            batchNumber: string;
         }[];
     } & {
         name: string;
@@ -53,11 +65,11 @@ export declare class ProductsRepository {
         createdAt: Date;
         updatedAt: Date;
         description: string | null;
+        purchasePrice: Prisma.Decimal;
+        sellingPrice: Prisma.Decimal;
         barcode: string | null;
         scientificName: string | null;
         categoryId: string;
-        purchasePrice: Prisma.Decimal;
-        sellingPrice: Prisma.Decimal;
         taxRate: Prisma.Decimal;
         minimumStock: number;
     })[]>;
@@ -68,11 +80,17 @@ export declare class ProductsRepository {
         };
         batches: {
             id: string;
+            branchId: string | null;
             quantity: number;
+            branch: {
+                name: string;
+                id: string;
+                code: string;
+            } | null;
+            batchNumber: string;
             expiryDate: Date;
             purchasePrice: Prisma.Decimal;
             sellingPrice: Prisma.Decimal;
-            batchNumber: string;
         }[];
     } & {
         name: string;
@@ -81,11 +99,11 @@ export declare class ProductsRepository {
         createdAt: Date;
         updatedAt: Date;
         description: string | null;
+        purchasePrice: Prisma.Decimal;
+        sellingPrice: Prisma.Decimal;
         barcode: string | null;
         scientificName: string | null;
         categoryId: string;
-        purchasePrice: Prisma.Decimal;
-        sellingPrice: Prisma.Decimal;
         taxRate: Prisma.Decimal;
         minimumStock: number;
     }) | null>;
@@ -96,11 +114,17 @@ export declare class ProductsRepository {
         };
         batches: {
             id: string;
+            branchId: string | null;
             quantity: number;
+            branch: {
+                name: string;
+                id: string;
+                code: string;
+            } | null;
+            batchNumber: string;
             expiryDate: Date;
             purchasePrice: Prisma.Decimal;
             sellingPrice: Prisma.Decimal;
-            batchNumber: string;
         }[];
     } & {
         name: string;
@@ -109,11 +133,11 @@ export declare class ProductsRepository {
         createdAt: Date;
         updatedAt: Date;
         description: string | null;
+        purchasePrice: Prisma.Decimal;
+        sellingPrice: Prisma.Decimal;
         barcode: string | null;
         scientificName: string | null;
         categoryId: string;
-        purchasePrice: Prisma.Decimal;
-        sellingPrice: Prisma.Decimal;
         taxRate: Prisma.Decimal;
         minimumStock: number;
     }) | null>;
@@ -134,11 +158,17 @@ export declare class ProductsRepository {
         };
         batches: {
             id: string;
+            branchId: string | null;
             quantity: number;
+            branch: {
+                name: string;
+                id: string;
+                code: string;
+            } | null;
+            batchNumber: string;
             expiryDate: Date;
             purchasePrice: Prisma.Decimal;
             sellingPrice: Prisma.Decimal;
-            batchNumber: string;
         }[];
     } & {
         name: string;
@@ -147,11 +177,11 @@ export declare class ProductsRepository {
         createdAt: Date;
         updatedAt: Date;
         description: string | null;
+        purchasePrice: Prisma.Decimal;
+        sellingPrice: Prisma.Decimal;
         barcode: string | null;
         scientificName: string | null;
         categoryId: string;
-        purchasePrice: Prisma.Decimal;
-        sellingPrice: Prisma.Decimal;
         taxRate: Prisma.Decimal;
         minimumStock: number;
     }>;
@@ -173,11 +203,17 @@ export declare class ProductsRepository {
         };
         batches: {
             id: string;
+            branchId: string | null;
             quantity: number;
+            branch: {
+                name: string;
+                id: string;
+                code: string;
+            } | null;
+            batchNumber: string;
             expiryDate: Date;
             purchasePrice: Prisma.Decimal;
             sellingPrice: Prisma.Decimal;
-            batchNumber: string;
         }[];
     } & {
         name: string;
@@ -186,11 +222,11 @@ export declare class ProductsRepository {
         createdAt: Date;
         updatedAt: Date;
         description: string | null;
+        purchasePrice: Prisma.Decimal;
+        sellingPrice: Prisma.Decimal;
         barcode: string | null;
         scientificName: string | null;
         categoryId: string;
-        purchasePrice: Prisma.Decimal;
-        sellingPrice: Prisma.Decimal;
         taxRate: Prisma.Decimal;
         minimumStock: number;
     }>;
@@ -201,11 +237,17 @@ export declare class ProductsRepository {
         };
         batches: {
             id: string;
+            branchId: string | null;
             quantity: number;
+            branch: {
+                name: string;
+                id: string;
+                code: string;
+            } | null;
+            batchNumber: string;
             expiryDate: Date;
             purchasePrice: Prisma.Decimal;
             sellingPrice: Prisma.Decimal;
-            batchNumber: string;
         }[];
     } & {
         name: string;
@@ -214,11 +256,11 @@ export declare class ProductsRepository {
         createdAt: Date;
         updatedAt: Date;
         description: string | null;
+        purchasePrice: Prisma.Decimal;
+        sellingPrice: Prisma.Decimal;
         barcode: string | null;
         scientificName: string | null;
         categoryId: string;
-        purchasePrice: Prisma.Decimal;
-        sellingPrice: Prisma.Decimal;
         taxRate: Prisma.Decimal;
         minimumStock: number;
     }>;
@@ -238,11 +280,11 @@ export declare class ProductsRepository {
         createdAt: Date;
         updatedAt: Date;
         description: string | null;
+        purchasePrice: Prisma.Decimal;
+        sellingPrice: Prisma.Decimal;
         barcode: string | null;
         scientificName: string | null;
         categoryId: string;
-        purchasePrice: Prisma.Decimal;
-        sellingPrice: Prisma.Decimal;
         taxRate: Prisma.Decimal;
         minimumStock: number;
     })[]>;
@@ -259,24 +301,25 @@ export declare class ProductsRepository {
             createdAt: Date;
             updatedAt: Date;
             description: string | null;
+            purchasePrice: Prisma.Decimal;
+            sellingPrice: Prisma.Decimal;
             barcode: string | null;
             scientificName: string | null;
             categoryId: string;
-            purchasePrice: Prisma.Decimal;
-            sellingPrice: Prisma.Decimal;
             taxRate: Prisma.Decimal;
             minimumStock: number;
         };
     } & {
         id: string;
+        branchId: string | null;
         createdAt: Date;
         updatedAt: Date;
         productId: string;
         quantity: number;
+        batchNumber: string;
         expiryDate: Date;
         purchasePrice: Prisma.Decimal;
         sellingPrice: Prisma.Decimal;
-        batchNumber: string;
     })[]>;
 }
 export declare const productsRepository: ProductsRepository;

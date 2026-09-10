@@ -33,8 +33,8 @@ export declare const batchQuerySchema: z.ZodObject<{
     sortBy: z.ZodDefault<z.ZodEnum<{
         createdAt: "createdAt";
         quantity: "quantity";
-        expiryDate: "expiryDate";
         batchNumber: "batchNumber";
+        expiryDate: "expiryDate";
     }>>;
     sortOrder: z.ZodDefault<z.ZodEnum<{
         asc: "asc";

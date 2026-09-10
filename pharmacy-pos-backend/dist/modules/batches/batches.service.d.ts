@@ -29,14 +29,15 @@ export declare class BatchesService {
                 };
             } & {
                 id: string;
+                branchId: string | null;
                 createdAt: Date;
                 updatedAt: Date;
                 productId: string;
                 quantity: number;
+                batchNumber: string;
                 expiryDate: Date;
                 purchasePrice: import("@prisma/client-runtime-utils").Decimal;
                 sellingPrice: import("@prisma/client-runtime-utils").Decimal;
-                batchNumber: string;
             };
             allocatedQuantity: number;
         }[];

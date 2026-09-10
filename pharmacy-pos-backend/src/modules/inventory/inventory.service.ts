@@ -3,7 +3,11 @@ import { inventoryRepository, InventoryRepository } from './inventory.repository
 import { productsService, ProductsService } from '../products/products.service.js';
 import { auditService, AuditService } from '../audit/audit.service.js';
 import { getPaginationMeta } from '../../utils/pagination.util.js';
-import { StockAdjustmentDTO, InventoryTransactionQueryDTO } from './inventory.validator.js';
+import {
+  StockAdjustmentDTO,
+  InventoryTransactionQueryDTO,
+  InventoryMatrixQueryDTO,
+} from './inventory.validator.js';
 import {
   InventoryTransactionResponse,
   PaginatedInventoryTransactionsResponse,
@@ -28,6 +32,14 @@ function formatTransaction(raw: any): InventoryTransactionResponse {
           batchNumber: raw.batch.batchNumber,
           expiryDate: raw.batch.expiryDate,
           quantity: raw.batch.quantity,
+        }
+      : null,
+    branchId: raw.branchId,
+    branch: raw.branch
+      ? {
+          id: raw.branch.id,
+          name: raw.branch.name,
+          code: raw.branch.code,
         }
       : null,
     quantity: raw.quantity,
@@ -62,6 +74,19 @@ export class InventoryService {
 
     return {
       items: items.map(formatTransaction),
+      pagination,
+    };
+  }
+
+  async getInventoryMatrix(query: InventoryMatrixQueryDTO) {
+    const page = Math.max(1, Number(query.page) || 1);
+    const limit = Math.max(1, Number(query.limit) || 20);
+    const matrixResult = await this.repo.findMatrix(query);
+    const pagination = getPaginationMeta(matrixResult.total, page, limit);
+
+    return {
+      branches: matrixResult.branches,
+      items: matrixResult.items,
       pagination,
     };
   }
@@ -104,6 +129,7 @@ export class InventoryService {
     const result = await this.repo.recordStockMovementAtomic({
       productId: input.productId,
       batchId: input.batchId,
+      branchId: input.branchId,
       quantityDelta: input.quantity,
       type: input.type,
       reason: input.reason,

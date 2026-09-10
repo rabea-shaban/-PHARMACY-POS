@@ -137,7 +137,7 @@ export const InventoryTransactionsPage: React.FC = () => {
                       {tx.reason || '—'}
                     </td>
                     <td className="py-3.5 px-4 text-slate-500">
-                      {tx.user?.name || '—'}
+                      {tx.createdBy?.name || '—'}
                     </td>
                   </tr>
                 ))}

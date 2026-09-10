@@ -5,6 +5,7 @@ import { customersService } from '../customers/customers.service.js';
 import { discountsService } from '../discounts/discounts.service.js';
 import { insuranceService } from '../insurance/insurance.service.js';
 import { commissionsService } from '../commissions/commissions.service.js';
+import { patientMedicationsService } from '../patient-medications/patient-medications.service.js';
 import { getPaginationMeta } from '../../utils/pagination.util.js';
 import { NotFoundError, BadRequestError } from '../../utils/errors.js';
 import { eventBus } from '../../lib/events.js';
@@ -74,7 +75,8 @@ export class SalesService {
     discounts;
     insurance;
     commissions;
-    constructor(repo = salesRepository, products = productsService, batches = batchesService, customers = customersService, discounts = discountsService, insurance = insuranceService, commissions = commissionsService) {
+    patientMedications;
+    constructor(repo = salesRepository, products = productsService, batches = batchesService, customers = customersService, discounts = discountsService, insurance = insuranceService, commissions = commissionsService, patientMedications = patientMedicationsService) {
         this.repo = repo;
         this.products = products;
         this.batches = batches;
@@ -82,6 +84,7 @@ export class SalesService {
         this.discounts = discounts;
         this.insurance = insurance;
         this.commissions = commissions;
+        this.patientMedications = patientMedications;
     }
     async getSales(filters) {
         const page = Math.max(1, Number(filters.page) || 1);
@@ -249,7 +252,30 @@ export class SalesService {
         // 8. Execute Atomic Transaction in Database
         const createdSale = await this.repo.createSaleAtomic(checkoutPlan);
         const saleResponse = formatSale(createdSale);
-        // 9. Publish Asynchronous Business Event (decoupled from transaction)
+        // 9. Process patient medication instructions if provided
+        if (input.customerId && input.medicationInstructions && input.medicationInstructions.length > 0) {
+            for (const med of input.medicationInstructions) {
+                try {
+                    await this.patientMedications.createMedication({
+                        customerId: input.customerId,
+                        productId: med.productId,
+                        saleId: saleResponse.id,
+                        type: med.type,
+                        dosage: med.dosage,
+                        dosageUnit: med.dosageUnit,
+                        frequency: med.frequency,
+                        dosageTimes: med.dosageTimes,
+                        duration: med.duration,
+                        isContinuous: med.isContinuous,
+                        doctorNotes: med.doctorNotes,
+                    }, cashierId);
+                }
+                catch (medErr) {
+                    console.error('Failed to create patient medication during checkout:', medErr);
+                }
+            }
+        }
+        // 10. Publish Asynchronous Business Event (decoupled from transaction)
         eventBus.emitSaleCompleted({
             saleId: saleResponse.id,
             invoiceNumber: saleResponse.invoiceNumber,

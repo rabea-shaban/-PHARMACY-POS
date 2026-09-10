@@ -15,6 +15,14 @@ export class ProductsRepository {
                 quantity: true,
                 purchasePrice: true,
                 sellingPrice: true,
+                branchId: true,
+                branch: {
+                    select: {
+                        id: true,
+                        name: true,
+                        code: true,
+                    },
+                },
             },
             orderBy: { expiryDate: 'asc' },
         },

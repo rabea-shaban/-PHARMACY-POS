@@ -4,6 +4,7 @@ import {
   BatchItem,
   InventoryTransaction,
   StockAdjustmentPayload,
+  InventoryMatrixResponse,
 } from '../types/inventory.types.js';
 import { LowStockProduct, ExpiringBatch } from '../../dashboard/types/dashboard.types.js';
 
@@ -18,13 +19,43 @@ export const inventoryApi = {
     return response.data.data;
   },
 
-  // 2. Get Batches list
+  // 2. Multi-Branch Inventory Matrix
+  getInventoryMatrix: async (params?: {
+    page?: number;
+    limit?: number;
+    search?: string;
+    categoryId?: string;
+    lowStockOnly?: boolean;
+  }): Promise<InventoryMatrixResponse> => {
+    const response = await api.get<ApiResponse<InventoryMatrixResponse>>('/inventory/matrix', { params });
+    return response.data.data;
+  },
+
+  // 3. Double-entry inventory movement ledger
+  getLedger: async (params?: {
+    page?: number;
+    limit?: number;
+    productId?: string;
+    batchId?: string;
+    branchId?: string;
+    type?: string;
+    search?: string;
+    startDate?: string;
+    endDate?: string;
+  }): Promise<PaginatedResponse<InventoryTransaction>> => {
+    const response = await api.get<ApiResponse<PaginatedResponse<InventoryTransaction>>>('/inventory/ledger', {
+      params,
+    });
+    return response.data.data;
+  },
+
+  // 4. Get Batches list
   getBatches: async (params?: { page?: number; limit?: number; search?: string; productId?: string }): Promise<PaginatedResponse<BatchItem>> => {
     const response = await api.get<ApiResponse<PaginatedResponse<BatchItem>>>('/batches', { params });
     return response.data.data;
   },
 
-  // 3. Get Expiring Batches (within specified days)
+  // 5. Get Expiring Batches (within specified days)
   getExpiringBatches: async (days = 30): Promise<ExpiringBatch[]> => {
     const response = await api.get<ApiResponse<any>>('/batches/expiring', {
       params: { days },
@@ -47,19 +78,21 @@ export const inventoryApi = {
     });
   },
 
-  // 4. Get Expired Batches
+  // 6. Get Expired Batches
   getExpiredBatches: async (): Promise<BatchItem[]> => {
     const response = await api.get<ApiResponse<BatchItem[]>>('/batches/expired');
     return response.data.data;
   },
 
-  // 5. Get Inventory Transactions Ledger (Audit-style)
+  // 7. Get Inventory Transactions Ledger (Audit-style)
   getTransactions: async (params?: {
     page?: number;
     limit?: number;
     productId?: string;
     batchId?: string;
+    branchId?: string;
     type?: string;
+    search?: string;
   }): Promise<PaginatedResponse<InventoryTransaction>> => {
     const response = await api.get<ApiResponse<PaginatedResponse<InventoryTransaction>>>('/inventory/transactions', {
       params,
@@ -67,12 +100,12 @@ export const inventoryApi = {
     return response.data.data;
   },
 
-  // 6. Submit Stock Adjustment (Managers only)
+  // 8. Submit Stock Adjustment (Managers only)
   adjustStock: async (data: StockAdjustmentPayload): Promise<void> => {
     await api.post<ApiResponse<any>>('/inventory/adjustments', data);
   },
 
-  // 7. Create Batch
+  // 9. Create Batch
   createBatch: async (data: {
     productId: string;
     batchNumber: string;

@@ -13,14 +13,14 @@ export declare class PurchasesRepository {
                 batch: {
                     id: string;
                     quantity: number;
-                    expiryDate: Date;
                     batchNumber: string;
+                    expiryDate: Date;
                 } | null;
                 product: {
                     name: string;
                     id: string;
-                    barcode: string | null;
                     sellingPrice: Prisma.Decimal;
+                    barcode: string | null;
                 };
             } & {
                 id: string;
@@ -40,6 +40,7 @@ export declare class PurchasesRepository {
             };
         } & {
             id: string;
+            branchId: string | null;
             createdAt: Date;
             updatedAt: Date;
             createdById: string;
@@ -67,14 +68,14 @@ export declare class PurchasesRepository {
             batch: {
                 id: string;
                 quantity: number;
-                expiryDate: Date;
                 batchNumber: string;
+                expiryDate: Date;
             } | null;
             product: {
                 name: string;
                 id: string;
-                barcode: string | null;
                 sellingPrice: Prisma.Decimal;
+                barcode: string | null;
             };
         } & {
             id: string;
@@ -94,6 +95,7 @@ export declare class PurchasesRepository {
         };
     } & {
         id: string;
+        branchId: string | null;
         createdAt: Date;
         updatedAt: Date;
         createdById: string;
@@ -119,14 +121,14 @@ export declare class PurchasesRepository {
             batch: {
                 id: string;
                 quantity: number;
-                expiryDate: Date;
                 batchNumber: string;
+                expiryDate: Date;
             } | null;
             product: {
                 name: string;
                 id: string;
-                barcode: string | null;
                 sellingPrice: Prisma.Decimal;
+                barcode: string | null;
             };
         } & {
             id: string;
@@ -146,6 +148,7 @@ export declare class PurchasesRepository {
         };
     } & {
         id: string;
+        branchId: string | null;
         createdAt: Date;
         updatedAt: Date;
         createdById: string;
@@ -195,14 +198,14 @@ export declare class PurchasesRepository {
             batch: {
                 id: string;
                 quantity: number;
-                expiryDate: Date;
                 batchNumber: string;
+                expiryDate: Date;
             } | null;
             product: {
                 name: string;
                 id: string;
-                barcode: string | null;
                 sellingPrice: Prisma.Decimal;
+                barcode: string | null;
             };
         } & {
             id: string;
@@ -222,6 +225,7 @@ export declare class PurchasesRepository {
         };
     } & {
         id: string;
+        branchId: string | null;
         createdAt: Date;
         updatedAt: Date;
         createdById: string;
@@ -255,14 +259,14 @@ export declare class PurchasesRepository {
             batch: {
                 id: string;
                 quantity: number;
-                expiryDate: Date;
                 batchNumber: string;
+                expiryDate: Date;
             } | null;
             product: {
                 name: string;
                 id: string;
-                barcode: string | null;
                 sellingPrice: Prisma.Decimal;
+                barcode: string | null;
             };
         } & {
             id: string;
@@ -282,6 +286,7 @@ export declare class PurchasesRepository {
         };
     } & {
         id: string;
+        branchId: string | null;
         createdAt: Date;
         updatedAt: Date;
         createdById: string;
@@ -307,14 +312,14 @@ export declare class PurchasesRepository {
             batch: {
                 id: string;
                 quantity: number;
-                expiryDate: Date;
                 batchNumber: string;
+                expiryDate: Date;
             } | null;
             product: {
                 name: string;
                 id: string;
-                barcode: string | null;
                 sellingPrice: Prisma.Decimal;
+                barcode: string | null;
             };
         } & {
             id: string;
@@ -334,6 +339,7 @@ export declare class PurchasesRepository {
         };
     } & {
         id: string;
+        branchId: string | null;
         createdAt: Date;
         updatedAt: Date;
         createdById: string;
@@ -359,14 +365,14 @@ export declare class PurchasesRepository {
             batch: {
                 id: string;
                 quantity: number;
-                expiryDate: Date;
                 batchNumber: string;
+                expiryDate: Date;
             } | null;
             product: {
                 name: string;
                 id: string;
-                barcode: string | null;
                 sellingPrice: Prisma.Decimal;
+                barcode: string | null;
             };
         } & {
             id: string;
@@ -386,6 +392,7 @@ export declare class PurchasesRepository {
         };
     } & {
         id: string;
+        branchId: string | null;
         createdAt: Date;
         updatedAt: Date;
         createdById: string;

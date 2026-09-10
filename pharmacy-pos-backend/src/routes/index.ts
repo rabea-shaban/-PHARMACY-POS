@@ -25,8 +25,20 @@ import { whatsAppRouter } from '../modules/whatsapp/index.js';
 import { auditRouter } from '../modules/audit/index.js';
 import { settingsRouter } from '../modules/settings/index.js';
 import { securityRouter } from '../modules/security/index.js';
+import { branchesRouter } from '../modules/branches/index.js';
+import { transfersRouter } from '../modules/transfers/index.js';
+import { patientMedicationsRouter } from '../modules/patient-medications/index.js';
 
 export const apiRouter = Router();
+
+// Multi-Branch Management Module
+apiRouter.use('/branches', branchesRouter);
+
+// Stock Transfers Module
+apiRouter.use('/transfers', transfersRouter);
+
+// Patient Chronic & Acute Medications Module
+apiRouter.use('/patient-medications', patientMedicationsRouter);
 
 // Health Check Module
 apiRouter.use('/health', healthRoutes);

@@ -1,12 +1,16 @@
 import { Router } from 'express';
 import { inventoryController } from './inventory.controller.js';
-import { stockAdjustmentSchema, inventoryTransactionQuerySchema, productIdParamSchema, batchIdParamSchema, } from './inventory.validator.js';
+import { stockAdjustmentSchema, inventoryTransactionQuerySchema, inventoryMatrixQuerySchema, productIdParamSchema, batchIdParamSchema, } from './inventory.validator.js';
 import { validateBody, validateQuery, validateParams } from '../../middlewares/validate.middleware.js';
 import { authenticate } from '../../middlewares/auth.middleware.js';
 import { authorize } from '../../middlewares/role.middleware.js';
 export const inventoryRouter = Router();
 // Staff authentication required for all inventory endpoints
 inventoryRouter.use(authenticate);
+// GET /api/v1/inventory/matrix - Multi-branch inventory stock matrix overview (All staff)
+inventoryRouter.get('/matrix', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'), validateQuery(inventoryMatrixQuerySchema), inventoryController.getInventoryMatrix);
+// GET /api/v1/inventory/ledger - Unified stock movement ledger (All staff)
+inventoryRouter.get('/ledger', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'), validateQuery(inventoryTransactionQuerySchema), inventoryController.getTransactions);
 // GET /api/v1/inventory/transactions - List historical inventory transactions (All staff)
 inventoryRouter.get('/transactions', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'), validateQuery(inventoryTransactionQuerySchema), inventoryController.getTransactions);
 // GET /api/v1/inventory/low-stock - List low stock report (All staff)

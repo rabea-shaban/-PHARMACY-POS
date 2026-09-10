@@ -14,6 +14,27 @@ export const checkoutPaymentSchema = z.object({
     referenceNumber: z.string().trim().max(100).optional().nullable(),
     notes: z.string().trim().max(255).optional().nullable(),
 });
+export const checkoutMedicationInstructionSchema = z.object({
+    productId: z.string().uuid('Product ID must be a valid UUID'),
+    type: z.enum(['ACUTE', 'CHRONIC']).default('ACUTE'),
+    dosage: z.string().trim().min(1, 'Dosage is required'),
+    dosageUnit: z.string().trim().max(50).optional().nullable(),
+    frequency: z.string().trim().min(1, 'Frequency is required'),
+    dosageTimes: z
+        .union([z.string(), z.array(z.string())])
+        .optional()
+        .nullable()
+        .transform((val) => {
+        if (!val)
+            return null;
+        if (Array.isArray(val))
+            return JSON.stringify(val);
+        return val;
+    }),
+    duration: z.string().trim().max(100).optional().nullable(),
+    isContinuous: z.boolean().optional().default(false),
+    doctorNotes: z.string().trim().max(1000).optional().nullable(),
+});
 export const checkoutRequestSchema = z.object({
     customerId: z.string().uuid('Customer ID must be a valid UUID').optional().nullable(),
     items: z.array(checkoutItemSchema).min(1, 'At least one product item is required for checkout'),
@@ -24,6 +45,7 @@ export const checkoutRequestSchema = z.object({
     redeemPoints: z.number().int().min(0).default(0),
     payments: z.array(checkoutPaymentSchema).min(1, 'At least one payment record is required'),
     notes: z.string().trim().max(500).optional().nullable(),
+    medicationInstructions: z.array(checkoutMedicationInstructionSchema).optional().nullable(),
 });
 export const saleQuerySchema = z.object({
     page: z.coerce.number().int().positive().default(1),
@@ -32,6 +54,7 @@ export const saleQuerySchema = z.object({
     invoiceNumber: z.string().trim().optional(),
     customerId: z.string().uuid().optional(),
     userId: z.string().uuid().optional(),
+    branchId: z.string().uuid().optional(),
     status: z.enum(saleStatusEnum).optional(),
     paymentMethod: z.enum(paymentMethodEnum).optional(),
     startDate: z.string().optional(),

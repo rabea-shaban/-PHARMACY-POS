@@ -9,6 +9,8 @@ const inventoryTransactionTypeEnum = [
     'EXPIRED',
     'MANUAL_IN',
     'MANUAL_OUT',
+    'TRANSFER_OUT',
+    'TRANSFER_IN',
 ];
 export const productIdParamSchema = z.object({
     productId: z.string().uuid('Product ID must be a valid UUID'),
@@ -19,6 +21,7 @@ export const batchIdParamSchema = z.object({
 export const stockAdjustmentSchema = z.object({
     productId: z.string().uuid('Product ID must be a valid UUID'),
     batchId: z.string().uuid('Batch ID must be a valid UUID'),
+    branchId: z.string().uuid('Branch ID must be a valid UUID').optional(),
     quantity: z
         .number({ message: 'Quantity is required' })
         .int('Quantity must be an integer')
@@ -39,10 +42,22 @@ export const inventoryTransactionQuerySchema = z.object({
     limit: z.coerce.number().int().positive().max(100).default(20),
     productId: z.string().uuid().optional(),
     batchId: z.string().uuid().optional(),
+    branchId: z.string().uuid().optional(),
     type: z.enum(inventoryTransactionTypeEnum).optional(),
     startDate: z.string().datetime({ offset: true }).or(z.string().regex(/^\d{4}-\d{2}-\d{2}$/)).optional(),
     endDate: z.string().datetime({ offset: true }).or(z.string().regex(/^\d{4}-\d{2}-\d{2}$/)).optional(),
+    search: z.string().trim().optional(),
     sortBy: z.enum(['createdAt', 'quantity']).default('createdAt'),
     sortOrder: z.enum(['asc', 'desc']).default('desc'),
+});
+export const inventoryMatrixQuerySchema = z.object({
+    page: z.coerce.number().int().positive().default(1),
+    limit: z.coerce.number().int().positive().max(100).default(20),
+    search: z.string().trim().optional(),
+    categoryId: z.string().uuid().optional(),
+    lowStockOnly: z
+        .enum(['true', 'false'])
+        .transform((val) => val === 'true')
+        .optional(),
 });
 //# sourceMappingURL=inventory.validator.js.map

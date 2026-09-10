@@ -27,6 +27,7 @@ export declare class ReportsRepository {
             })[];
         } & {
             id: string;
+            branchId: string | null;
             createdAt: Date;
             updatedAt: Date;
             userId: string;
@@ -56,6 +57,7 @@ export declare class ReportsRepository {
             }[];
         } & {
             id: string;
+            branchId: string | null;
             createdAt: Date;
             updatedAt: Date;
             userId: string;
@@ -111,11 +113,11 @@ export declare class ReportsRepository {
             createdAt: Date;
             updatedAt: Date;
             description: string | null;
+            purchasePrice: Prisma.Decimal;
+            sellingPrice: Prisma.Decimal;
             barcode: string | null;
             scientificName: string | null;
             categoryId: string;
-            purchasePrice: Prisma.Decimal;
-            sellingPrice: Prisma.Decimal;
             taxRate: Prisma.Decimal;
             minimumStock: number;
         })[];
@@ -163,11 +165,11 @@ export declare class ReportsRepository {
             createdAt: Date;
             updatedAt: Date;
             description: string | null;
+            purchasePrice: Prisma.Decimal;
+            sellingPrice: Prisma.Decimal;
             barcode: string | null;
             scientificName: string | null;
             categoryId: string;
-            purchasePrice: Prisma.Decimal;
-            sellingPrice: Prisma.Decimal;
             taxRate: Prisma.Decimal;
             minimumStock: number;
         })[];
@@ -203,6 +205,7 @@ export declare class ReportsRepository {
             }[];
         } & {
             id: string;
+            branchId: string | null;
             createdAt: Date;
             updatedAt: Date;
             createdById: string;
@@ -234,16 +237,16 @@ export declare class ReportsRepository {
     }>;
     getCustomerReportData(_filters: CustomerReportQueryFilters, startDate: Date, endDate: Date): Promise<{
         allCustomers: ({
+            sales: {
+                id: string;
+                total: Prisma.Decimal;
+            }[];
             loyaltyAccount: {
                 totalPoints: number;
             } | null;
             tier: {
                 name: string;
             } | null;
-            sales: {
-                id: string;
-                total: Prisma.Decimal;
-            }[];
         } & {
             name: string;
             id: string;

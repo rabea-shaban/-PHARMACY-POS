@@ -15,6 +15,16 @@ export class InventoryController {
             next(error);
         }
     };
+    getInventoryMatrix = async (req, res, next) => {
+        try {
+            const filters = req.query;
+            const result = await this.service.getInventoryMatrix(filters);
+            sendSuccess(res, 'Multi-branch inventory matrix retrieved successfully', result, 200);
+        }
+        catch (error) {
+            next(error);
+        }
+    };
     getProductTransactions = async (req, res, next) => {
         try {
             const productId = req.params.productId;

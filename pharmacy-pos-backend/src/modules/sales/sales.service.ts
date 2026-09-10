@@ -5,6 +5,7 @@ import { customersService, CustomersService } from '../customers/customers.servi
 import { discountsService, DiscountsService } from '../discounts/discounts.service.js';
 import { insuranceService, InsuranceService } from '../insurance/insurance.service.js';
 import { commissionsService, CommissionsService } from '../commissions/commissions.service.js';
+import { patientMedicationsService, PatientMedicationsService } from '../patient-medications/patient-medications.service.js';
 import { getPaginationMeta } from '../../utils/pagination.util.js';
 import { CheckoutRequestDTO, SaleQueryDTO, CancelSaleDTO } from './sales.validator.js';
 import {
@@ -82,7 +83,8 @@ export class SalesService {
     private readonly customers: CustomersService = customersService,
     private readonly discounts: DiscountsService = discountsService,
     private readonly insurance: InsuranceService = insuranceService,
-    private readonly commissions: CommissionsService = commissionsService
+    private readonly commissions: CommissionsService = commissionsService,
+    private readonly patientMedications: PatientMedicationsService = patientMedicationsService
   ) {}
 
   async getSales(filters: SaleQueryFilters): Promise<PaginatedSalesResponse> {
@@ -291,7 +293,33 @@ export class SalesService {
     const createdSale = await this.repo.createSaleAtomic(checkoutPlan);
     const saleResponse = formatSale(createdSale);
 
-    // 9. Publish Asynchronous Business Event (decoupled from transaction)
+    // 9. Process patient medication instructions if provided
+    if (input.customerId && input.medicationInstructions && input.medicationInstructions.length > 0) {
+      for (const med of input.medicationInstructions) {
+        try {
+          await this.patientMedications.createMedication(
+            {
+              customerId: input.customerId,
+              productId: med.productId,
+              saleId: saleResponse.id,
+              type: med.type,
+              dosage: med.dosage,
+              dosageUnit: med.dosageUnit,
+              frequency: med.frequency,
+              dosageTimes: med.dosageTimes,
+              duration: med.duration,
+              isContinuous: med.isContinuous,
+              doctorNotes: med.doctorNotes,
+            },
+            cashierId
+          );
+        } catch (medErr) {
+          console.error('Failed to create patient medication during checkout:', medErr);
+        }
+      }
+    }
+
+    // 10. Publish Asynchronous Business Event (decoupled from transaction)
     eventBus.emitSaleCompleted({
       saleId: saleResponse.id,
       invoiceNumber: saleResponse.invoiceNumber,

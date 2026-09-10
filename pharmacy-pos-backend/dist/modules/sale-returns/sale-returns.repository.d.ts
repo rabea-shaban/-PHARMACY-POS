@@ -41,8 +41,8 @@ export declare class SaleReturnsRepository {
             items: ({
                 batch: {
                     id: string;
-                    expiryDate: Date;
                     batchNumber: string;
+                    expiryDate: Date;
                 } | null;
                 product: {
                     name: string;
@@ -103,8 +103,8 @@ export declare class SaleReturnsRepository {
         items: ({
             batch: {
                 id: string;
-                expiryDate: Date;
                 batchNumber: string;
+                expiryDate: Date;
             } | null;
             product: {
                 name: string;
@@ -163,8 +163,8 @@ export declare class SaleReturnsRepository {
         items: ({
             batch: {
                 id: string;
-                expiryDate: Date;
                 batchNumber: string;
+                expiryDate: Date;
             } | null;
             product: {
                 name: string;
@@ -231,6 +231,16 @@ export declare class SaleReturnsRepository {
             customerId: string | null;
             processedById: string;
         })[];
+        commissionTransactions: {
+            id: string;
+            createdAt: Date;
+            userId: string;
+            saleId: string | null;
+            commissionRuleId: string | null;
+            salesAmount: Prisma.Decimal;
+            commissionAmount: Prisma.Decimal;
+            commissionRate: Prisma.Decimal;
+        }[];
         customer: {
             name: string;
             id: string;
@@ -248,14 +258,15 @@ export declare class SaleReturnsRepository {
         items: ({
             batch: {
                 id: string;
+                branchId: string | null;
                 createdAt: Date;
                 updatedAt: Date;
                 productId: string;
                 quantity: number;
+                batchNumber: string;
                 expiryDate: Date;
                 purchasePrice: Prisma.Decimal;
                 sellingPrice: Prisma.Decimal;
-                batchNumber: string;
             } | null;
             product: {
                 name: string;
@@ -264,11 +275,11 @@ export declare class SaleReturnsRepository {
                 createdAt: Date;
                 updatedAt: Date;
                 description: string | null;
+                purchasePrice: Prisma.Decimal;
+                sellingPrice: Prisma.Decimal;
                 barcode: string | null;
                 scientificName: string | null;
                 categoryId: string;
-                purchasePrice: Prisma.Decimal;
-                sellingPrice: Prisma.Decimal;
                 taxRate: Prisma.Decimal;
                 minimumStock: number;
             };
@@ -292,18 +303,9 @@ export declare class SaleReturnsRepository {
             total: Prisma.Decimal;
             unitPrice: Prisma.Decimal;
         })[];
-        commissionTransactions: {
-            id: string;
-            createdAt: Date;
-            userId: string;
-            saleId: string | null;
-            commissionRuleId: string | null;
-            salesAmount: Prisma.Decimal;
-            commissionAmount: Prisma.Decimal;
-            commissionRate: Prisma.Decimal;
-        }[];
     } & {
         id: string;
+        branchId: string | null;
         createdAt: Date;
         updatedAt: Date;
         userId: string;
@@ -335,8 +337,8 @@ export declare class SaleReturnsRepository {
         items: ({
             batch: {
                 id: string;
-                expiryDate: Date;
                 batchNumber: string;
+                expiryDate: Date;
             } | null;
             product: {
                 name: string;

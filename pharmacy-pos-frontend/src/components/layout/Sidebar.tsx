@@ -24,6 +24,10 @@ import {
   Building2,
   Award,
   ShieldPlus,
+  Store,
+  ArrowLeftRight,
+  LayoutGrid,
+  ScrollText,
 } from 'lucide-react';
 import { cn } from '../../lib/utils.js';
 import { Role } from '../../types/auth.types.js';
@@ -66,6 +70,30 @@ const navItemDefs: NavItemDef[] = [
     href: '/inventory',
     icon: <Boxes className="w-5 h-5" />,
     roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'],
+  },
+  {
+    key: 'matrix',
+    href: '/inventory/matrix',
+    icon: <LayoutGrid className="w-5 h-5" />,
+    roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'],
+  },
+  {
+    key: 'transfers',
+    href: '/transfers',
+    icon: <ArrowLeftRight className="w-5 h-5" />,
+    roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'],
+  },
+  {
+    key: 'ledger',
+    href: '/inventory/ledger',
+    icon: <ScrollText className="w-5 h-5" />,
+    roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'],
+  },
+  {
+    key: 'branches',
+    href: '/branches',
+    icon: <Store className="w-5 h-5" />,
+    roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER'],
   },
   {
     key: 'suppliers',

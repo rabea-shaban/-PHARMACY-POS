@@ -139,6 +139,16 @@ export const cartSlice = createSlice({
       calculateTotals(state);
     },
 
+    setItemMedicationInstruction: (
+      state,
+      action: PayloadAction<{ productId: string; instruction: CartItemModel['medicationInstruction'] }>
+    ) => {
+      const item = state.items.find((i) => i.productId === action.payload.productId);
+      if (item) {
+        item.medicationInstruction = action.payload.instruction;
+      }
+    },
+
     setCustomer: (state, action: PayloadAction<Customer | null>) => {
       state.customer = action.payload;
       if (!action.payload) {
@@ -188,6 +198,7 @@ export const {
   removeItem,
   updateQuantity,
   updateItemDiscount,
+  setItemMedicationInstruction,
   setCustomer,
   setDiscount,
   setInsurance,

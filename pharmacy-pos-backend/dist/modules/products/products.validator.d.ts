@@ -49,8 +49,8 @@ export declare const productQuerySchema: z.ZodObject<{
         name: "name";
         createdAt: "createdAt";
         updatedAt: "updatedAt";
-        barcode: "barcode";
         sellingPrice: "sellingPrice";
+        barcode: "barcode";
     }>>;
     sortOrder: z.ZodDefault<z.ZodEnum<{
         asc: "asc";

@@ -3,12 +3,12 @@ import { SupplierQueryFilters } from './suppliers.types.js';
 export declare class SuppliersRepository {
     findMany(filters: SupplierQueryFilters): Promise<{
         items: ({
-            _count: {
-                purchases: number;
-            };
             purchases: {
                 total: Prisma.Decimal;
             }[];
+            _count: {
+                purchases: number;
+            };
         } & {
             name: string;
             id: string;
@@ -24,12 +24,12 @@ export declare class SuppliersRepository {
         total: number;
     }>;
     findById(id: string): Promise<({
-        _count: {
-            purchases: number;
-        };
         purchases: {
             total: Prisma.Decimal;
         }[];
+        _count: {
+            purchases: number;
+        };
     } & {
         name: string;
         id: string;
@@ -62,12 +62,12 @@ export declare class SuppliersRepository {
         taxNumber?: string | null;
         notes?: string | null;
     }): Promise<{
-        _count: {
-            purchases: number;
-        };
         purchases: {
             total: Prisma.Decimal;
         }[];
+        _count: {
+            purchases: number;
+        };
     } & {
         name: string;
         id: string;
@@ -89,12 +89,12 @@ export declare class SuppliersRepository {
         notes?: string | null;
         isActive?: boolean;
     }): Promise<{
-        _count: {
-            purchases: number;
-        };
         purchases: {
             total: Prisma.Decimal;
         }[];
+        _count: {
+            purchases: number;
+        };
     } & {
         name: string;
         id: string;
@@ -108,12 +108,12 @@ export declare class SuppliersRepository {
         taxNumber: string | null;
     }>;
     softDelete(id: string): Promise<{
-        _count: {
-            purchases: number;
-        };
         purchases: {
             total: Prisma.Decimal;
         }[];
+        _count: {
+            purchases: number;
+        };
     } & {
         name: string;
         id: string;
@@ -131,8 +131,8 @@ export declare class SuppliersRepository {
             items: ({
                 batch: {
                     id: string;
-                    expiryDate: Date;
                     batchNumber: string;
+                    expiryDate: Date;
                 } | null;
                 product: {
                     name: string;
@@ -157,6 +157,7 @@ export declare class SuppliersRepository {
             };
         } & {
             id: string;
+            branchId: string | null;
             createdAt: Date;
             updatedAt: Date;
             createdById: string;

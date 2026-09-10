@@ -102,6 +102,19 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
           notes: p.notes || null,
         })),
         notes: notes.trim() || null,
+        medicationInstructions: items
+          .filter((it) => !!it.medicationInstruction)
+          .map((it) => ({
+            productId: it.productId,
+            type: it.medicationInstruction!.type,
+            dosage: it.medicationInstruction!.dosage,
+            dosageUnit: it.medicationInstruction!.dosageUnit,
+            frequency: it.medicationInstruction!.frequency,
+            dosageTimes: it.medicationInstruction!.dosageTimes,
+            duration: it.medicationInstruction!.duration,
+            isContinuous: it.medicationInstruction!.isContinuous,
+            doctorNotes: it.medicationInstruction!.doctorNotes,
+          })),
       };
 
       const result = await checkoutMutation.mutateAsync(payload);

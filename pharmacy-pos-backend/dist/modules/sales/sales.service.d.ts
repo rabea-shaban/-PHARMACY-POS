@@ -5,6 +5,7 @@ import { CustomersService } from '../customers/customers.service.js';
 import { DiscountsService } from '../discounts/discounts.service.js';
 import { InsuranceService } from '../insurance/insurance.service.js';
 import { CommissionsService } from '../commissions/commissions.service.js';
+import { PatientMedicationsService } from '../patient-medications/patient-medications.service.js';
 import { CheckoutRequestDTO, CancelSaleDTO } from './sales.validator.js';
 import { SaleResponse, SaleQueryFilters, PaginatedSalesResponse } from './sales.types.js';
 export declare class SalesService {
@@ -15,7 +16,8 @@ export declare class SalesService {
     private readonly discounts;
     private readonly insurance;
     private readonly commissions;
-    constructor(repo?: SalesRepository, products?: ProductsService, batches?: BatchesService, customers?: CustomersService, discounts?: DiscountsService, insurance?: InsuranceService, commissions?: CommissionsService);
+    private readonly patientMedications;
+    constructor(repo?: SalesRepository, products?: ProductsService, batches?: BatchesService, customers?: CustomersService, discounts?: DiscountsService, insurance?: InsuranceService, commissions?: CommissionsService, patientMedications?: PatientMedicationsService);
     getSales(filters: SaleQueryFilters): Promise<PaginatedSalesResponse>;
     getSaleById(id: string): Promise<SaleResponse>;
     getSaleByInvoiceNumber(invoiceNumber: string): Promise<SaleResponse>;

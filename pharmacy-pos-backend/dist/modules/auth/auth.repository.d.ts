@@ -8,6 +8,7 @@ export declare class AuthRepository {
         passwordHash: string;
         role: import("@prisma/client").$Enums.Role;
         isActive: boolean;
+        branchId: string | null;
         createdAt: Date;
         updatedAt: Date;
     } | null>;

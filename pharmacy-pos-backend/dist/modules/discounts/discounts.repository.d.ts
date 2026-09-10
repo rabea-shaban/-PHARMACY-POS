@@ -9,11 +9,11 @@ export declare class DiscountsRepository {
             createdAt: Date;
             updatedAt: Date;
             type: import("@prisma/client").$Enums.DiscountType;
+            startDate: Date | null;
+            endDate: Date | null;
             code: string | null;
             value: Prisma.Decimal;
             minimumPurchase: Prisma.Decimal;
-            startDate: Date | null;
-            endDate: Date | null;
         }[];
         total: number;
     }>;
@@ -24,11 +24,11 @@ export declare class DiscountsRepository {
         createdAt: Date;
         updatedAt: Date;
         type: import("@prisma/client").$Enums.DiscountType;
+        startDate: Date | null;
+        endDate: Date | null;
         code: string | null;
         value: Prisma.Decimal;
         minimumPurchase: Prisma.Decimal;
-        startDate: Date | null;
-        endDate: Date | null;
     } | null>;
     findByCode(code: string): Promise<{
         name: string;
@@ -37,11 +37,11 @@ export declare class DiscountsRepository {
         createdAt: Date;
         updatedAt: Date;
         type: import("@prisma/client").$Enums.DiscountType;
+        startDate: Date | null;
+        endDate: Date | null;
         code: string | null;
         value: Prisma.Decimal;
         minimumPurchase: Prisma.Decimal;
-        startDate: Date | null;
-        endDate: Date | null;
     } | null>;
     create(data: {
         code?: string | null;
@@ -58,11 +58,11 @@ export declare class DiscountsRepository {
         createdAt: Date;
         updatedAt: Date;
         type: import("@prisma/client").$Enums.DiscountType;
+        startDate: Date | null;
+        endDate: Date | null;
         code: string | null;
         value: Prisma.Decimal;
         minimumPurchase: Prisma.Decimal;
-        startDate: Date | null;
-        endDate: Date | null;
     }>;
     update(id: string, data: {
         code?: string | null;
@@ -80,11 +80,11 @@ export declare class DiscountsRepository {
         createdAt: Date;
         updatedAt: Date;
         type: import("@prisma/client").$Enums.DiscountType;
+        startDate: Date | null;
+        endDate: Date | null;
         code: string | null;
         value: Prisma.Decimal;
         minimumPurchase: Prisma.Decimal;
-        startDate: Date | null;
-        endDate: Date | null;
     }>;
     softDelete(id: string): Promise<{
         name: string;
@@ -93,11 +93,11 @@ export declare class DiscountsRepository {
         createdAt: Date;
         updatedAt: Date;
         type: import("@prisma/client").$Enums.DiscountType;
+        startDate: Date | null;
+        endDate: Date | null;
         code: string | null;
         value: Prisma.Decimal;
         minimumPurchase: Prisma.Decimal;
-        startDate: Date | null;
-        endDate: Date | null;
     }>;
 }
 export declare const discountsRepository: DiscountsRepository;

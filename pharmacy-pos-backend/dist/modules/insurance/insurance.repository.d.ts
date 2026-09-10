@@ -98,12 +98,12 @@ export declare class InsuranceRepository {
         createdAt: Date;
         updatedAt: Date;
         customerId: string;
+        expiryDate: Date | null;
         insuranceProviderId: string;
         policyNumber: string;
         memberNumber: string;
         coveragePercentage: Prisma.Decimal;
         maxCoverageLimit: Prisma.Decimal | null;
-        expiryDate: Date | null;
     })[]>;
     findCustomerInsuranceById(id: string): Promise<({
         insuranceProvider: {
@@ -124,12 +124,12 @@ export declare class InsuranceRepository {
         createdAt: Date;
         updatedAt: Date;
         customerId: string;
+        expiryDate: Date | null;
         insuranceProviderId: string;
         policyNumber: string;
         memberNumber: string;
         coveragePercentage: Prisma.Decimal;
         maxCoverageLimit: Prisma.Decimal | null;
-        expiryDate: Date | null;
     }) | null>;
     createCustomerInsurance(data: {
         customerId: string;
@@ -158,12 +158,12 @@ export declare class InsuranceRepository {
         createdAt: Date;
         updatedAt: Date;
         customerId: string;
+        expiryDate: Date | null;
         insuranceProviderId: string;
         policyNumber: string;
         memberNumber: string;
         coveragePercentage: Prisma.Decimal;
         maxCoverageLimit: Prisma.Decimal | null;
-        expiryDate: Date | null;
     }>;
 }
 export declare const insuranceRepository: InsuranceRepository;

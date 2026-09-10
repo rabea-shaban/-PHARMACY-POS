@@ -4,6 +4,7 @@ export declare class InventoryController {
     private readonly service;
     constructor(service?: InventoryService);
     getTransactions: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+    getInventoryMatrix: (req: Request, res: Response, next: NextFunction) => Promise<void>;
     getProductTransactions: (req: Request, res: Response, next: NextFunction) => Promise<void>;
     getBatchTransactions: (req: Request, res: Response, next: NextFunction) => Promise<void>;
     adjustStock: (req: Request, res: Response, next: NextFunction) => Promise<void>;

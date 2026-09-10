@@ -18,6 +18,7 @@ export declare class DashboardRepository {
             })[];
         } & {
             id: string;
+            branchId: string | null;
             createdAt: Date;
             updatedAt: Date;
             userId: string;
@@ -59,11 +60,11 @@ export declare class DashboardRepository {
         }[];
         activeProducts: {
             id: string;
-            minimumStock: number;
             batches: {
                 quantity: number;
                 expiryDate: Date;
             }[];
+            minimumStock: number;
         }[];
         batches: {
             id: string;

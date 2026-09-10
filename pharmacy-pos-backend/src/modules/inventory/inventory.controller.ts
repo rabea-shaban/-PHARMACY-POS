@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { inventoryService, InventoryService } from './inventory.service.js';
 import { sendSuccess } from '../../utils/response.util.js';
-import { InventoryTransactionQueryDTO } from './inventory.validator.js';
+import { InventoryTransactionQueryDTO, InventoryMatrixQueryDTO } from './inventory.validator.js';
 
 export class InventoryController {
   constructor(private readonly service: InventoryService = inventoryService) {}
@@ -11,6 +11,16 @@ export class InventoryController {
       const filters = req.query as unknown as InventoryTransactionQueryDTO;
       const result = await this.service.getTransactions(filters);
       sendSuccess(res, 'Inventory transactions retrieved successfully', result, 200);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  getInventoryMatrix = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const filters = req.query as unknown as InventoryMatrixQueryDTO;
+      const result = await this.service.getInventoryMatrix(filters);
+      sendSuccess(res, 'Multi-branch inventory matrix retrieved successfully', result, 200);
     } catch (error) {
       next(error);
     }

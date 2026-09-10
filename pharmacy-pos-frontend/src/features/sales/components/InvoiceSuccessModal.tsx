@@ -10,6 +10,8 @@ import { printSaleReceipt, isDirectPrintSupported } from '../../../lib/printer.j
 import { openWhatsAppInvoice } from '../../../lib/whatsapp.js';
 import { showPromptDialog } from '../../../lib/alerts.js';
 import { useAppSelector } from '../../../store/hooks.js';
+import { WhatsAppScheduleModal } from './WhatsAppScheduleModal.js';
+import { Pill } from 'lucide-react';
 
 export interface InvoiceSuccessModalProps {
   isOpen: boolean;
@@ -29,6 +31,7 @@ export const InvoiceSuccessModal: React.FC<InvoiceSuccessModalProps> = ({
   const { publicSettings } = useAppSelector((state) => state.settings);
   const [printStatus, setPrintStatus] = React.useState<'idle' | 'printing' | 'success' | 'error'>('idle');
   const [printMessage, setPrintMessage] = React.useState<string>('');
+  const [isScheduleModalOpen, setIsScheduleModalOpen] = React.useState(false);
 
   const handlePrint = async () => {
     setPrintStatus('printing');
@@ -147,7 +150,17 @@ export const InvoiceSuccessModal: React.FC<InvoiceSuccessModalProps> = ({
               className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border-emerald-300 dark:bg-emerald-950/40 dark:hover:bg-emerald-900/50 dark:text-emerald-300 dark:border-emerald-800"
               leftIcon={<MessageCircle className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />}
             >
-              {isArabic ? 'واتساب' : 'WhatsApp'}
+              {isArabic ? 'فاتورة واتساب' : 'WhatsApp Receipt'}
+            </Button>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsScheduleModalOpen(true)}
+              className="bg-teal-50 hover:bg-teal-100 text-teal-700 border-teal-300 dark:bg-teal-950/40 dark:hover:bg-teal-900/50 dark:text-teal-300 dark:border-teal-800"
+              leftIcon={<Pill className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />}
+            >
+              {isArabic ? 'جدول الجرعات (واتساب)' : 'Medication Schedule'}
             </Button>
 
             <Button
@@ -183,6 +196,28 @@ export const InvoiceSuccessModal: React.FC<InvoiceSuccessModalProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Medication Schedule WhatsApp Modal */}
+      {isScheduleModalOpen && (
+        <WhatsAppScheduleModal
+          isOpen={isScheduleModalOpen}
+          onClose={() => setIsScheduleModalOpen(false)}
+          payload={{
+            customerName: sale.customerName || undefined,
+            customerPhone: sale.customerPhone || undefined,
+            invoiceNumber: sale.invoiceNumber,
+            pharmacyName: publicSettings.pharmacyName,
+            items: (sale.items || []).map((it) => ({
+              productName: it.productName,
+              dosage: '1 قرص / وحدة',
+              frequency: 'حسب إرشادات الصيدلي',
+              dosageTimes: ['08:00 AM', '08:00 PM'],
+              duration: 'حسب الحاجة',
+              doctorNotes: 'تناول مع كمية كافية من الماء',
+            })),
+          }}
+        />
+      )}
     </Modal>
   );
 };

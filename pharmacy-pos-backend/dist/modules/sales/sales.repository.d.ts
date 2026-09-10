@@ -55,43 +55,6 @@ export declare class SalesRepository {
                 id: string;
                 role: import("@prisma/client").$Enums.Role;
             };
-            customer: {
-                name: string;
-                id: string;
-                phone: string;
-                tier: {
-                    name: string;
-                    id: string;
-                    isActive: boolean;
-                    createdAt: Date;
-                    updatedAt: Date;
-                    description: string | null;
-                    discountPercentage: Prisma.Decimal;
-                    minimumPoints: number;
-                } | null;
-            } | null;
-            items: ({
-                batch: {
-                    id: string;
-                    expiryDate: Date;
-                    batchNumber: string;
-                } | null;
-                product: {
-                    name: string;
-                    id: string;
-                    barcode: string | null;
-                };
-            } & {
-                id: string;
-                saleId: string;
-                productId: string;
-                batchId: string | null;
-                quantity: number;
-                discount: Prisma.Decimal;
-                tax: Prisma.Decimal;
-                total: Prisma.Decimal;
-                unitPrice: Prisma.Decimal;
-            })[];
             commissionTransactions: {
                 id: string;
                 createdAt: Date;
@@ -117,6 +80,43 @@ export declare class SalesRepository {
                 referenceNumber: string | null;
                 notes: string | null;
             })[];
+            customer: {
+                name: string;
+                id: string;
+                phone: string;
+                tier: {
+                    name: string;
+                    id: string;
+                    isActive: boolean;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    description: string | null;
+                    discountPercentage: Prisma.Decimal;
+                    minimumPoints: number;
+                } | null;
+            } | null;
+            items: ({
+                batch: {
+                    id: string;
+                    batchNumber: string;
+                    expiryDate: Date;
+                } | null;
+                product: {
+                    name: string;
+                    id: string;
+                    barcode: string | null;
+                };
+            } & {
+                id: string;
+                saleId: string;
+                productId: string;
+                batchId: string | null;
+                quantity: number;
+                discount: Prisma.Decimal;
+                tax: Prisma.Decimal;
+                total: Prisma.Decimal;
+                unitPrice: Prisma.Decimal;
+            })[];
             insurance: ({
                 insuranceProvider: {
                     name: string;
@@ -134,6 +134,7 @@ export declare class SalesRepository {
             }) | null;
         } & {
             id: string;
+            branchId: string | null;
             createdAt: Date;
             updatedAt: Date;
             userId: string;
@@ -158,43 +159,6 @@ export declare class SalesRepository {
             id: string;
             role: import("@prisma/client").$Enums.Role;
         };
-        customer: {
-            name: string;
-            id: string;
-            phone: string;
-            tier: {
-                name: string;
-                id: string;
-                isActive: boolean;
-                createdAt: Date;
-                updatedAt: Date;
-                description: string | null;
-                discountPercentage: Prisma.Decimal;
-                minimumPoints: number;
-            } | null;
-        } | null;
-        items: ({
-            batch: {
-                id: string;
-                expiryDate: Date;
-                batchNumber: string;
-            } | null;
-            product: {
-                name: string;
-                id: string;
-                barcode: string | null;
-            };
-        } & {
-            id: string;
-            saleId: string;
-            productId: string;
-            batchId: string | null;
-            quantity: number;
-            discount: Prisma.Decimal;
-            tax: Prisma.Decimal;
-            total: Prisma.Decimal;
-            unitPrice: Prisma.Decimal;
-        })[];
         commissionTransactions: {
             id: string;
             createdAt: Date;
@@ -220,6 +184,43 @@ export declare class SalesRepository {
             referenceNumber: string | null;
             notes: string | null;
         })[];
+        customer: {
+            name: string;
+            id: string;
+            phone: string;
+            tier: {
+                name: string;
+                id: string;
+                isActive: boolean;
+                createdAt: Date;
+                updatedAt: Date;
+                description: string | null;
+                discountPercentage: Prisma.Decimal;
+                minimumPoints: number;
+            } | null;
+        } | null;
+        items: ({
+            batch: {
+                id: string;
+                batchNumber: string;
+                expiryDate: Date;
+            } | null;
+            product: {
+                name: string;
+                id: string;
+                barcode: string | null;
+            };
+        } & {
+            id: string;
+            saleId: string;
+            productId: string;
+            batchId: string | null;
+            quantity: number;
+            discount: Prisma.Decimal;
+            tax: Prisma.Decimal;
+            total: Prisma.Decimal;
+            unitPrice: Prisma.Decimal;
+        })[];
         insurance: ({
             insuranceProvider: {
                 name: string;
@@ -237,6 +238,7 @@ export declare class SalesRepository {
         }) | null;
     } & {
         id: string;
+        branchId: string | null;
         createdAt: Date;
         updatedAt: Date;
         userId: string;
@@ -259,43 +261,6 @@ export declare class SalesRepository {
             id: string;
             role: import("@prisma/client").$Enums.Role;
         };
-        customer: {
-            name: string;
-            id: string;
-            phone: string;
-            tier: {
-                name: string;
-                id: string;
-                isActive: boolean;
-                createdAt: Date;
-                updatedAt: Date;
-                description: string | null;
-                discountPercentage: Prisma.Decimal;
-                minimumPoints: number;
-            } | null;
-        } | null;
-        items: ({
-            batch: {
-                id: string;
-                expiryDate: Date;
-                batchNumber: string;
-            } | null;
-            product: {
-                name: string;
-                id: string;
-                barcode: string | null;
-            };
-        } & {
-            id: string;
-            saleId: string;
-            productId: string;
-            batchId: string | null;
-            quantity: number;
-            discount: Prisma.Decimal;
-            tax: Prisma.Decimal;
-            total: Prisma.Decimal;
-            unitPrice: Prisma.Decimal;
-        })[];
         commissionTransactions: {
             id: string;
             createdAt: Date;
@@ -321,6 +286,43 @@ export declare class SalesRepository {
             referenceNumber: string | null;
             notes: string | null;
         })[];
+        customer: {
+            name: string;
+            id: string;
+            phone: string;
+            tier: {
+                name: string;
+                id: string;
+                isActive: boolean;
+                createdAt: Date;
+                updatedAt: Date;
+                description: string | null;
+                discountPercentage: Prisma.Decimal;
+                minimumPoints: number;
+            } | null;
+        } | null;
+        items: ({
+            batch: {
+                id: string;
+                batchNumber: string;
+                expiryDate: Date;
+            } | null;
+            product: {
+                name: string;
+                id: string;
+                barcode: string | null;
+            };
+        } & {
+            id: string;
+            saleId: string;
+            productId: string;
+            batchId: string | null;
+            quantity: number;
+            discount: Prisma.Decimal;
+            tax: Prisma.Decimal;
+            total: Prisma.Decimal;
+            unitPrice: Prisma.Decimal;
+        })[];
         insurance: ({
             insuranceProvider: {
                 name: string;
@@ -338,6 +340,7 @@ export declare class SalesRepository {
         }) | null;
     } & {
         id: string;
+        branchId: string | null;
         createdAt: Date;
         updatedAt: Date;
         userId: string;
@@ -360,43 +363,6 @@ export declare class SalesRepository {
             id: string;
             role: import("@prisma/client").$Enums.Role;
         };
-        customer: {
-            name: string;
-            id: string;
-            phone: string;
-            tier: {
-                name: string;
-                id: string;
-                isActive: boolean;
-                createdAt: Date;
-                updatedAt: Date;
-                description: string | null;
-                discountPercentage: Prisma.Decimal;
-                minimumPoints: number;
-            } | null;
-        } | null;
-        items: ({
-            batch: {
-                id: string;
-                expiryDate: Date;
-                batchNumber: string;
-            } | null;
-            product: {
-                name: string;
-                id: string;
-                barcode: string | null;
-            };
-        } & {
-            id: string;
-            saleId: string;
-            productId: string;
-            batchId: string | null;
-            quantity: number;
-            discount: Prisma.Decimal;
-            tax: Prisma.Decimal;
-            total: Prisma.Decimal;
-            unitPrice: Prisma.Decimal;
-        })[];
         commissionTransactions: {
             id: string;
             createdAt: Date;
@@ -422,6 +388,43 @@ export declare class SalesRepository {
             referenceNumber: string | null;
             notes: string | null;
         })[];
+        customer: {
+            name: string;
+            id: string;
+            phone: string;
+            tier: {
+                name: string;
+                id: string;
+                isActive: boolean;
+                createdAt: Date;
+                updatedAt: Date;
+                description: string | null;
+                discountPercentage: Prisma.Decimal;
+                minimumPoints: number;
+            } | null;
+        } | null;
+        items: ({
+            batch: {
+                id: string;
+                batchNumber: string;
+                expiryDate: Date;
+            } | null;
+            product: {
+                name: string;
+                id: string;
+                barcode: string | null;
+            };
+        } & {
+            id: string;
+            saleId: string;
+            productId: string;
+            batchId: string | null;
+            quantity: number;
+            discount: Prisma.Decimal;
+            tax: Prisma.Decimal;
+            total: Prisma.Decimal;
+            unitPrice: Prisma.Decimal;
+        })[];
         insurance: ({
             insuranceProvider: {
                 name: string;
@@ -439,6 +442,7 @@ export declare class SalesRepository {
         }) | null;
     } & {
         id: string;
+        branchId: string | null;
         createdAt: Date;
         updatedAt: Date;
         userId: string;
@@ -461,43 +465,6 @@ export declare class SalesRepository {
             id: string;
             role: import("@prisma/client").$Enums.Role;
         };
-        customer: {
-            name: string;
-            id: string;
-            phone: string;
-            tier: {
-                name: string;
-                id: string;
-                isActive: boolean;
-                createdAt: Date;
-                updatedAt: Date;
-                description: string | null;
-                discountPercentage: Prisma.Decimal;
-                minimumPoints: number;
-            } | null;
-        } | null;
-        items: ({
-            batch: {
-                id: string;
-                expiryDate: Date;
-                batchNumber: string;
-            } | null;
-            product: {
-                name: string;
-                id: string;
-                barcode: string | null;
-            };
-        } & {
-            id: string;
-            saleId: string;
-            productId: string;
-            batchId: string | null;
-            quantity: number;
-            discount: Prisma.Decimal;
-            tax: Prisma.Decimal;
-            total: Prisma.Decimal;
-            unitPrice: Prisma.Decimal;
-        })[];
         commissionTransactions: {
             id: string;
             createdAt: Date;
@@ -523,6 +490,43 @@ export declare class SalesRepository {
             referenceNumber: string | null;
             notes: string | null;
         })[];
+        customer: {
+            name: string;
+            id: string;
+            phone: string;
+            tier: {
+                name: string;
+                id: string;
+                isActive: boolean;
+                createdAt: Date;
+                updatedAt: Date;
+                description: string | null;
+                discountPercentage: Prisma.Decimal;
+                minimumPoints: number;
+            } | null;
+        } | null;
+        items: ({
+            batch: {
+                id: string;
+                batchNumber: string;
+                expiryDate: Date;
+            } | null;
+            product: {
+                name: string;
+                id: string;
+                barcode: string | null;
+            };
+        } & {
+            id: string;
+            saleId: string;
+            productId: string;
+            batchId: string | null;
+            quantity: number;
+            discount: Prisma.Decimal;
+            tax: Prisma.Decimal;
+            total: Prisma.Decimal;
+            unitPrice: Prisma.Decimal;
+        })[];
         insurance: ({
             insuranceProvider: {
                 name: string;
@@ -540,6 +544,7 @@ export declare class SalesRepository {
         }) | null;
     } & {
         id: string;
+        branchId: string | null;
         createdAt: Date;
         updatedAt: Date;
         userId: string;

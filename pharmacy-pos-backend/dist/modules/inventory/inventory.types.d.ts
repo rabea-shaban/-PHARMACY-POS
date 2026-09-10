@@ -15,6 +15,12 @@ export interface InventoryTransactionResponse {
         expiryDate: Date;
         quantity: number;
     } | null;
+    branchId?: string | null;
+    branch?: {
+        id: string;
+        name: string;
+        code: string;
+    } | null;
     quantity: number;
     type: InventoryTransactionType;
     referenceType: string | null;

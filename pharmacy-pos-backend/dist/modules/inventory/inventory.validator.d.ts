@@ -8,6 +8,7 @@ export declare const batchIdParamSchema: z.ZodObject<{
 export declare const stockAdjustmentSchema: z.ZodObject<{
     productId: z.ZodString;
     batchId: z.ZodString;
+    branchId: z.ZodOptional<z.ZodString>;
     quantity: z.ZodNumber;
     type: z.ZodEnum<{
         SALE: "SALE";
@@ -19,6 +20,8 @@ export declare const stockAdjustmentSchema: z.ZodObject<{
         EXPIRED: "EXPIRED";
         MANUAL_IN: "MANUAL_IN";
         MANUAL_OUT: "MANUAL_OUT";
+        TRANSFER_OUT: "TRANSFER_OUT";
+        TRANSFER_IN: "TRANSFER_IN";
     }>;
     reason: z.ZodString;
     referenceType: z.ZodNullable<z.ZodOptional<z.ZodString>>;
@@ -29,6 +32,7 @@ export declare const inventoryTransactionQuerySchema: z.ZodObject<{
     limit: z.ZodDefault<z.ZodCoercedNumber<unknown>>;
     productId: z.ZodOptional<z.ZodString>;
     batchId: z.ZodOptional<z.ZodString>;
+    branchId: z.ZodOptional<z.ZodString>;
     type: z.ZodOptional<z.ZodEnum<{
         SALE: "SALE";
         PURCHASE: "PURCHASE";
@@ -39,9 +43,12 @@ export declare const inventoryTransactionQuerySchema: z.ZodObject<{
         EXPIRED: "EXPIRED";
         MANUAL_IN: "MANUAL_IN";
         MANUAL_OUT: "MANUAL_OUT";
+        TRANSFER_OUT: "TRANSFER_OUT";
+        TRANSFER_IN: "TRANSFER_IN";
     }>>;
     startDate: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodString]>>;
     endDate: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodString]>>;
+    search: z.ZodOptional<z.ZodString>;
     sortBy: z.ZodDefault<z.ZodEnum<{
         createdAt: "createdAt";
         quantity: "quantity";
@@ -51,5 +58,16 @@ export declare const inventoryTransactionQuerySchema: z.ZodObject<{
         desc: "desc";
     }>>;
 }, z.core.$strip>;
+export declare const inventoryMatrixQuerySchema: z.ZodObject<{
+    page: z.ZodDefault<z.ZodCoercedNumber<unknown>>;
+    limit: z.ZodDefault<z.ZodCoercedNumber<unknown>>;
+    search: z.ZodOptional<z.ZodString>;
+    categoryId: z.ZodOptional<z.ZodString>;
+    lowStockOnly: z.ZodOptional<z.ZodPipe<z.ZodEnum<{
+        true: "true";
+        false: "false";
+    }>, z.ZodTransform<boolean, "true" | "false">>>;
+}, z.core.$strip>;
 export type StockAdjustmentDTO = z.infer<typeof stockAdjustmentSchema>;
 export type InventoryTransactionQueryDTO = z.infer<typeof inventoryTransactionQuerySchema>;
+export type InventoryMatrixQueryDTO = z.infer<typeof inventoryMatrixQuerySchema>;

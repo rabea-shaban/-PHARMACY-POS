@@ -50,6 +50,8 @@ function formatProduct(raw: any): ProductResponse {
       quantity: b.quantity,
       purchasePrice: Number(b.purchasePrice),
       sellingPrice: Number(b.sellingPrice),
+      branchId: b.branchId,
+      branch: b.branch,
     })),
     createdAt: raw.createdAt,
     updatedAt: raw.updatedAt,

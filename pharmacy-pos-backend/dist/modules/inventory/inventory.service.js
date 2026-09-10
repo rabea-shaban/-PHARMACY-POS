@@ -23,6 +23,14 @@ function formatTransaction(raw) {
                 quantity: raw.batch.quantity,
             }
             : null,
+        branchId: raw.branchId,
+        branch: raw.branch
+            ? {
+                id: raw.branch.id,
+                name: raw.branch.name,
+                code: raw.branch.code,
+            }
+            : null,
         quantity: raw.quantity,
         type: raw.type,
         referenceType: raw.referenceType,
@@ -58,6 +66,17 @@ export class InventoryService {
             pagination,
         };
     }
+    async getInventoryMatrix(query) {
+        const page = Math.max(1, Number(query.page) || 1);
+        const limit = Math.max(1, Number(query.limit) || 20);
+        const matrixResult = await this.repo.findMatrix(query);
+        const pagination = getPaginationMeta(matrixResult.total, page, limit);
+        return {
+            branches: matrixResult.branches,
+            items: matrixResult.items,
+            pagination,
+        };
+    }
     async getProductTransactions(productId, page = 1, limit = 20) {
         await this.products.getProductById(productId);
         const { items, total } = await this.repo.findByProductId(productId, page, limit);
@@ -83,6 +102,7 @@ export class InventoryService {
         const result = await this.repo.recordStockMovementAtomic({
             productId: input.productId,
             batchId: input.batchId,
+            branchId: input.branchId,
             quantityDelta: input.quantity,
             type: input.type,
             reason: input.reason,

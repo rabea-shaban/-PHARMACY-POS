@@ -29,6 +29,12 @@ import { BatchesPage } from '../features/inventory/pages/BatchesPage.js';
 import { LowStockPage } from '../features/inventory/pages/LowStockPage.js';
 import { ExpiryAlertsPage } from '../features/inventory/pages/ExpiryAlertsPage.js';
 import { InventoryTransactionsPage } from '../features/inventory/pages/InventoryTransactionsPage.js';
+import { DrugMovementLedgerPage } from '../features/inventory/pages/DrugMovementLedgerPage.js';
+
+// E03: Multi-Branch & Transfers Pages
+import { BranchManagementPage } from '../features/branches/pages/BranchManagementPage.js';
+import { BranchInventoryMatrixPage } from '../features/branches/pages/BranchInventoryMatrixPage.js';
+import { TransferRequestsPage } from '../features/transfers/pages/TransferRequestsPage.js';
 
 // F05: Suppliers Pages
 import { SuppliersPage } from '../features/suppliers/pages/SuppliersPage.js';
@@ -266,6 +272,14 @@ export const AppRoutes: React.FC = () => {
           }
         />
         <Route
+          path="/inventory/matrix"
+          element={
+            <RoleGuard allowedRoles={MODULE_PERMISSIONS.inventory}>
+              <BranchInventoryMatrixPage />
+            </RoleGuard>
+          }
+        />
+        <Route
           path="/inventory/batches"
           element={
             <RoleGuard allowedRoles={MODULE_PERMISSIONS.inventory}>
@@ -294,6 +308,34 @@ export const AppRoutes: React.FC = () => {
           element={
             <RoleGuard allowedRoles={MODULE_PERMISSIONS.inventory}>
               <InventoryTransactionsPage />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/inventory/ledger"
+          element={
+            <RoleGuard allowedRoles={MODULE_PERMISSIONS.inventory}>
+              <DrugMovementLedgerPage />
+            </RoleGuard>
+          }
+        />
+
+        {/* E03: Multi-Branch Management */}
+        <Route
+          path="/branches"
+          element={
+            <RoleGuard allowedRoles={MODULE_PERMISSIONS.branches}>
+              <BranchManagementPage />
+            </RoleGuard>
+          }
+        />
+
+        {/* E03: Stock Transfers */}
+        <Route
+          path="/transfers"
+          element={
+            <RoleGuard allowedRoles={MODULE_PERMISSIONS.transfers}>
+              <TransferRequestsPage />
             </RoleGuard>
           }
         />

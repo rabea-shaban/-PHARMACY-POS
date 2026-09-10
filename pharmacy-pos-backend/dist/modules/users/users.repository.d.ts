@@ -33,6 +33,7 @@ export declare class UsersRepository {
         passwordHash: string;
         role: import("@prisma/client").$Enums.Role;
         isActive: boolean;
+        branchId: string | null;
         createdAt: Date;
         updatedAt: Date;
     } | null>;
@@ -44,6 +45,7 @@ export declare class UsersRepository {
         passwordHash: string;
         role: import("@prisma/client").$Enums.Role;
         isActive: boolean;
+        branchId: string | null;
         createdAt: Date;
         updatedAt: Date;
     } | null>;
@@ -55,6 +57,7 @@ export declare class UsersRepository {
         passwordHash: string;
         role: import("@prisma/client").$Enums.Role;
         isActive: boolean;
+        branchId: string | null;
         createdAt: Date;
         updatedAt: Date;
     } | null>;

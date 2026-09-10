@@ -9,6 +9,7 @@ import { LoyaltyTransactionsTable } from '../components/LoyaltyTransactionsTable
 import { CustomerPurchaseHistory } from '../components/CustomerPurchaseHistory.js';
 import { AdjustPointsModal } from '../components/AdjustPointsModal.js';
 import { CustomerInsuranceList } from '../../insurance/components/CustomerInsuranceList.js';
+import { PatientMedicationsTab } from '../components/PatientMedicationsTab.js';
 import { useCustomerInsurances } from '../../insurance/hooks/useInsurance.js';
 import { Badge } from '../../../components/ui/Badge.js';
 import { Button } from '../../../components/ui/Button.js';
@@ -195,6 +196,13 @@ export const CustomerDetailsPage: React.FC = () => {
           />
         </div>
       </div>
+
+      {/* Chronic & Acute Patient Medications Profile Section */}
+      <PatientMedicationsTab
+        customerId={customer.id}
+        customerName={customer.name}
+        customerPhone={customer.phone}
+      />
 
       {/* Insurance Policies Section */}
       <CustomerInsuranceList
