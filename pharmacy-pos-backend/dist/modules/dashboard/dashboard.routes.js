@@ -8,5 +8,5 @@ export const dashboardRouter = Router();
 // Staff authentication required for dashboard
 dashboardRouter.use(authenticate);
 // GET /api/v1/dashboard/overview - Top-level pharmacy operational and financial overview
-dashboardRouter.get('/overview', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT', 'PHARMACIST'), validateQuery(dashboardOverviewQuerySchema), dashboardController.getOverview);
+dashboardRouter.get('/overview', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'ACCOUNTANT', 'PHARMACIST'), validateQuery(dashboardOverviewQuerySchema), dashboardController.getOverview);
 //# sourceMappingURL=dashboard.routes.js.map

@@ -8,6 +8,7 @@ export interface CreateUserInput {
   email?: string;
   password: string;
   role: Role;
+  branchId?: string | null;
 }
 
 export interface UpdateUserInput {
@@ -16,6 +17,7 @@ export interface UpdateUserInput {
   email?: string;
   password?: string;
   role?: Role;
+  branchId?: string | null;
   isActive?: boolean;
 }
 
@@ -24,6 +26,7 @@ export interface UserQueryParams {
   limit?: number;
   search?: string;
   role?: Role;
+  branchId?: string;
   isActive?: boolean;
   sortBy?: 'name' | 'createdAt' | 'role';
   sortOrder?: 'asc' | 'desc';

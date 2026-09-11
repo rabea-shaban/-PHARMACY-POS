@@ -24,9 +24,10 @@ export function getCreateUserSchema() {
     password: z
       .string({ message: isAr ? 'كلمة المرور مطلوبة' : 'Password is required' })
       .min(8, isAr ? 'كلمة المرور يجب أن تكون 8 أحرف على الأقل' : 'Password must be at least 8 characters'),
-    role: z.enum(['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'], {
+    role: z.enum(['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'], {
       message: isAr ? 'يرجى اختيار الصلاحية / الدور' : 'Please select a role',
     }),
+    branchId: z.string().optional().nullable().or(z.literal('')),
   });
 }
 
@@ -57,7 +58,8 @@ export function getUpdateUserSchema() {
       .min(8, isAr ? 'كلمة المرور يجب أن تكون 8 أحرف على الأقل' : 'Password must be at least 8 characters')
       .optional()
       .or(z.literal('')),
-    role: z.enum(['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT']).optional(),
+    role: z.enum(['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT']).optional(),
+    branchId: z.string().optional().nullable().or(z.literal('')),
     isActive: z.boolean().optional(),
   });
 }

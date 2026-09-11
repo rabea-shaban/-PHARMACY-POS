@@ -18,7 +18,7 @@ usersRouter.use(authenticate);
 // GET /api/v1/users - List users (Managers only)
 usersRouter.get(
   '/',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER'),
   validateQuery(userQuerySchema),
   usersController.getUsers
 );
@@ -26,7 +26,7 @@ usersRouter.get(
 // GET /api/v1/users/:id - Get user profile (Managers only)
 usersRouter.get(
   '/:id',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER'),
   validateParams(userIdParamSchema),
   usersController.getUserById
 );
@@ -34,7 +34,7 @@ usersRouter.get(
 // POST /api/v1/users - Create new staff user (Managers only)
 usersRouter.post(
   '/',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER'),
   validateBody(createUserSchema),
   usersController.createUser
 );
@@ -42,7 +42,7 @@ usersRouter.post(
 // PATCH /api/v1/users/:id - Update staff user (Managers only)
 usersRouter.patch(
   '/:id',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER'),
   validateParams(userIdParamSchema),
   validateBody(updateUserSchema),
   usersController.updateUser

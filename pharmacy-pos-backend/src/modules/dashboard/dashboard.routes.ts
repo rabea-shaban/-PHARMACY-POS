@@ -13,7 +13,7 @@ dashboardRouter.use(authenticate);
 // GET /api/v1/dashboard/overview - Top-level pharmacy operational and financial overview
 dashboardRouter.get(
   '/overview',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT', 'PHARMACIST'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'ACCOUNTANT', 'PHARMACIST'),
   validateQuery(dashboardOverviewQuerySchema),
   dashboardController.getOverview
 );

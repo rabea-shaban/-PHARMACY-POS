@@ -22,7 +22,7 @@ productsRouter.use(authenticate);
 // GET /api/v1/products - Search & list products (All staff)
 productsRouter.get(
   '/',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
   validateQuery(productQuerySchema),
   productsController.getProducts
 );
@@ -30,7 +30,7 @@ productsRouter.get(
 // GET /api/v1/products/search - POS-optimized product search (All staff)
 productsRouter.get(
   '/search',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
   validateQuery(productSearchQuerySchema),
   productsController.searchProducts
 );
@@ -38,14 +38,14 @@ productsRouter.get(
 // GET /api/v1/products/low-stock - List low stock products (All staff)
 productsRouter.get(
   '/low-stock',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
   productsController.getLowStockProducts
 );
 
 // GET /api/v1/products/expiring - List expiring products (All staff)
 productsRouter.get(
   '/expiring',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
   validateQuery(expiringQuerySchema),
   productsController.getExpiringProducts
 );
@@ -53,7 +53,7 @@ productsRouter.get(
 // GET /api/v1/products/barcode/:barcode - Fast barcode lookup (All staff)
 productsRouter.get(
   '/barcode/:barcode',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
   validateParams(barcodeParamSchema),
   productsController.getProductByBarcode
 );
@@ -61,7 +61,7 @@ productsRouter.get(
 // GET /api/v1/products/:id/stock - Product stock summary breakdown (All staff)
 productsRouter.get(
   '/:id/stock',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
   validateParams(productIdParamSchema),
   productsController.getProductStock
 );
@@ -69,14 +69,14 @@ productsRouter.get(
 // GET /api/v1/products/:productId/batches - Get all batches of a product (All staff)
 productsRouter.get(
   '/:productId/batches',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
   batchesController.getBatchesByProductId
 );
 
 // GET /api/v1/products/:id - Get product details (All staff)
 productsRouter.get(
   '/:id',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
   validateParams(productIdParamSchema),
   productsController.getProductById
 );
@@ -84,7 +84,7 @@ productsRouter.get(
 // POST /api/v1/products - Create product (Managers & Pharmacists)
 productsRouter.post(
   '/',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST'),
   validateBody(createProductSchema),
   productsController.createProduct
 );
@@ -92,7 +92,7 @@ productsRouter.post(
 // PATCH /api/v1/products/:id - Update product (Managers & Pharmacists)
 productsRouter.patch(
   '/:id',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST'),
   validateParams(productIdParamSchema),
   validateBody(updateProductSchema),
   productsController.updateProduct
@@ -101,7 +101,7 @@ productsRouter.patch(
 // DELETE /api/v1/products/:id - Soft-deactivate product (Managers only)
 productsRouter.delete(
   '/:id',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER'),
   validateParams(productIdParamSchema),
   productsController.deleteProduct
 );

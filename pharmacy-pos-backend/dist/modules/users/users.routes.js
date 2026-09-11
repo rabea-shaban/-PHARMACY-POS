@@ -8,13 +8,13 @@ export const usersRouter = Router();
 // All user management routes require staff authentication
 usersRouter.use(authenticate);
 // GET /api/v1/users - List users (Managers only)
-usersRouter.get('/', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER'), validateQuery(userQuerySchema), usersController.getUsers);
+usersRouter.get('/', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER'), validateQuery(userQuerySchema), usersController.getUsers);
 // GET /api/v1/users/:id - Get user profile (Managers only)
-usersRouter.get('/:id', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER'), validateParams(userIdParamSchema), usersController.getUserById);
+usersRouter.get('/:id', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER'), validateParams(userIdParamSchema), usersController.getUserById);
 // POST /api/v1/users - Create new staff user (Managers only)
-usersRouter.post('/', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER'), validateBody(createUserSchema), usersController.createUser);
+usersRouter.post('/', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER'), validateBody(createUserSchema), usersController.createUser);
 // PATCH /api/v1/users/:id - Update staff user (Managers only)
-usersRouter.patch('/:id', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER'), validateParams(userIdParamSchema), validateBody(updateUserSchema), usersController.updateUser);
+usersRouter.patch('/:id', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER'), validateParams(userIdParamSchema), validateBody(updateUserSchema), usersController.updateUser);
 // DELETE /api/v1/users/:id - Soft-deactivate user (Managers only)
 usersRouter.delete('/:id', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER'), validateParams(userIdParamSchema), usersController.deleteUser);
 // Fallbacks for missing ID on PATCH and DELETE

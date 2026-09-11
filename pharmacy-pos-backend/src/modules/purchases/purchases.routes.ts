@@ -20,7 +20,7 @@ purchasesRouter.use(authenticate);
 // GET /api/v1/purchases - Search & list purchases (All staff)
 purchasesRouter.get(
   '/',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
   validateQuery(purchaseQuerySchema),
   purchasesController.getPurchases
 );
@@ -28,7 +28,7 @@ purchasesRouter.get(
 // GET /api/v1/purchases/:id - Get purchase details (All staff)
 purchasesRouter.get(
   '/:id',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
   validateParams(purchaseIdParamSchema),
   purchasesController.getPurchaseById
 );
@@ -36,7 +36,7 @@ purchasesRouter.get(
 // POST /api/v1/purchases - Create purchase invoice (Managers & Pharmacists)
 purchasesRouter.post(
   '/',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST'),
   validateBody(createPurchaseSchema),
   purchasesController.createPurchase
 );
@@ -44,7 +44,7 @@ purchasesRouter.post(
 // PATCH /api/v1/purchases/:id - Update draft purchase invoice (Managers & Pharmacists)
 purchasesRouter.patch(
   '/:id',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST'),
   validateParams(purchaseIdParamSchema),
   validateBody(updatePurchaseSchema),
   purchasesController.updatePurchase
@@ -53,7 +53,7 @@ purchasesRouter.patch(
 // POST /api/v1/purchases/:id/receive - Receive purchase into inventory (Managers & Pharmacists)
 purchasesRouter.post(
   '/:id/receive',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST'),
   validateParams(purchaseIdParamSchema),
   validateBody(receivePurchaseSchema),
   purchasesController.receivePurchase
@@ -62,7 +62,7 @@ purchasesRouter.post(
 // POST /api/v1/purchases/:id/cancel - Cancel pending purchase (Managers only)
 purchasesRouter.post(
   '/:id/cancel',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER'),
   validateParams(purchaseIdParamSchema),
   validateBody(cancelPurchaseSchema),
   purchasesController.cancelPurchase

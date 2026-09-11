@@ -10,6 +10,16 @@ export class UsersRepository {
     email: true,
     role: true,
     isActive: true,
+    branchId: true,
+    branch: {
+      select: {
+        id: true,
+        name: true,
+        code: true,
+        isMain: true,
+        isActive: true,
+      },
+    },
     createdAt: true,
     updatedAt: true,
   };
@@ -17,7 +27,7 @@ export class UsersRepository {
   async findMany(params: UserQueryParams) {
     const page = Math.max(1, Number(params.page) || 1);
     const limit = Math.max(1, Number(params.limit) || 20);
-    const { search, role, isActive, sortBy = 'createdAt', sortOrder = 'desc' } = params;
+    const { search, role, branchId, isActive, sortBy = 'createdAt', sortOrder = 'desc' } = params;
     const skip = (page - 1) * limit;
 
     const where: Prisma.UserWhereInput = {};
@@ -32,6 +42,10 @@ export class UsersRepository {
 
     if (role) {
       where.role = role;
+    }
+
+    if (branchId) {
+      where.branchId = branchId;
     }
 
     if (typeof isActive === 'boolean') {
@@ -83,6 +97,7 @@ export class UsersRepository {
     email?: string | null;
     passwordHash: string;
     role: Role;
+    branchId?: string | null;
   }) {
     return prisma.user.create({
       data: {
@@ -91,6 +106,7 @@ export class UsersRepository {
         email: data.email || null,
         passwordHash: data.passwordHash,
         role: data.role,
+        branchId: data.branchId || null,
         isActive: true,
       },
       select: this.safeSelect,
@@ -105,6 +121,7 @@ export class UsersRepository {
       email?: string | null;
       passwordHash?: string;
       role?: Role;
+      branchId?: string | null;
       isActive?: boolean;
     }
   ) {

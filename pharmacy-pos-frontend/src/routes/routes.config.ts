@@ -30,12 +30,12 @@ export const APP_ROUTES: Record<string, AppRouteDefinition> = {
   PRODUCTS_NEW: {
     path: '/products/new',
     isProtected: true,
-    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'],
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST'],
   },
   PRODUCTS_EDIT: {
     path: '/products/:id/edit',
     isProtected: true,
-    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'],
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST'],
   },
   PRODUCTS_DETAILS: {
     path: '/products/:id',
@@ -45,7 +45,7 @@ export const APP_ROUTES: Record<string, AppRouteDefinition> = {
   CATEGORIES: {
     path: '/categories',
     isProtected: true,
-    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'],
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'],
   },
   INVENTORY: {
     path: '/inventory',
@@ -75,22 +75,22 @@ export const APP_ROUTES: Record<string, AppRouteDefinition> = {
   SUPPLIERS: {
     path: '/suppliers',
     isProtected: true,
-    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'],
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'],
   },
   SUPPLIERS_NEW: {
     path: '/suppliers/new',
     isProtected: true,
-    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'],
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST'],
   },
   SUPPLIERS_EDIT: {
     path: '/suppliers/:id/edit',
     isProtected: true,
-    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'],
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST'],
   },
   SUPPLIERS_DETAILS: {
     path: '/suppliers/:id',
     isProtected: true,
-    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'],
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'],
   },
   PURCHASES: {
     path: '/purchases',
@@ -100,7 +100,7 @@ export const APP_ROUTES: Record<string, AppRouteDefinition> = {
   PURCHASES_NEW: {
     path: '/purchases/new',
     isProtected: true,
-    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'],
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST'],
   },
   PURCHASES_DETAILS: {
     path: '/purchases/:id',
@@ -115,12 +115,12 @@ export const APP_ROUTES: Record<string, AppRouteDefinition> = {
   CUSTOMERS_NEW: {
     path: '/customers/new',
     isProtected: true,
-    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'],
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST'],
   },
   CUSTOMERS_EDIT: {
     path: '/customers/:id/edit',
     isProtected: true,
-    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'],
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST'],
   },
   CUSTOMERS_DETAILS: {
     path: '/customers/:id',
@@ -145,7 +145,7 @@ export const APP_ROUTES: Record<string, AppRouteDefinition> = {
   RETURNS_NEW: {
     path: '/returns/new',
     isProtected: true,
-    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'],
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST'],
   },
   RETURNS_DETAILS: {
     path: '/returns/:id',
@@ -160,12 +160,12 @@ export const APP_ROUTES: Record<string, AppRouteDefinition> = {
   EXPENSES_NEW: {
     path: '/expenses/new',
     isProtected: true,
-    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT'],
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'ACCOUNTANT'],
   },
   EXPENSES_EDIT: {
     path: '/expenses/:id/edit',
     isProtected: true,
-    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER'],
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER'],
   },
   EXPENSES_DETAILS: {
     path: '/expenses/:id',
@@ -210,7 +210,7 @@ export const APP_ROUTES: Record<string, AppRouteDefinition> = {
   COMMISSION_RULES: {
     path: '/commissions/rules',
     isProtected: true,
-    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT'],
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'ACCOUNTANT'],
   },
   COMMISSION_STATEMENT: {
     path: '/commissions/statement/:userId',
@@ -255,12 +255,12 @@ export const APP_ROUTES: Record<string, AppRouteDefinition> = {
   USERS_NEW: {
     path: '/users/new',
     isProtected: true,
-    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER'],
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER'],
   },
   USERS_EDIT: {
     path: '/users/:id/edit',
     isProtected: true,
-    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER'],
+    allowedRoles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER'],
   },
   USERS_DETAILS: {
     path: '/users/:id',

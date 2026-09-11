@@ -53,8 +53,9 @@
   },
   "roles": {
     "PLATFORM_MANAGER": "Platform Super Manager",
-    "PHARMACY_MANAGER": "Pharmacy Manager",
-    "PHARMACIST": "Staff Pharmacist",
+    "PHARMACY_MANAGER": "Pharmacy General Manager",
+    "BRANCH_MANAGER": "Branch Manager",
+    "PHARMACIST": "Staff Pharmacist (Cashier)",
     "ACCOUNTANT": "Financial Accountant"
   },
   "auth": {

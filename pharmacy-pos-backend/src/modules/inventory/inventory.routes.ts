@@ -19,7 +19,7 @@ inventoryRouter.use(authenticate);
 // GET /api/v1/inventory/matrix - Multi-branch inventory stock matrix overview (All staff)
 inventoryRouter.get(
   '/matrix',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
   validateQuery(inventoryMatrixQuerySchema),
   inventoryController.getInventoryMatrix
 );
@@ -27,7 +27,7 @@ inventoryRouter.get(
 // GET /api/v1/inventory/ledger - Unified stock movement ledger (All staff)
 inventoryRouter.get(
   '/ledger',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
   validateQuery(inventoryTransactionQuerySchema),
   inventoryController.getTransactions
 );
@@ -35,7 +35,7 @@ inventoryRouter.get(
 // GET /api/v1/inventory/transactions - List historical inventory transactions (All staff)
 inventoryRouter.get(
   '/transactions',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
   validateQuery(inventoryTransactionQuerySchema),
   inventoryController.getTransactions
 );
@@ -43,21 +43,21 @@ inventoryRouter.get(
 // GET /api/v1/inventory/low-stock - List low stock report (All staff)
 inventoryRouter.get(
   '/low-stock',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
   inventoryController.getLowStockReport
 );
 
 // GET /api/v1/inventory/expiring - List expiring stock report (All staff)
 inventoryRouter.get(
   '/expiring',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
   inventoryController.getExpiringReport
 );
 
 // GET /api/v1/inventory/products/:productId - Stock transactions for a specific product (All staff)
 inventoryRouter.get(
   '/products/:productId',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
   validateParams(productIdParamSchema),
   inventoryController.getProductTransactions
 );
@@ -65,7 +65,7 @@ inventoryRouter.get(
 // GET /api/v1/inventory/batches/:batchId - Stock transactions for a specific batch (All staff)
 inventoryRouter.get(
   '/batches/:batchId',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
   validateParams(batchIdParamSchema),
   inventoryController.getBatchTransactions
 );
@@ -73,7 +73,7 @@ inventoryRouter.get(
 // POST /api/v1/inventory/adjustments - Manual stock adjustment (Managers only)
 inventoryRouter.post(
   '/adjustments',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER'),
   validateBody(stockAdjustmentSchema),
   inventoryController.adjustStock
 );
@@ -81,7 +81,7 @@ inventoryRouter.post(
 // POST /api/v1/inventory/adjust - Alias for manual stock adjustment (Managers only)
 inventoryRouter.post(
   '/adjust',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER'),
   validateBody(stockAdjustmentSchema),
   inventoryController.adjustStock
 );

@@ -52,9 +52,10 @@
     "users": "إدارة الموظفين والصلاحيات"
   },
   "roles": {
-    "PLATFORM_MANAGER": "المدير العام للنظام",
-    "PHARMACY_MANAGER": "مدير الصيدلية",
-    "PHARMACIST": "صيدلي ممارس",
+    "PLATFORM_MANAGER": "المدير العام للنظام (Super Admin)",
+    "PHARMACY_MANAGER": "مدير عام الصيدليات",
+    "BRANCH_MANAGER": "مدير فرع",
+    "PHARMACIST": "صيدلي ممارس (كاشير)",
     "ACCOUNTANT": "محاسب مالي"
   },
   "auth": {

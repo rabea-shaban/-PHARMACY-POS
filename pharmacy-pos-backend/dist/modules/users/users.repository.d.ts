@@ -10,8 +10,16 @@ export declare class UsersRepository {
             email: string | null;
             role: import("@prisma/client").$Enums.Role;
             isActive: boolean;
+            branchId: string | null;
             createdAt: Date;
             updatedAt: Date;
+            branch: {
+                name: string;
+                id: string;
+                isActive: boolean;
+                code: string;
+                isMain: boolean;
+            } | null;
         }[];
         total: number;
     }>;
@@ -22,8 +30,16 @@ export declare class UsersRepository {
         email: string | null;
         role: import("@prisma/client").$Enums.Role;
         isActive: boolean;
+        branchId: string | null;
         createdAt: Date;
         updatedAt: Date;
+        branch: {
+            name: string;
+            id: string;
+            isActive: boolean;
+            code: string;
+            isMain: boolean;
+        } | null;
     } | null>;
     findByIdWithPassword(id: string): Promise<{
         name: string;
@@ -67,6 +83,7 @@ export declare class UsersRepository {
         email?: string | null;
         passwordHash: string;
         role: Role;
+        branchId?: string | null;
     }): Promise<{
         name: string;
         id: string;
@@ -74,8 +91,16 @@ export declare class UsersRepository {
         email: string | null;
         role: import("@prisma/client").$Enums.Role;
         isActive: boolean;
+        branchId: string | null;
         createdAt: Date;
         updatedAt: Date;
+        branch: {
+            name: string;
+            id: string;
+            isActive: boolean;
+            code: string;
+            isMain: boolean;
+        } | null;
     }>;
     update(id: string, data: {
         name?: string;
@@ -83,6 +108,7 @@ export declare class UsersRepository {
         email?: string | null;
         passwordHash?: string;
         role?: Role;
+        branchId?: string | null;
         isActive?: boolean;
     }): Promise<{
         name: string;
@@ -91,8 +117,16 @@ export declare class UsersRepository {
         email: string | null;
         role: import("@prisma/client").$Enums.Role;
         isActive: boolean;
+        branchId: string | null;
         createdAt: Date;
         updatedAt: Date;
+        branch: {
+            name: string;
+            id: string;
+            isActive: boolean;
+            code: string;
+            isMain: boolean;
+        } | null;
     }>;
     softDelete(id: string): Promise<{
         name: string;
@@ -101,8 +135,16 @@ export declare class UsersRepository {
         email: string | null;
         role: import("@prisma/client").$Enums.Role;
         isActive: boolean;
+        branchId: string | null;
         createdAt: Date;
         updatedAt: Date;
+        branch: {
+            name: string;
+            id: string;
+            isActive: boolean;
+            code: string;
+            isMain: boolean;
+        } | null;
     }>;
 }
 export declare const usersRepository: UsersRepository;

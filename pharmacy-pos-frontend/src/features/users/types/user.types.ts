@@ -7,6 +7,14 @@ export interface User {
   email: string | null;
   role: Role;
   isActive: boolean;
+  branchId?: string | null;
+  branch?: {
+    id: string;
+    name: string;
+    code: string;
+    isMain?: boolean;
+    isActive?: boolean;
+  } | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -17,6 +25,7 @@ export interface CreateUserPayload {
   email?: string | null;
   password: string;
   role: Role;
+  branchId?: string | null;
 }
 
 export interface UpdateUserPayload {
@@ -25,6 +34,7 @@ export interface UpdateUserPayload {
   email?: string | null;
   password?: string;
   role?: Role;
+  branchId?: string | null;
   isActive?: boolean;
 }
 
@@ -33,6 +43,7 @@ export interface UserQueryParams {
   limit?: number;
   search?: string;
   role?: Role;
+  branchId?: string;
   isActive?: boolean;
   sortBy?: 'name' | 'createdAt' | 'role';
   sortOrder?: 'asc' | 'desc';

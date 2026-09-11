@@ -1,3 +1,4 @@
+import { prisma } from '../../lib/prisma.js';
 import { usersRepository } from './users.repository.js';
 import { auditService } from '../audit/audit.service.js';
 import { hashPassword } from '../../utils/password.util.js';
@@ -30,21 +31,38 @@ export class UsersService {
     async createUser(input, actorId, actorRole) {
         // 1. Role-Based Creation Hierarchy:
         // PLATFORM_MANAGER (Super Admin): Can create any role
-        // PHARMACY_MANAGER (Admin): Can ONLY create PHARMACIST and ACCOUNTANT
+        // PHARMACY_MANAGER (General Manager): Can create BRANCH_MANAGER, PHARMACIST, ACCOUNTANT
+        // BRANCH_MANAGER (Branch Manager): Can create PHARMACIST
         if (actorRole === 'PHARMACY_MANAGER') {
             if (input.role === 'PLATFORM_MANAGER' || input.role === 'PHARMACY_MANAGER') {
-                throw new ForbiddenError('Pharmacy Manager can only create Pharmacist or Accountant accounts');
+                throw new ForbiddenError('Pharmacy Manager can create Branch Manager, Pharmacist, or Accountant accounts');
+            }
+        }
+        else if (actorRole === 'BRANCH_MANAGER') {
+            if (input.role !== 'PHARMACIST') {
+                throw new ForbiddenError('Branch Manager can only create Pharmacist accounts for their branch');
             }
         }
         else if (actorRole !== 'PLATFORM_MANAGER') {
-            throw new ForbiddenError('Only Super Admin (Platform Manager) or Pharmacy Manager can create staff accounts');
+            throw new ForbiddenError('Insufficient permissions to create staff accounts');
         }
-        // 2. Check duplicate phone
+        // 2. Branch verification if branchId is provided
+        const targetBranchId = input.branchId && input.branchId.trim() !== '' ? input.branchId.trim() : null;
+        if (targetBranchId) {
+            const branch = await prisma.branch.findUnique({ where: { id: targetBranchId } });
+            if (!branch) {
+                throw new NotFoundError(`Branch with ID '${targetBranchId}' not found`);
+            }
+            if (!branch.isActive) {
+                throw new BadRequestError(`Cannot assign user to inactive branch '${branch.name}'`);
+            }
+        }
+        // 3. Check duplicate phone
         const existingPhone = await this.repo.findByPhone(input.phone.trim());
         if (existingPhone) {
             throw new ConflictError(`Phone number '${input.phone}' is already registered to another staff member`);
         }
-        // 3. Check duplicate email if provided
+        // 4. Check duplicate email if provided
         if (input.email && input.email.trim()) {
             const existingEmail = await this.repo.findByEmail(input.email.trim());
             if (existingEmail) {
@@ -58,6 +76,7 @@ export class UsersService {
             email: input.email ? input.email.trim() : null,
             passwordHash,
             role: input.role,
+            branchId: targetBranchId,
         });
         // Record audit log
         await this.audit.logAction({
@@ -65,7 +84,7 @@ export class UsersService {
             action: 'CREATE',
             entity: 'users',
             entityId: newUser.id,
-            newData: { name: newUser.name, phone: newUser.phone, role: newUser.role },
+            newData: { name: newUser.name, phone: newUser.phone, role: newUser.role, branchId: newUser.branchId },
         });
         return newUser;
     }
@@ -79,7 +98,21 @@ export class UsersService {
             throw new ForbiddenError('Only a Platform Manager can promote a user to Platform Manager');
         }
         if (actorRole === 'PHARMACY_MANAGER' && (input.role === 'PLATFORM_MANAGER' || input.role === 'PHARMACY_MANAGER')) {
-            throw new ForbiddenError('Pharmacy Manager cannot assign Manager roles');
+            throw new ForbiddenError('Pharmacy Manager cannot assign Platform Manager or Pharmacy Manager roles');
+        }
+        if (actorRole === 'BRANCH_MANAGER' && input.role && input.role !== 'PHARMACIST') {
+            throw new ForbiddenError('Branch Manager can only manage Pharmacist roles');
+        }
+        // Branch verification if branchId is updated
+        let targetBranchId = undefined;
+        if (input.branchId !== undefined) {
+            targetBranchId = input.branchId && input.branchId.trim() !== '' ? input.branchId.trim() : null;
+            if (targetBranchId) {
+                const branch = await prisma.branch.findUnique({ where: { id: targetBranchId } });
+                if (!branch) {
+                    throw new NotFoundError(`Branch with ID '${targetBranchId}' not found`);
+                }
+            }
         }
         // Uniqueness validation on phone
         if (input.phone && input.phone.trim() !== existing.phone) {
@@ -104,6 +137,8 @@ export class UsersService {
             updateData.email = input.email ? input.email.trim() : null;
         if (input.role)
             updateData.role = input.role;
+        if (targetBranchId !== undefined)
+            updateData.branchId = targetBranchId;
         if (typeof input.isActive === 'boolean')
             updateData.isActive = input.isActive;
         if (input.password && input.password.trim()) {
@@ -116,8 +151,8 @@ export class UsersService {
             action: 'UPDATE',
             entity: 'users',
             entityId: id,
-            oldData: { name: existing.name, phone: existing.phone, role: existing.role, isActive: existing.isActive },
-            newData: { name: updatedUser.name, phone: updatedUser.phone, role: updatedUser.role, isActive: updatedUser.isActive },
+            oldData: { name: existing.name, phone: existing.phone, role: existing.role, branchId: existing.branchId, isActive: existing.isActive },
+            newData: { name: updatedUser.name, phone: updatedUser.phone, role: updatedUser.role, branchId: updatedUser.branchId, isActive: updatedUser.isActive },
         });
         return updatedUser;
     }

@@ -17,7 +17,7 @@ transfersRouter.use(authenticate);
 // GET /api/v1/transfers - List transfers (All staff)
 transfersRouter.get(
   '/',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
   validateQuery(transferQuerySchema),
   transfersController.getTransfers
 );
@@ -25,7 +25,7 @@ transfersRouter.get(
 // GET /api/v1/transfers/:id - Get transfer details (All staff)
 transfersRouter.get(
   '/:id',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
   validateParams(transferIdParamSchema),
   transfersController.getTransferById
 );
@@ -33,7 +33,7 @@ transfersRouter.get(
 // POST /api/v1/transfers - Initiate new transfer request (Managers & Pharmacists)
 transfersRouter.post(
   '/',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST'),
   validateBody(createTransferSchema),
   transfersController.createTransfer
 );
@@ -41,7 +41,7 @@ transfersRouter.post(
 // POST /api/v1/transfers/:id/approve - Approve transfer request (Managers only)
 transfersRouter.post(
   '/:id/approve',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER'),
   validateParams(transferIdParamSchema),
   transfersController.approveTransfer
 );
@@ -49,7 +49,7 @@ transfersRouter.post(
 // POST /api/v1/transfers/:id/dispatch - Dispatch items from source branch (Managers & Pharmacists)
 transfersRouter.post(
   '/:id/dispatch',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST'),
   validateParams(transferIdParamSchema),
   transfersController.dispatchTransfer
 );
@@ -57,7 +57,7 @@ transfersRouter.post(
 // POST /api/v1/transfers/:id/receive - Receive items at destination branch (Managers & Pharmacists)
 transfersRouter.post(
   '/:id/receive',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST'),
   validateParams(transferIdParamSchema),
   transfersController.receiveTransfer
 );
@@ -65,7 +65,7 @@ transfersRouter.post(
 // POST /api/v1/transfers/:id/reject - Reject transfer request (Managers only)
 transfersRouter.post(
   '/:id/reject',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER'),
   validateParams(transferIdParamSchema),
   validateBody(rejectTransferSchema),
   transfersController.rejectTransfer
@@ -74,7 +74,7 @@ transfersRouter.post(
 // POST /api/v1/transfers/:id/cancel - Cancel pending/approved transfer request
 transfersRouter.post(
   '/:id/cancel',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST'),
   validateParams(transferIdParamSchema),
   transfersController.cancelTransfer
 );

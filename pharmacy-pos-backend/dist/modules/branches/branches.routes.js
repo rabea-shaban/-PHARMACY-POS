@@ -7,9 +7,9 @@ import { authorize } from '../../middlewares/role.middleware.js';
 export const branchesRouter = Router();
 branchesRouter.use(authenticate);
 // GET /api/v1/branches - List branches (All staff)
-branchesRouter.get('/', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'), validateQuery(branchQuerySchema), branchesController.getBranches);
+branchesRouter.get('/', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'), validateQuery(branchQuerySchema), branchesController.getBranches);
 // GET /api/v1/branches/:id - Get branch details (All staff)
-branchesRouter.get('/:id', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'), validateParams(branchIdParamSchema), branchesController.getBranchById);
+branchesRouter.get('/:id', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'), validateParams(branchIdParamSchema), branchesController.getBranchById);
 // POST /api/v1/branches - Create branch (Platform & Pharmacy Managers)
 branchesRouter.post('/', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER'), validateBody(createBranchSchema), branchesController.createBranch);
 // PATCH /api/v1/branches/:id - Update branch (Platform & Pharmacy Managers)

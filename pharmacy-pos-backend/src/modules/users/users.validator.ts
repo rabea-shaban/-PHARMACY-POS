@@ -1,6 +1,12 @@
 import { z } from 'zod';
 
-const roleEnumValues = ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'] as const;
+const roleEnumValues = [
+  'PLATFORM_MANAGER',
+  'PHARMACY_MANAGER',
+  'BRANCH_MANAGER',
+  'PHARMACIST',
+  'ACCOUNTANT',
+] as const;
 
 export const userIdParamSchema = z.object({
   id: z.string().uuid('Invalid user ID format (must be a valid UUID)'),
@@ -27,8 +33,9 @@ export const createUserSchema = z.object({
     .string({ message: 'Password is required' })
     .min(8, 'Password must be at least 8 characters'),
   role: z.enum(roleEnumValues, {
-    message: 'Role must be one of: PLATFORM_MANAGER, PHARMACY_MANAGER, PHARMACIST, ACCOUNTANT',
+    message: 'Role must be one of: PLATFORM_MANAGER, PHARMACY_MANAGER, BRANCH_MANAGER, PHARMACIST, ACCOUNTANT',
   }),
+  branchId: z.string().uuid('Invalid branch ID format').optional().nullable().or(z.literal('')),
 });
 
 export const updateUserSchema = z.object({
@@ -37,6 +44,7 @@ export const updateUserSchema = z.object({
   email: z.string().trim().email('Invalid email format').optional().or(z.literal('')),
   password: z.string().min(8, 'Password must be at least 8 characters').optional(),
   role: z.enum(roleEnumValues).optional(),
+  branchId: z.string().uuid('Invalid branch ID format').optional().nullable().or(z.literal('')),
   isActive: z.boolean().optional(),
 });
 
@@ -45,6 +53,7 @@ export const userQuerySchema = z.object({
   limit: z.coerce.number().int().positive().max(100).default(20),
   search: z.string().trim().optional(),
   role: z.enum(roleEnumValues).optional(),
+  branchId: z.string().uuid().optional(),
   isActive: z
     .enum(['true', 'false'])
     .transform((val) => val === 'true')

@@ -7,13 +7,23 @@ export class UsersRepository {
         email: true,
         role: true,
         isActive: true,
+        branchId: true,
+        branch: {
+            select: {
+                id: true,
+                name: true,
+                code: true,
+                isMain: true,
+                isActive: true,
+            },
+        },
         createdAt: true,
         updatedAt: true,
     };
     async findMany(params) {
         const page = Math.max(1, Number(params.page) || 1);
         const limit = Math.max(1, Number(params.limit) || 20);
-        const { search, role, isActive, sortBy = 'createdAt', sortOrder = 'desc' } = params;
+        const { search, role, branchId, isActive, sortBy = 'createdAt', sortOrder = 'desc' } = params;
         const skip = (page - 1) * limit;
         const where = {};
         if (search) {
@@ -25,6 +35,9 @@ export class UsersRepository {
         }
         if (role) {
             where.role = role;
+        }
+        if (branchId) {
+            where.branchId = branchId;
         }
         if (typeof isActive === 'boolean') {
             where.isActive = isActive;
@@ -70,6 +83,7 @@ export class UsersRepository {
                 email: data.email || null,
                 passwordHash: data.passwordHash,
                 role: data.role,
+                branchId: data.branchId || null,
                 isActive: true,
             },
             select: this.safeSelect,

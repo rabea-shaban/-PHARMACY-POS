@@ -5,7 +5,7 @@ import { UserRoleBadge } from './UserRoleBadge.js';
 import { UserStatusBadge } from './UserStatusBadge.js';
 import { formatDate } from '../../../lib/utils.js';
 import { Link } from 'react-router-dom';
-import { Eye, Edit, UserX, UserCheck, ChevronLeft, ChevronRight, Phone } from 'lucide-react';
+import { Eye, Edit, UserX, UserCheck, ChevronLeft, ChevronRight, Phone, Building2 } from 'lucide-react';
 import { useAppSelector } from '../../../store/hooks.js';
 
 export interface UserTableProps {
@@ -32,7 +32,7 @@ export const UserTable: React.FC<UserTableProps> = ({
   const { direction } = useAppSelector((state) => state.ui);
   const { user: currentUser, role } = useAppSelector((state) => state.auth);
 
-  const canManage = role && ['PLATFORM_MANAGER', 'PHARMACY_MANAGER'].includes(role);
+  const canManage = role && ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER'].includes(role);
 
   if (isLoading) {
     return (
@@ -53,6 +53,7 @@ export const UserTable: React.FC<UserTableProps> = ({
               <th className="py-3.5 px-4 text-start">الموظف / المستخدم</th>
               <th className="py-3.5 px-4 text-start">رقم الهاتف</th>
               <th className="py-3.5 px-4 text-start">الصلاحية / الدور</th>
+              <th className="py-3.5 px-4 text-start">الفرع</th>
               <th className="py-3.5 px-4 text-start">حالة الحساب</th>
               <th className="py-3.5 px-4 text-start">تاريخ الإنشاء</th>
               <th className="py-3.5 px-4 text-end">{t('common.actions')}</th>
@@ -93,6 +94,22 @@ export const UserTable: React.FC<UserTableProps> = ({
                 {/* Role */}
                 <td className="py-3.5 px-4">
                   <UserRoleBadge role={u.role} />
+                </td>
+
+                {/* Branch */}
+                <td className="py-3.5 px-4">
+                  {u.branch ? (
+                    <div className="flex items-center gap-1.5">
+                      <Building2 className="w-3.5 h-3.5 text-emerald-500" />
+                      <span className="font-bold text-slate-800 dark:text-slate-200">
+                        {u.branch.name}
+                      </span>
+                    </div>
+                  ) : (
+                    <span className="text-[10px] text-slate-400 font-medium">
+                      جميع الفروع
+                    </span>
+                  )}
                 </td>
 
                 {/* Status */}

@@ -30,6 +30,7 @@ import {
   History,
   Clock,
   Award,
+  Building2,
 } from 'lucide-react';
 import { useAppSelector } from '../../../store/hooks.js';
 
@@ -238,6 +239,18 @@ export const UserDetailsPage: React.FC = () => {
                 <div className="mt-1">
                   <UserRoleBadge role={user.role} />
                 </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-[#0B0F17] text-emerald-600 border border-slate-200 dark:border-[#223049]">
+                <Building2 className="w-4 h-4" />
+              </div>
+              <div>
+                <p className="text-[11px] text-slate-400 font-bold">الفرع التابع له</p>
+                <p className="font-bold text-slate-800 dark:text-slate-200 mt-0.5">
+                  {user.branch ? `${user.branch.name} (${user.branch.code})` : 'جميع الفروع (صلاحية عامة)'}
+                </p>
               </div>
             </div>
 

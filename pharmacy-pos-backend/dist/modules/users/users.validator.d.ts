@@ -10,9 +10,11 @@ export declare const createUserSchema: z.ZodObject<{
     role: z.ZodEnum<{
         PLATFORM_MANAGER: "PLATFORM_MANAGER";
         PHARMACY_MANAGER: "PHARMACY_MANAGER";
+        BRANCH_MANAGER: "BRANCH_MANAGER";
         PHARMACIST: "PHARMACIST";
         ACCOUNTANT: "ACCOUNTANT";
     }>;
+    branchId: z.ZodUnion<[z.ZodNullable<z.ZodOptional<z.ZodString>>, z.ZodLiteral<"">]>;
 }, z.core.$strip>;
 export declare const updateUserSchema: z.ZodObject<{
     name: z.ZodOptional<z.ZodString>;
@@ -22,9 +24,11 @@ export declare const updateUserSchema: z.ZodObject<{
     role: z.ZodOptional<z.ZodEnum<{
         PLATFORM_MANAGER: "PLATFORM_MANAGER";
         PHARMACY_MANAGER: "PHARMACY_MANAGER";
+        BRANCH_MANAGER: "BRANCH_MANAGER";
         PHARMACIST: "PHARMACIST";
         ACCOUNTANT: "ACCOUNTANT";
     }>>;
+    branchId: z.ZodUnion<[z.ZodNullable<z.ZodOptional<z.ZodString>>, z.ZodLiteral<"">]>;
     isActive: z.ZodOptional<z.ZodBoolean>;
 }, z.core.$strip>;
 export declare const userQuerySchema: z.ZodObject<{
@@ -34,9 +38,11 @@ export declare const userQuerySchema: z.ZodObject<{
     role: z.ZodOptional<z.ZodEnum<{
         PLATFORM_MANAGER: "PLATFORM_MANAGER";
         PHARMACY_MANAGER: "PHARMACY_MANAGER";
+        BRANCH_MANAGER: "BRANCH_MANAGER";
         PHARMACIST: "PHARMACIST";
         ACCOUNTANT: "ACCOUNTANT";
     }>>;
+    branchId: z.ZodOptional<z.ZodString>;
     isActive: z.ZodOptional<z.ZodPipe<z.ZodEnum<{
         true: "true";
         false: "false";

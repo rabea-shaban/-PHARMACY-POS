@@ -16,7 +16,7 @@ export interface SystemAlertEventPayload {
   title: string;
   message: string;
   type: 'LOW_STOCK' | 'EXPIRY_ALERT' | 'SALE_COMPLETED' | 'SYSTEM_ALERT' | 'GENERAL';
-  targetRoles?: ('PLATFORM_MANAGER' | 'PHARMACY_MANAGER' | 'ACCOUNTANT' | 'PHARMACIST')[];
+  targetRoles?: ('PLATFORM_MANAGER' | 'PHARMACY_MANAGER' | 'BRANCH_MANAGER' | 'ACCOUNTANT' | 'PHARMACIST')[];
   userId?: string;
 }
 

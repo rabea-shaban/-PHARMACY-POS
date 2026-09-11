@@ -8,13 +8,13 @@ export const salesRouter = Router();
 // Staff authentication required for all sales endpoints
 salesRouter.use(authenticate);
 // GET /api/v1/sales - Search & list sales (All staff)
-salesRouter.get('/', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'), validateQuery(saleQuerySchema), salesController.getSales);
+salesRouter.get('/', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'), validateQuery(saleQuerySchema), salesController.getSales);
 // GET /api/v1/sales/invoice/:invoiceNumber - Lookup sale by invoice number (All staff)
-salesRouter.get('/invoice/:invoiceNumber', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'), salesController.getSaleByInvoice);
+salesRouter.get('/invoice/:invoiceNumber', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'), salesController.getSaleByInvoice);
 // GET /api/v1/sales/:id - Get sale invoice details (All staff)
-salesRouter.get('/:id', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'), validateParams(saleIdParamSchema), salesController.getSaleById);
+salesRouter.get('/:id', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'), validateParams(saleIdParamSchema), salesController.getSaleById);
 // POST /api/v1/sales - Checkout / Create completed sale (Managers & Pharmacists)
-salesRouter.post('/', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'), validateBody(checkoutRequestSchema), salesController.checkout);
+salesRouter.post('/', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST'), validateBody(checkoutRequestSchema), salesController.checkout);
 // POST /api/v1/sales/:id/cancel - Cancel a completed sale (Managers only)
-salesRouter.post('/:id/cancel', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER'), validateParams(saleIdParamSchema), validateBody(cancelSaleSchema), salesController.cancelSale);
+salesRouter.post('/:id/cancel', authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER'), validateParams(saleIdParamSchema), validateBody(cancelSaleSchema), salesController.cancelSale);
 //# sourceMappingURL=sales.routes.js.map

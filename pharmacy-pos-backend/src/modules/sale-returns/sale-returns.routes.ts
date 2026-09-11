@@ -18,7 +18,7 @@ saleReturnsRouter.use(authenticate);
 // GET /api/v1/sale-returns - Search & list returns (All staff)
 saleReturnsRouter.get(
   '/',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
   validateQuery(saleReturnQuerySchema),
   saleReturnsController.getSaleReturns
 );
@@ -26,7 +26,7 @@ saleReturnsRouter.get(
 // GET /api/v1/sale-returns/:id - Get single return details (All staff)
 saleReturnsRouter.get(
   '/:id',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
   validateParams(returnIdParamSchema),
   saleReturnsController.getSaleReturnById
 );
@@ -34,7 +34,7 @@ saleReturnsRouter.get(
 // GET /api/v1/sale-returns/sales/:saleId - Get returns for a specific sale (All staff)
 saleReturnsRouter.get(
   '/sales/:saleId',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
   validateParams(saleIdParamSchema),
   saleReturnsController.getReturnsBySaleId
 );
@@ -42,7 +42,7 @@ saleReturnsRouter.get(
 // POST /api/v1/sale-returns - Process sale return (Managers & Pharmacists)
 saleReturnsRouter.post(
   '/',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST'),
   validateBody(createSaleReturnSchema),
   saleReturnsController.createSaleReturn
 );

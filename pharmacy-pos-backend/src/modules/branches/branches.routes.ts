@@ -17,7 +17,7 @@ branchesRouter.use(authenticate);
 // GET /api/v1/branches - List branches (All staff)
 branchesRouter.get(
   '/',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
   validateQuery(branchQuerySchema),
   branchesController.getBranches
 );
@@ -25,7 +25,7 @@ branchesRouter.get(
 // GET /api/v1/branches/:id - Get branch details (All staff)
 branchesRouter.get(
   '/:id',
-  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
+  authorize('PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST', 'ACCOUNTANT'),
   validateParams(branchIdParamSchema),
   branchesController.getBranchById
 );

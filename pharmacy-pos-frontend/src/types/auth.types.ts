@@ -1,4 +1,4 @@
-export type Role = 'PLATFORM_MANAGER' | 'PHARMACY_MANAGER' | 'PHARMACIST' | 'ACCOUNTANT';
+export type Role = 'PLATFORM_MANAGER' | 'PHARMACY_MANAGER' | 'BRANCH_MANAGER' | 'PHARMACIST' | 'ACCOUNTANT';
 
 export interface User {
   id: string;

@@ -1,5 +1,5 @@
 import { Role } from '../../../types/auth.types.js';
-import { ShieldCheck, UserCheck, Stethoscope, Calculator } from 'lucide-react';
+import { ShieldCheck, UserCheck, Stethoscope, Calculator, Store } from 'lucide-react';
 
 export interface UserRoleBadgeProps {
   role: Role;
@@ -18,7 +18,14 @@ export const UserRoleBadge: React.FC<UserRoleBadgeProps> = ({ role }) => {
       return (
         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300 border border-sky-200 dark:border-sky-800">
           <UserCheck className="w-3 h-3 text-sky-600 dark:text-sky-400" />
-          <span>مدير الصيدلية</span>
+          <span>مدير عام الصيدلية</span>
+        </span>
+      );
+    case 'BRANCH_MANAGER':
+      return (
+        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+          <Store className="w-3 h-3 text-indigo-600 dark:text-indigo-400" />
+          <span>مدير فرع</span>
         </span>
       );
     case 'PHARMACIST':

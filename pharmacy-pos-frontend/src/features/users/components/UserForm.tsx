@@ -10,8 +10,10 @@ import { User } from '../types/user.types.js';
 import { Button } from '../../../components/ui/Button.js';
 import { Input } from '../../../components/ui/Input.js';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/Card.js';
-import { User as UserIcon, Phone, Mail, Lock, ShieldCheck, Eye, EyeOff } from 'lucide-react';
+import { User as UserIcon, Phone, Mail, Lock, ShieldCheck, Eye, EyeOff, Building2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useBranches } from '../../branches/hooks/useBranches.js';
+import { Branch } from '../../branches/types/branch.types.js';
 
 export interface UserFormProps {
   initialData?: User;
@@ -26,12 +28,15 @@ export const UserForm: React.FC<UserFormProps> = ({
 }) => {
   const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
+  const { data: branchesData, isLoading: isLoadingBranches } = useBranches({ isActive: true, limit: 100 });
+  const branches = branchesData?.items || [];
 
   const isEdit = Boolean(initialData);
 
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(isEdit ? getUpdateUserSchema() : getCreateUserSchema()),
@@ -40,10 +45,13 @@ export const UserForm: React.FC<UserFormProps> = ({
       phone: initialData?.phone || '',
       email: initialData?.email || '',
       role: initialData?.role || 'PHARMACIST',
+      branchId: initialData?.branchId || '',
       password: '',
       isActive: initialData?.isActive ?? true,
     },
   });
+
+  const selectedRole = watch('role');
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 max-w-2xl mx-auto">
@@ -100,17 +108,57 @@ export const UserForm: React.FC<UserFormProps> = ({
               </div>
               <select
                 {...register('role')}
-                className="w-full rounded-2xl border py-2.5 ps-10 pe-3 text-xs bg-white dark:bg-[#0B0F17] border-slate-200 text-slate-900 dark:border-[#223049] dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                className="w-full rounded-2xl border py-2.5 ps-10 pe-3 text-xs bg-white dark:bg-[#0B0F17] border-slate-200 text-slate-900 dark:border-[#223049] dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500/20 font-bold"
               >
-                <option value="PHARMACIST">دكتور صيدلي (صرف وبيع POS وإرجاع)</option>
-                <option value="PHARMACY_MANAGER">مدير الصيدلية (إدارة كاملة للمخازن والمصروفات)</option>
+                <option value="PHARMACIST">دكتور صيدلي (صرف وبيع POS وإرجاع بالفرع)</option>
+                <option value="BRANCH_MANAGER">مدير فرع (إشراف كامل على عمليات ومخزون وصيادلة الفرع)</option>
+                <option value="PHARMACY_MANAGER">مدير عام الصيدليات (إدارة شاملة لجميع الفروع وسلسلة الصيدليات)</option>
                 <option value="ACCOUNTANT">محاسب مالي (التقارير والمشتريات والمصروفات)</option>
-                <option value="PLATFORM_MANAGER">مدير منصة (Super Admin - صلاحية شاملة)</option>
+                <option value="PLATFORM_MANAGER">مدير منصة (Super Admin - صلاحية فنية وتقنية شاملة)</option>
               </select>
             </div>
             {errors.role?.message && (
               <p className="text-[11px] text-rose-500 mt-1">{String(errors.role.message)}</p>
             )}
+          </div>
+
+          {/* Assigned Branch Selector */}
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-200">
+                الفرع التابع له الموظف {selectedRole === 'BRANCH_MANAGER' || selectedRole === 'PHARMACIST' ? '*' : '(اختياري)'}
+              </label>
+              {selectedRole === 'BRANCH_MANAGER' && (
+                <span className="text-[10px] text-indigo-600 dark:text-indigo-400 font-bold">
+                  مطلوب لمدير الفرع
+                </span>
+              )}
+            </div>
+            <div className="relative">
+              <div className="absolute inset-y-0 start-0 ps-3.5 flex items-center pointer-events-none text-slate-400">
+                <Building2 className="w-4 h-4 text-emerald-600" />
+              </div>
+              <select
+                {...register('branchId')}
+                disabled={isLoadingBranches}
+                className="w-full rounded-2xl border py-2.5 ps-10 pe-3 text-xs bg-white dark:bg-[#0B0F17] border-slate-200 text-slate-900 dark:border-[#223049] dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+              >
+                <option value="">-- بدون تعيين فرع محدد (رؤية عامة / كل الفروع) --</option>
+                {branches.map((b: Branch) => (
+                  <option key={b.id} value={b.id}>
+                    {b.name} ({b.code})
+                  </option>
+                ))}
+              </select>
+            </div>
+            {errors.branchId?.message && (
+              <p className="text-[11px] text-rose-500 mt-1">{String(errors.branchId.message)}</p>
+            )}
+            <p className="text-[10px] text-slate-400 mt-1">
+              {selectedRole === 'BRANCH_MANAGER' || selectedRole === 'PHARMACIST'
+                ? 'سيتم حصر عمليات البيع والمخزون وتحويلات الأدوية لهذا الموظف على هذا الفرع'
+                : 'المدير العام ومدير المنصة يمتلكان صلاحية الإشراف على جميع الفروع تلقائياً'}
+            </p>
           </div>
 
           {/* Password (Required for create, optional for edit) */}

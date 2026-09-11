@@ -45,7 +45,8 @@ export const UserFilters: React.FC<UserFiltersProps> = ({
         >
           <option value="">جميع الصلاحيات والأدوار</option>
           <option value="PLATFORM_MANAGER">مدير المنصة (Super Admin)</option>
-          <option value="PHARMACY_MANAGER">مدير الصيدلية</option>
+          <option value="PHARMACY_MANAGER">مدير عام الصيدلية</option>
+          <option value="BRANCH_MANAGER">مدير فرع</option>
           <option value="PHARMACIST">صيدلي (كاشير)</option>
           <option value="ACCOUNTANT">محاسب مالي</option>
         </select>
