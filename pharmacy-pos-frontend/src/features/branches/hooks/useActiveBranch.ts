@@ -25,24 +25,26 @@ export const useActiveBranch = () => {
     if (branchList && branchList.length > 0) {
       dispatch(setBranches(branchList));
 
-      // If no activeBranch selected yet, pick:
-      // 1. Saved in localStorage
-      // 2. User assigned branch
-      // 3. Main branch
-      // 4. First branch
+      // Resolve active branch:
+      // 1. User's assigned branch from login/profile
+      // 2. Saved active branch in localStorage (if manager switched)
+      // 3. First branch in branchList
       if (!activeBranch) {
+        const matchedUser = user?.branchId
+          ? branchList.find((b: Branch) => b.id === user.branchId)
+          : user?.branch
+          ? branchList.find((b: Branch) => b.id === user.branch?.id)
+          : null;
         const savedId = typeof window !== 'undefined' ? localStorage.getItem('virexa_active_branch_id') : null;
         const matchedSaved = savedId ? branchList.find((b: Branch) => b.id === savedId) : null;
-        const matchedUser = user?.branchId ? branchList.find((b: Branch) => b.id === user.branchId) : null;
-        const mainBranch = branchList.find((b: Branch) => b.isMain);
-        const resolved = matchedSaved || matchedUser || mainBranch || branchList[0];
+        const resolved = matchedUser || matchedSaved || branchList[0];
 
         if (resolved) {
           dispatch(setActiveBranch(resolved));
         }
       }
     }
-  }, [branchList, activeBranch, user?.branchId, dispatch]);
+  }, [branchList, activeBranch, user?.branchId, user?.branch, dispatch]);
 
   const canSwitchBranch = role === 'PLATFORM_MANAGER' || role === 'PHARMACY_MANAGER' || !user?.branchId;
 

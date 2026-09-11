@@ -25,6 +25,17 @@ export class AuthRepository {
             where: {
                 OR: [{ phone: identifier }, { email: identifier }],
             },
+            include: {
+                branch: {
+                    select: {
+                        id: true,
+                        name: true,
+                        code: true,
+                        isMain: true,
+                        isActive: true,
+                    },
+                },
+            },
         });
     }
     async findById(id) {

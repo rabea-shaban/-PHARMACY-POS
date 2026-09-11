@@ -62,6 +62,16 @@ export class AuthService {
       email: user.email,
       role: user.role,
       isActive: user.isActive,
+      branchId: user.branchId,
+      branch: (user as any).branch
+        ? {
+            id: (user as any).branch.id,
+            name: (user as any).branch.name,
+            code: (user as any).branch.code,
+            isMain: (user as any).branch.isMain,
+            isActive: (user as any).branch.isActive,
+          }
+        : null,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     };

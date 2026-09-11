@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../store/hooks.js';
 import { setUser, clearUser, setCheckingAuth, setSessionExpired } from '../store/slices/authSlice.js';
-import { setPublicSettings } from '../store/slices/settingsSlice.js';
+import { setPublicSettings, setActiveBranch } from '../store/slices/settingsSlice.js';
 import { authApi } from '../features/auth/api/authApi.js';
 import { registerSessionExpiredHandler } from '../lib/api.js';
 import { queryClient } from '../lib/queryClient.js';
@@ -144,6 +144,9 @@ export const AppRoutes: React.FC = () => {
         const user = await authApi.getMe();
         if (isMounted && user) {
           dispatch(setUser(user));
+          if (user.branch) {
+            dispatch(setActiveBranch(user.branch as any));
+          }
           queryClient.setQueryData(['currentUser'], user);
         }
       } catch {

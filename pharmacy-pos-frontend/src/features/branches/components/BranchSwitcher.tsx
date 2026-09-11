@@ -50,9 +50,8 @@ export const BranchSwitcher: React.FC<BranchSwitcherProps> = ({
     );
   }
 
-  const displayName = activeBranch?.name || (isAr ? 'الفرع الرئيسي' : 'Main Branch');
-  const displayCode = activeBranch?.code || 'BR-01';
-  const isMain = activeBranch?.isMain;
+  const displayName = activeBranch?.name || (isAr ? 'اختر الفرع' : 'Select Branch');
+  const displayCode = activeBranch?.code || '';
 
   return (
     <div className="relative inline-block text-right" ref={dropdownRef}>
@@ -88,12 +87,9 @@ export const BranchSwitcher: React.FC<BranchSwitcherProps> = ({
 
         <div className="flex items-center gap-1.5 max-w-[140px] sm:max-w-[200px] truncate">
           <span className="truncate font-black">{displayName}</span>
-          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-md bg-white dark:bg-[#0E1522] text-slate-500 dark:text-slate-400 border border-slate-200/60 dark:border-slate-700/60">
-            {displayCode}
-          </span>
-          {isMain && (
-            <span className="hidden sm:inline-block text-[9px] font-bold px-1.5 py-0.2 rounded bg-amber-100 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300">
-              {isAr ? 'رئيسي' : 'Main'}
+          {displayCode && (
+            <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-md bg-white dark:bg-[#0E1522] text-slate-500 dark:text-slate-400 border border-slate-200/60 dark:border-slate-700/60">
+              {displayCode}
             </span>
           )}
         </div>
@@ -157,11 +153,6 @@ export const BranchSwitcher: React.FC<BranchSwitcherProps> = ({
                         <span className="text-[10px] font-mono text-slate-400 dark:text-slate-500">
                           ({b.code})
                         </span>
-                        {b.isMain && (
-                          <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-amber-100 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300">
-                            {isAr ? 'رئيسي' : 'Main'}
-                          </span>
-                        )}
                       </div>
                       {b.address && (
                         <p className="text-[10px] text-slate-400 dark:text-slate-500 truncate flex items-center gap-1 mt-0.5">

@@ -49,21 +49,18 @@ export const BranchSettingsTab: React.FC = () => {
                 <span className="text-xs font-bold text-sky-600 dark:text-sky-400">
                   {isAr ? 'الفرع النشط حالياً لهذا الجهاز / الجلسة' : 'Current Active Branch for this Device'}
                 </span>
-                {activeBranch?.isMain && (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">
-                    {isAr ? '👑 الفرع الرئيسي' : '👑 Main Headquarters'}
-                  </span>
-                )}
                 <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
                   {isAr ? 'نشط ومتصل' : 'Active & Online'}
                 </span>
               </div>
 
               <h2 className="text-2xl font-black text-slate-900 dark:text-white mt-1">
-                {activeBranch?.name || (isAr ? 'الفرع الرئيسي' : 'Main Branch')}
-                <span className="text-sm font-mono font-bold text-slate-400 dark:text-slate-500 ml-2">
-                  ({activeBranch?.code || 'BR-01'})
-                </span>
+                {activeBranch?.name || (isAr ? 'اختر الفرع' : 'Select Branch')}
+                {activeBranch?.code && (
+                  <span className="text-sm font-mono font-bold text-slate-400 dark:text-slate-500 ml-2">
+                    ({activeBranch.code})
+                  </span>
+                )}
               </h2>
 
               <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 dark:text-slate-400 mt-2">
@@ -168,11 +165,6 @@ export const BranchSettingsTab: React.FC = () => {
 
                 {/* Details */}
                 <div className="mt-3 space-y-1 text-xs text-slate-500 dark:text-slate-400">
-                  {branch.isMain && (
-                    <div className="flex items-center gap-1 text-amber-600 dark:text-amber-400 font-bold text-[11px]">
-                      <span>⭐ {isAr ? 'الفرع الرئيسي للمؤسسة' : 'Main Headquarters'}</span>
-                    </div>
-                  )}
                   {branch.address && (
                     <div className="flex items-center gap-1.5 truncate">
                       <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />

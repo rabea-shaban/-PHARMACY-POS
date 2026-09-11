@@ -7,7 +7,6 @@ import {
   Trash2,
   MapPin,
   Phone,
-  Star,
   Search,
 } from 'lucide-react';
 import { branchesApi } from '../api/branchesApi.js';
@@ -181,18 +180,8 @@ export const BranchManagementPage: React.FC = () => {
           {branches.map((b) => (
             <div
               key={b.id}
-              className={`p-6 rounded-3xl border transition-all relative overflow-hidden flex flex-col justify-between ${
-                b.isMain
-                  ? 'bg-gradient-to-br from-blue-50/80 to-indigo-50/50 dark:from-blue-950/20 dark:to-indigo-950/10 border-blue-200 dark:border-blue-900/50 shadow-sm'
-                  : 'bg-white dark:bg-slate-800 border-slate-200/80 dark:border-slate-700/80'
-              }`}
+              className="p-6 rounded-3xl border transition-all relative overflow-hidden flex flex-col justify-between bg-white dark:bg-slate-800 border-slate-200/80 dark:border-slate-700/80 shadow-xs hover:shadow-md"
             >
-              {b.isMain && (
-                <div className="absolute top-0 end-0 bg-blue-600 text-white text-[10px] font-black px-3 py-1 rounded-bl-xl flex items-center gap-1 shadow-sm">
-                  <Star className="w-3 h-3 fill-current" />
-                  {isAr ? 'الفرع الرئيسي' : 'Main Branch'}
-                </div>
-              )}
 
               <div>
                 <div className="flex items-center gap-2 mb-2">

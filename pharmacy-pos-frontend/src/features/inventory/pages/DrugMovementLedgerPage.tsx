@@ -277,7 +277,7 @@ export const DrugMovementLedgerPage: React.FC = () => {
                     <td className="py-3.5 px-3">
                       <div className="flex items-center gap-1 font-semibold text-slate-700 dark:text-slate-300">
                         <Building2 className="w-3.5 h-3.5 text-slate-400" />
-                        <span>{tx.branch?.name || (isAr ? 'الفرع الرئيسي' : 'Main Branch')}</span>
+                        <span>{tx.branch?.name || (isAr ? 'عام' : 'General')}</span>
                       </div>
                     </td>
 

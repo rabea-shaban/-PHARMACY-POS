@@ -1,6 +1,14 @@
 export declare class AuthRepository {
     private readonly safeSelect;
-    findByIdentifier(identifier: string): Promise<{
+    findByIdentifier(identifier: string): Promise<({
+        branch: {
+            name: string;
+            id: string;
+            isActive: boolean;
+            code: string;
+            isMain: boolean;
+        } | null;
+    } & {
         name: string;
         id: string;
         phone: string;
@@ -11,7 +19,7 @@ export declare class AuthRepository {
         branchId: string | null;
         createdAt: Date;
         updatedAt: Date;
-    } | null>;
+    }) | null>;
     findById(id: string): Promise<{
         name: string;
         id: string;

@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from '../../../store/hooks.js';
 import { setUser, clearUser, setCheckingAuth } from '../../../store/slices/authSlice.js';
+import { setActiveBranch } from '../../../store/slices/settingsSlice.js';
 import { authApi } from '../api/authApi.js';
 import { LoginPayload } from '../types/auth.types.js';
 import { Role } from '../../../types/auth.types.js';
@@ -34,10 +35,15 @@ export function useAuth() {
       // 1. Sync safe user into Redux
       dispatch(setUser(result.user));
 
-      // 2. Sync into TanStack Query cache
+      // 2. Set active branch immediately if user has branch assigned
+      if (result.user.branch) {
+        dispatch(setActiveBranch(result.user.branch as any));
+      }
+
+      // 3. Sync into TanStack Query cache
       queryClient.setQueryData(['currentUser'], result.user);
 
-      // 3. Determine redirect destination (respect safe returnTo)
+      // 4. Determine redirect destination (respect safe returnTo)
       const fromPath = (location.state as any)?.from?.pathname;
       const destination = fromPath && fromPath !== '/login' ? fromPath : getDefaultRouteForRole(result.user.role);
 
