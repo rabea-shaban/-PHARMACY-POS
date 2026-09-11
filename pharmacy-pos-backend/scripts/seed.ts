@@ -75,6 +75,13 @@ async function seed() {
       role: 'PHARMACY_MANAGER' as const,
     },
     {
+      name: 'Dr. Khaled Branch Manager',
+      phone: '01055554444',
+      email: 'khaled.branch@pharmacy.local',
+      password: 'BranchPass123!',
+      role: 'BRANCH_MANAGER' as const,
+    },
+    {
       name: 'Dr. Ahmed Hassan',
       phone: '01123456789',
       email: 'ahmed.pharm@pharmacy.local',
