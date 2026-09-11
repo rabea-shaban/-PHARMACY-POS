@@ -18,11 +18,13 @@ import { Button } from '../../../components/ui/Button.js';
 import { Badge } from '../../../components/ui/Badge.js';
 import { formatDate } from '../../../lib/utils.js';
 import { useAppSelector } from '../../../store/hooks.js';
+import { useActiveBranch } from '../../branches/hooks/useActiveBranch.js';
 
 export const TransferRequestsPage: React.FC = () => {
   const { i18n } = useTranslation();
   const isAr = i18n.language !== 'en';
-  const { role } = useAppSelector((state) => state.auth);
+  const { role, user } = useAppSelector((state) => state.auth);
+  const { activeBranch } = useActiveBranch();
 
   const [transfers, setTransfers] = useState<TransferRequest[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -36,8 +38,6 @@ export const TransferRequestsPage: React.FC = () => {
   const [selectedTransfer, setSelectedTransfer] = useState<TransferRequest | null>(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [actionLoadingId, setActionLoadingId] = useState<string | null>(null);
-
-  const canApprove = role === 'PLATFORM_MANAGER' || role === 'PHARMACY_MANAGER';
 
   const fetchTransfers = async () => {
     try {
@@ -368,83 +368,126 @@ export const TransferRequestsPage: React.FC = () => {
 
                     {/* Actions */}
                     <td className="py-3.5 px-4 text-end">
-                      <div className="flex items-center justify-end gap-1.5">
-                        {/* PENDING -> Approve or Reject */}
-                        {t.status === 'PENDING' && canApprove && (
-                          <>
-                            <Button
-                              variant="primary"
-                              size="sm"
-                              isLoading={actionLoadingId === t.id}
-                              onClick={() => handleApprove(t.id)}
-                              className="text-[11px] py-1 px-2.5 bg-emerald-600 hover:bg-emerald-700"
+                      {(() => {
+                        const currentBranchId = activeBranch?.id || user?.branchId || user?.branch?.id;
+                        const isSuperAdmin = role === 'PLATFORM_MANAGER';
+                        const isDestinationBranch = isSuperAdmin || currentBranchId === t.toBranchId;
+                        const isSourceBranch = isSuperAdmin || currentBranchId === t.fromBranchId;
+
+                        return (
+                          <div className="flex items-center justify-end gap-1.5">
+                            {/* PENDING -> Destination Branch approves/rejects, Source branch waits */}
+                            {t.status === 'PENDING' && (
+                              <>
+                                {isDestinationBranch ? (
+                                  <>
+                                    <Button
+                                      variant="primary"
+                                      size="sm"
+                                      isLoading={actionLoadingId === t.id}
+                                      onClick={() => handleApprove(t.id)}
+                                      className="text-[11px] py-1 px-2.5 bg-emerald-600 hover:bg-emerald-700"
+                                    >
+                                      {isAr ? 'قبول التحويل' : 'Accept Transfer'}
+                                    </Button>
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      isLoading={actionLoadingId === t.id}
+                                      onClick={() => handleReject(t.id)}
+                                      className="text-[11px] py-1 px-2 text-rose-600 hover:bg-rose-50"
+                                    >
+                                      {isAr ? 'رفض' : 'Reject'}
+                                    </Button>
+                                  </>
+                                ) : (
+                                  <span className="text-[10px] text-amber-700 dark:text-amber-300 font-bold bg-amber-50 dark:bg-amber-950/60 px-2 py-1 rounded-lg border border-amber-200 dark:border-amber-900/50">
+                                    {isAr ? 'بانتظار قبول فرع الوجهة' : 'Awaiting destination branch acceptance'}
+                                  </span>
+                                )}
+
+                                {isSourceBranch && (
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => handleCancel(t.id)}
+                                    className="text-[11px] py-1 px-2 text-slate-400 hover:text-rose-500"
+                                  >
+                                    {isAr ? 'إلغاء الطلب' : 'Cancel'}
+                                  </Button>
+                                )}
+                              </>
+                            )}
+
+                            {/* APPROVED -> Source branch dispatches items */}
+                            {t.status === 'APPROVED' && (
+                              <>
+                                {isSourceBranch ? (
+                                  <Button
+                                    variant="primary"
+                                    size="sm"
+                                    isLoading={actionLoadingId === t.id}
+                                    onClick={() => handleDispatch(t.id)}
+                                    className="text-[11px] py-1 px-2.5 bg-blue-600 hover:bg-blue-700"
+                                    leftIcon={<Truck className="w-3 h-3" />}
+                                  >
+                                    {isAr ? 'شحن وخروج' : 'Dispatch'}
+                                  </Button>
+                                ) : (
+                                  <span className="text-[10px] text-blue-700 dark:text-blue-300 font-bold bg-blue-50 dark:bg-blue-950/60 px-2 py-1 rounded-lg border border-blue-200 dark:border-blue-900/50">
+                                    {isAr ? 'تمت الموافقة • بانتظار الشحن' : 'Approved • Awaiting dispatch'}
+                                  </span>
+                                )}
+
+                                {isSourceBranch && (
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => handleCancel(t.id)}
+                                    className="text-[11px] py-1 px-2 text-slate-400 hover:text-rose-500"
+                                  >
+                                    {isAr ? 'إلغاء' : 'Cancel'}
+                                  </Button>
+                                )}
+                              </>
+                            )}
+
+                            {/* IN_TRANSIT -> Destination branch receives and stocks items */}
+                            {t.status === 'IN_TRANSIT' && (
+                              <>
+                                {isDestinationBranch ? (
+                                  <Button
+                                    variant="primary"
+                                    size="sm"
+                                    isLoading={actionLoadingId === t.id}
+                                    onClick={() => handleReceive(t.id)}
+                                    className="text-[11px] py-1 px-2.5 bg-emerald-600 hover:bg-emerald-700"
+                                    leftIcon={<PackageCheck className="w-3 h-3" />}
+                                  >
+                                    {isAr ? 'استلام وتخزين' : 'Receive'}
+                                  </Button>
+                                ) : (
+                                  <span className="text-[10px] text-purple-700 dark:text-purple-300 font-bold bg-purple-50 dark:bg-purple-950/60 px-2 py-1 rounded-lg border border-purple-200 dark:border-purple-900/50">
+                                    {isAr ? 'الشحنة في الطريق' : 'In Transit'}
+                                  </span>
+                                )}
+                              </>
+                            )}
+
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setSelectedTransfer(t);
+                                setIsDetailsModalOpen(true);
+                              }}
+                              className="p-1.5 text-slate-400 hover:text-indigo-600 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-950/40"
+                              title={isAr ? 'عرض التفاصيل' : 'View Details'}
                             >
-                              {isAr ? 'موافقة' : 'Approve'}
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              isLoading={actionLoadingId === t.id}
-                              onClick={() => handleReject(t.id)}
-                              className="text-[11px] py-1 px-2 text-rose-600 hover:bg-rose-50"
-                            >
-                              {isAr ? 'رفض' : 'Reject'}
-                            </Button>
-                          </>
-                        )}
-
-                        {/* APPROVED -> Dispatch */}
-                        {t.status === 'APPROVED' && (
-                          <Button
-                            variant="primary"
-                            size="sm"
-                            isLoading={actionLoadingId === t.id}
-                            onClick={() => handleDispatch(t.id)}
-                            className="text-[11px] py-1 px-2.5 bg-blue-600 hover:bg-blue-700"
-                            leftIcon={<Truck className="w-3 h-3" />}
-                          >
-                            {isAr ? 'شحن وخروج' : 'Dispatch'}
-                          </Button>
-                        )}
-
-                        {/* IN_TRANSIT -> Receive */}
-                        {t.status === 'IN_TRANSIT' && (
-                          <Button
-                            variant="primary"
-                            size="sm"
-                            isLoading={actionLoadingId === t.id}
-                            onClick={() => handleReceive(t.id)}
-                            className="text-[11px] py-1 px-2.5 bg-emerald-600 hover:bg-emerald-700"
-                            leftIcon={<PackageCheck className="w-3 h-3" />}
-                          >
-                            {isAr ? 'استلام وتخزين' : 'Receive'}
-                          </Button>
-                        )}
-
-                        {/* PENDING/APPROVED -> Cancel */}
-                        {(t.status === 'PENDING' || t.status === 'APPROVED') && (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleCancel(t.id)}
-                            className="text-[11px] py-1 px-2 text-slate-400 hover:text-rose-500"
-                          >
-                            {isAr ? 'إلغاء' : 'Cancel'}
-                          </Button>
-                        )}
-
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setSelectedTransfer(t);
-                            setIsDetailsModalOpen(true);
-                          }}
-                          className="p-1.5 text-slate-400 hover:text-indigo-600 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-950/40"
-                          title={isAr ? 'عرض التفاصيل' : 'View Details'}
-                        >
-                          <Eye className="w-4 h-4" />
-                        </button>
-                      </div>
+                              <Eye className="w-4 h-4" />
+                            </button>
+                          </div>
+                        );
+                      })()}
                     </td>
                   </tr>
                 ))

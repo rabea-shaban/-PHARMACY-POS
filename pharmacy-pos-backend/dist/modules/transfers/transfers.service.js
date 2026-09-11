@@ -1,7 +1,8 @@
 import { transfersRepository } from './transfers.repository.js';
 import { auditService } from '../audit/audit.service.js';
-import { NotFoundError, BadRequestError } from '../../utils/errors.js';
+import { NotFoundError, BadRequestError, ForbiddenError } from '../../utils/errors.js';
 import { getPaginationMeta } from '../../utils/pagination.util.js';
+import { prisma } from '../../lib/prisma.js';
 export class TransfersService {
     repo;
     audit;
@@ -59,6 +60,15 @@ export class TransfersService {
         }
         if (existing.status !== 'PENDING') {
             throw new BadRequestError(`Cannot approve transfer with status '${existing.status}'`);
+        }
+        // Enforce: Only staff belonging to the destination branch (or Platform Manager) can accept/approve
+        const user = await prisma.user.findUnique({ where: { id: actorId } });
+        if (user &&
+            user.role !== 'PLATFORM_MANAGER' &&
+            user.branchId &&
+            user.branchId === existing.fromBranchId &&
+            user.branchId !== existing.toBranchId) {
+            throw new ForbiddenError('الموافقة على طلب التحويل وقبوله يجب أن تتم من خلال الصيدلية / الفرع المستلم');
         }
         const approved = await this.repo.approve(id, actorId);
         await this.audit.logAction({
