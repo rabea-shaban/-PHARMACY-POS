@@ -26,7 +26,7 @@ export const LoginForm: React.FC<LoginFormProps> = () => {
     resolver: zodResolver(getLoginSchema()),
     defaultValues: {
       identifier: '01012345678',
-      password: 'AdminPass123!',
+      password: '12345678',
     },
   });
 

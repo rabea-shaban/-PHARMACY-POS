@@ -2,7 +2,21 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/Card.js';
 import { useAppSelector } from '../../../store/hooks.js';
-import { ShoppingCart, Pill, Users, Truck, Wallet, Coins, FileSpreadsheet, Zap } from 'lucide-react';
+import {
+  ShoppingCart,
+  Pill,
+  Truck,
+  Wallet,
+  Coins,
+  FileSpreadsheet,
+  Zap,
+  Store,
+  LayoutGrid,
+  ArrowLeftRight,
+  Landmark,
+  ShieldCheck,
+  UsersRound,
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Role } from '../../../types/auth.types.js';
 
@@ -19,36 +33,43 @@ const actionsList: QuickActionItem[] = [
     titleKey: 'dashboard.actionNewSale',
     href: '/pos',
     icon: <ShoppingCart className="w-5 h-5" />,
-    roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'],
+    roles: ['PLATFORM_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST'],
     color: 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100 dark:bg-emerald-950/50 dark:text-emerald-300',
   },
   {
-    titleKey: 'dashboard.actionAddProduct',
-    href: '/products',
-    icon: <Pill className="w-5 h-5" />,
-    roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST'],
-    color: 'bg-sky-50 text-sky-600 hover:bg-sky-100 dark:bg-sky-950/50 dark:text-sky-300',
+    titleKey: 'dashboard.actionBranches',
+    href: '/branches',
+    icon: <Store className="w-5 h-5" />,
+    roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER'],
+    color: 'bg-teal-50 text-teal-600 hover:bg-teal-100 dark:bg-teal-950/50 dark:text-teal-300',
   },
   {
-    titleKey: 'dashboard.actionAddCustomer',
-    href: '/customers',
-    icon: <Users className="w-5 h-5" />,
-    roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'PHARMACIST', 'ACCOUNTANT'],
+    titleKey: 'dashboard.actionMatrix',
+    href: '/inventory/matrix',
+    icon: <LayoutGrid className="w-5 h-5" />,
+    roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER'],
     color: 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100 dark:bg-indigo-950/50 dark:text-indigo-300',
   },
   {
-    titleKey: 'dashboard.actionReceivePurchase',
-    href: '/purchases',
-    icon: <Truck className="w-5 h-5" />,
+    titleKey: 'dashboard.actionTransfers',
+    href: '/transfers',
+    icon: <ArrowLeftRight className="w-5 h-5" />,
+    roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST'],
+    color: 'bg-blue-50 text-blue-600 hover:bg-blue-100 dark:bg-blue-950/50 dark:text-blue-300',
+  },
+  {
+    titleKey: 'dashboard.actionFinance',
+    href: '/finance',
+    icon: <Landmark className="w-5 h-5" />,
     roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT'],
-    color: 'bg-cyan-50 text-cyan-600 hover:bg-cyan-100 dark:bg-cyan-950/50 dark:text-cyan-300',
+    color: 'bg-amber-50 text-amber-600 hover:bg-amber-100 dark:bg-amber-950/50 dark:text-amber-300',
   },
   {
     titleKey: 'dashboard.actionAddExpense',
-    href: '/expenses',
+    href: '/expenses/new',
     icon: <Wallet className="w-5 h-5" />,
-    roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT'],
-    color: 'bg-amber-50 text-amber-600 hover:bg-amber-100 dark:bg-amber-950/50 dark:text-amber-300',
+    roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'ACCOUNTANT'],
+    color: 'bg-rose-50 text-rose-600 hover:bg-rose-100 dark:bg-rose-950/50 dark:text-rose-300',
   },
   {
     titleKey: 'dashboard.actionPayroll',
@@ -58,11 +79,39 @@ const actionsList: QuickActionItem[] = [
     color: 'bg-purple-50 text-purple-600 hover:bg-purple-100 dark:bg-purple-950/50 dark:text-purple-300',
   },
   {
+    titleKey: 'dashboard.actionReceivePurchase',
+    href: '/purchases/new',
+    icon: <Truck className="w-5 h-5" />,
+    roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'ACCOUNTANT'],
+    color: 'bg-cyan-50 text-cyan-600 hover:bg-cyan-100 dark:bg-cyan-950/50 dark:text-cyan-300',
+  },
+  {
+    titleKey: 'dashboard.actionAddProduct',
+    href: '/products/new',
+    icon: <Pill className="w-5 h-5" />,
+    roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'PHARMACIST'],
+    color: 'bg-sky-50 text-sky-600 hover:bg-sky-100 dark:bg-sky-950/50 dark:text-sky-300',
+  },
+  {
+    titleKey: 'dashboard.actionUsers',
+    href: '/users',
+    icon: <UsersRound className="w-5 h-5" />,
+    roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER'],
+    color: 'bg-violet-50 text-violet-600 hover:bg-violet-100 dark:bg-violet-950/50 dark:text-violet-300',
+  },
+  {
     titleKey: 'dashboard.actionReports',
     href: '/reports',
     icon: <FileSpreadsheet className="w-5 h-5" />,
-    roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'ACCOUNTANT'],
-    color: 'bg-rose-50 text-rose-600 hover:bg-rose-100 dark:bg-rose-950/50 dark:text-rose-300',
+    roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER', 'BRANCH_MANAGER', 'ACCOUNTANT'],
+    color: 'bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200',
+  },
+  {
+    titleKey: 'dashboard.actionAudit',
+    href: '/audit',
+    icon: <ShieldCheck className="w-5 h-5" />,
+    roles: ['PLATFORM_MANAGER', 'PHARMACY_MANAGER'],
+    color: 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-950/50 dark:text-emerald-300',
   },
 ];
 

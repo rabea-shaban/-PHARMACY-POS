@@ -22,7 +22,7 @@ const demoAccounts: DemoAccountDef[] = [
   {
     key: 'PLATFORM_MANAGER',
     identifier: '01012345678',
-    pass: 'AdminPass123!',
+    pass: '12345678',
     icon: <ShieldCheck className="w-4 h-4 shrink-0 text-indigo-600 dark:text-indigo-400" />,
     borderClass: 'border-indigo-200 hover:border-indigo-400 dark:border-indigo-900 dark:hover:border-indigo-600',
     bgClass: 'bg-indigo-50/70 hover:bg-indigo-100/80 dark:bg-indigo-950/30 dark:hover:bg-indigo-900/40',
@@ -32,7 +32,7 @@ const demoAccounts: DemoAccountDef[] = [
   {
     key: 'PHARMACY_MANAGER',
     identifier: '01098765432',
-    pass: 'ManagerPass123!',
+    pass: '12345678',
     icon: <Building2 className="w-4 h-4 shrink-0 text-blue-600 dark:text-blue-400" />,
     borderClass: 'border-blue-200 hover:border-blue-400 dark:border-blue-900 dark:hover:border-blue-600',
     bgClass: 'bg-blue-50/70 hover:bg-blue-100/80 dark:bg-blue-950/30 dark:hover:bg-blue-900/40',
@@ -41,7 +41,7 @@ const demoAccounts: DemoAccountDef[] = [
   {
     key: 'BRANCH_MANAGER',
     identifier: '01055554444',
-    pass: 'BranchPass123!',
+    pass: '12345678',
     icon: <Store className="w-4 h-4 shrink-0 text-teal-600 dark:text-teal-400" />,
     borderClass: 'border-teal-200 hover:border-teal-400 dark:border-teal-900 dark:hover:border-teal-600',
     bgClass: 'bg-teal-50/70 hover:bg-teal-100/80 dark:bg-teal-950/30 dark:hover:bg-teal-900/40',
@@ -50,7 +50,7 @@ const demoAccounts: DemoAccountDef[] = [
   {
     key: 'PHARMACIST',
     identifier: '01123456789',
-    pass: 'PharmPass123!',
+    pass: '12345678',
     icon: <Pill className="w-4 h-4 shrink-0 text-emerald-600 dark:text-emerald-400" />,
     borderClass: 'border-emerald-200 hover:border-emerald-400 dark:border-emerald-900 dark:hover:border-emerald-600',
     bgClass: 'bg-emerald-50/70 hover:bg-emerald-100/80 dark:bg-emerald-950/30 dark:hover:bg-emerald-900/40',
@@ -59,7 +59,7 @@ const demoAccounts: DemoAccountDef[] = [
   {
     key: 'ACCOUNTANT',
     identifier: '01223456789',
-    pass: 'AccPass123!',
+    pass: '12345678',
     icon: <Coins className="w-4 h-4 shrink-0 text-amber-600 dark:text-amber-400" />,
     borderClass: 'border-amber-200 hover:border-amber-400 dark:border-amber-900 dark:hover:border-amber-600',
     bgClass: 'bg-amber-50/70 hover:bg-amber-100/80 dark:bg-amber-950/30 dark:hover:bg-amber-900/40',
